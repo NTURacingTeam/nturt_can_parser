@@ -2,8 +2,8 @@
 #define CAN_PARSER__H
 
 // define result state here
-#define OK -1
-#define ERR 0
+#define OK_PARSER -1
+#define ERR_PARSER 0
 // define some parameters
 #define Frame_NUM 8 // how many kinds of frame here? plus 1 then.
 #define DATA_NUM 11 // how many kinds of data here? plus 1 then.
@@ -42,10 +42,10 @@ public:
         int idsize = sizeof(id_)/sizeof(int); // Should be Frame_NUM
         if(type<idsize){
             id_[type] = id;
-            return OK;
+            return OK_PARSER;
         }
         else{
-            return ERR;
+            return ERR_PARSER;
         }
     }
 
@@ -60,7 +60,7 @@ public:
                 return id_[i];
             }
         }
-        return ERR;
+        return ERR_PARSER;
     }
     
     /* parameter:
