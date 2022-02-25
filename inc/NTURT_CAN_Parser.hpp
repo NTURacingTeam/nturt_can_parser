@@ -2,8 +2,13 @@
 #define CAN_PARSER__H
 
 // define result state here
+#ifndef OK_ERR
+#define OK_ERR
+
 #define OK -1
 #define ERR 0
+
+#endif
 // define some parameters
 #define Frame_NUM 8 // how many kinds of frame here? plus 1 then.
 #define DATA_NUM 11 // how many kinds of data here? plus 1 then.
