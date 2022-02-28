@@ -1,6 +1,7 @@
 #ifndef CAN_PARSER__H
 #define CAN_PARSER__H
 
+#include <iostream>
 // define result state here
 #ifndef OK_ERR
 #define OK_ERR
@@ -10,7 +11,7 @@
 
 #endif
 // define some parameters
-#define Frame_NUM 8 // how many kinds of frame here? plus 1 then.
+#define Frame_NUM 9 // how many kinds of frame here? plus 1 then.
 #define DATA_NUM 11 // how many kinds of data here? plus 1 then.
 // define Frame type here
 #define FB1 1  // front box
@@ -53,6 +54,25 @@ public:
             return ERR;
         }
     }
+    
+    /* parameter:
+     * return:
+     *   return OK or ERR
+     */
+    int print_id(){
+        for(int i=1;i<Frame_NUM;i++){
+            std::cout<<"type: "<<i<<", id: "<<id_[i]<<std::endl;
+        }
+        return OK;
+    }
+
+    /* parameter:
+     *   none
+     * return:
+     *   OK or ERR
+     * assign all ID
+     */
+    int init_parser();
 
     /* parameter:
      *   CAN id
@@ -62,7 +82,7 @@ public:
     int get_type(int id){
         for(int i=1;i<=Frame_NUM;i++){
             if(id_[i] == id){
-                return id_[i];
+                return i;
             }
         }
         return ERR;

@@ -1,5 +1,16 @@
 #include <NTURT_CAN_Parser.hpp>
 
+int Parser::init_parser(){
+    assign_id(FB1, 0x080AD091);
+    assign_id(RBX, 0x080AD092);
+    assign_id(HIA, 0x08f02de2);
+    assign_id(HIG, 0x0cf02ae2);
+    assign_id(HIC, 0x0cf029e2);
+    std::cout<<"Parser Initialize~~"<<std::endl;
+    print_id();
+    return OK;
+}
+
 int Parser::decode(int type, int* data){
     if(type == FB1){
         thr1_  = data[0]*100/255;
