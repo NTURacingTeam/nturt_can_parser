@@ -14,26 +14,26 @@
 #define Frame_NUM 9 // how many kinds of frame here? plus 1 then.
 #define DATA_NUM 11 // how many kinds of data here? plus 1 then.
 // define Frame type here
-#define FB1 1  // front box
-#define FB2 2  // front box
-#define RBX 3  // rear box
-#define INV 4  // inverter
-#define BMS 5  // BMS
-#define HIA 6  // accelerometer frame from Honeywell IMU
-#define HIG 7  // gyroscope frame from Honeywell IMU
-#define HIC 8  // pose frame from Honeywell IMU
+#define _CP_FB1 1  // front box
+#define _CP_FB2 2  // front box
+#define _CP_RBX 3  // rear box
+#define _CP_INV 4  // inverter
+#define _CP_BMS 5  // BMS
+#define _CP_HIA 6  // accelerometer frame from Honeywell IMU
+#define _CP_HIG 7  // gyroscope frame from Honeywell IMU
+#define _CP_HIC 8  // pose frame from Honeywell IMU
 // and so on...
 // define data type here
-#define ACC 1  // accelerometer
-#define GYR 2  // gyrscope
-#define CMP 3  // compass
-#define FWS 4  // front wheel speed
-#define RWS 5  // rear wheel speed
-#define THR 6  // throttle 
-#define BRK 7  // brake
-#define STR 8  // steer
-#define BTP 9  // battery temp
-#define BVT 10 // battery voltage
+#define _CP_ACC 1  // accelerometer
+#define _CP_GYR 2  // gyrscope
+#define _CP_CMP 3  // compass
+#define _CP_FWS 4  // front wheel speed
+#define _CP_RWS 5  // rear wheel speed
+#define _CP_THR 6  // throttle 
+#define _CP_BRK 7  // brake
+#define _CP_STR 8  // steer
+#define _CP_BTP 9  // battery temp
+#define _CP_BVT 10 // battery voltage
 // and so on...
 
 class NTURT_CAN_parser {
