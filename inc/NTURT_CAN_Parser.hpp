@@ -11,32 +11,41 @@
 
 #endif
 // define some parameters
-#define Frame_NUM 11 // how many kinds of frame here?
-#define DATA_NUM 10  // how many kinds of data here?
+#define Frame_NUM 15 // how many kinds of frame here?
+#define DATA_NUM 15  // how many kinds of data here?
 // define Frame type here
-#define _CP_FB1 1  // front box
-#define _CP_FB2 2  // front box
-#define _CP_RBX 3  // rear box
-#define _CP_INV 4  // inverter
-#define _CP_BMS 5  // BMS
-#define _CP_HIA 6  // accelerometer frame from Honeywell IMU
-#define _CP_HIG 7  // gyroscope frame from Honeywell IMU
-#define _CP_HIC 8  // pose frame from Honeywell IMU
-#define _CP_OIA 9  // accelerometer frame from Open IMU
-#define _CP_OIG 10 // gyroscope frame from Open IMU
-#define _CP_OIC 11 // pose frame from Open IMU
+#define _CP_FB1 1  // front box 1
+#define _CP_FB2 2  // front box 2
+#define _CP_RB1 3  // rear box 1
+#define _CP_RB2 4  // rear box 2
+#define _CP_DB1 5  // Dash Board 1
+#define _CP_DB2 6  // Dash Board 2
+#define _CP_INV 7  // inverter
+#define _CP_BMS 8  // BMS
+#define _CP_HIA 9  // accelerometer frame from Honeywell IMU
+#define _CP_HIG 10 // gyroscope frame from Honeywell IMU
+#define _CP_HIC 11 // slope frame from Honeywell IMU
+#define _CP_OIS 12 // slope frame from Open IMU
+#define _CP_OIA 13 // accelerometer frame from Open IMU
+#define _CP_OIG 14 // gyroscope frame from Open IMU
+#define _CP_OIC 15 // pose frame from Open IMU
 // and so on...
 // define data type here
-#define _CP_ACC 1  // accelerometer
-#define _CP_GYR 2  // gyrscope
-#define _CP_CMP 3  // compass
-#define _CP_FWS 4  // front wheel speed
-#define _CP_RWS 5  // rear wheel speed
-#define _CP_THR 6  // throttle
-#define _CP_BRK 7  // brake
-#define _CP_STR 8  // steer
-#define _CP_BTP 9  // battery temp
-#define _CP_BVT 10 // battery voltage
+#define _CP_ACC 1   // accelerometer
+#define _CP_GYR 2   // gyrscope
+#define _CP_CMP 3   // compass
+#define _CP_SLP 4   // slope
+#define _CP_FWS 5   // front wheel speed
+#define _CP_RWS 6   // rear wheel speed
+#define _CP_FWT 7   // front wheel temp
+#define _CP_RWT 8   // rear wheel temp
+#define _CP_FSS 9   // front wheel suspension stroke
+#define _CP_RSS 10  // rear wheel suspension stroke
+#define _CP_THR 11  // throttle
+#define _CP_BRK 12  // brake
+#define _CP_STR 13  // steer
+#define _CP_BTP 14  // battery temp
+#define _CP_BVT 15  // battery voltage
 // and so on...
 // define Constants
 #define TWOPOW08 256

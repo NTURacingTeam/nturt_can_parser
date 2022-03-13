@@ -2,7 +2,13 @@
 
 int Parser::init_parser(){
     assign_id(_CP_FB1, 0x080AD091);
-    assign_id(_CP_RBX, 0x080AD092);
+    assign_id(_CP_FB2, 0x080AD092);
+    assign_id(_CP_RB1, 0x080AD093);
+    assign_id(_CP_RB2, 0x080AD094);
+    // assign_id(_CP_OIA, 0x08f02de2);
+    // assign_id(_CP_OIG, 0x0cf02ae2);
+    // assign_id(_CP_OIC, 0x0cf029e2);
+    // assign_id(_CP_OIS, 0x0cf029e2);
     assign_id(_CP_HIA, 0x08f02de2);
     assign_id(_CP_HIG, 0x0cf02ae2);
     assign_id(_CP_HIC, 0x0cf029e2);
@@ -13,25 +19,32 @@ int Parser::init_parser(){
 
 int Parser::decode(int type, int* data){
     if(type == _CP_FB1){
-        thr1_  = data[0]*100/255;
-        thr2_  = data[1]*100/255;
-        brk_   = data[2]*100/255;
-        str_   = data[3]*100/255;
         fws_l_ = (data[4]*256+data[5])*0.002;
         fws_r_ = (data[6]*256+data[7])*0.002;
         // flags
         flag_[_CP_FWS] = 1;
-        flag_[_CP_THR] = 1;
-        flag_[_CP_BRK] = 1;
-        flag_[_CP_STR] = 1;
         return OK;
     }
     else if(type == _CP_FB2){
-        // TODO
+        thr1_  = data[0]*100/255;
+        thr2_  = data[1]*100/255;
+        brk_   = data[2]*100/255;
+        str_   = data[3]*100/255;
+        // flags
+        flag_[_CP_THR] = 1;
+        flag_[_CP_BRK] = 1;
+        flag_[_CP_STR] = 1;
         // No such message yet
         return OK;
     }
-    else if(type == _CP_RBX){
+    else if(type == _CP_RB1){
+        rws_l_ = (data[2]*256+data[3])*0.002;
+        rws_r_ = (data[4]*256+data[5])*0.002;
+        // flags
+        flag_[_CP_RWS] = 1;
+        return OK;
+    }
+    else if(type == _CP_RB2){
         rws_l_ = (data[2]*256+data[3])*0.002;
         rws_r_ = (data[4]*256+data[5])*0.002;
         // flags
