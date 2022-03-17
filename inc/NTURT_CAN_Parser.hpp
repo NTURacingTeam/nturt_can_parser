@@ -1,7 +1,12 @@
 #ifndef CAN_PARSER__H
 #define CAN_PARSER__H
 
+#define BOOST_ARRAY
+
 #include <iostream>
+#ifdef BOOST_ARRAY
+#include <boost/array.hpp>
+#endif
 // define result state here
 #ifndef OK_ERR
 #define OK_ERR
@@ -150,7 +155,9 @@ public:
    * and it store the result to data (int[8]).
    */
   int encode(int type, double *tbe, int *data);
-
+#ifdef BOOST_ARRAY
+  int encode(int type, double* tbe, boost::array<unsigned char, 8> &data);
+#endif
   /* parameters:
    *   variables to-be-updated(i.e. sensor data)
    *   Here they are accelerometer data

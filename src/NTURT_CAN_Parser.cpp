@@ -92,6 +92,18 @@ int Parser::encode(int type, double* tbe, int* data){
     }
 }
 
+#ifdef BOOST_ARRAY
+int Parser::encode(int type, double* tbe, boost::array<unsigned char, 8> &data){
+    if(type==_CP_INV){
+        // encode torque data here
+        return OK;
+    }
+    else{
+        return ERR;
+    }
+}
+#endif
+
 int Parser::get_ACC(double &ax, double &ay, double &az){
     if(flag_[_CP_ACC]){
         ax = accx_;
