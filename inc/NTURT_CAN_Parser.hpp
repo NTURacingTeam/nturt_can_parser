@@ -3,7 +3,15 @@
 
 #define BOOST_ARRAY
 
+#include <math.h>
+#include <stdio.h>
+
+#include <fstream>
 #include <iostream>
+#include <map>
+#include <sstream>
+#include <string>
+#include <vector>
 #ifdef BOOST_ARRAY
 #include <boost/array.hpp>
 #endif
@@ -15,25 +23,29 @@
 #define ERR 0
 
 #endif
+#define _CP_BIT 1
+#define _CP_BYTE 2
+#define _CP_BIG 3
+#define _CP_LITTLE 4
 // define some parameters
-#define Frame_NUM 15 // how many kinds of frame here?
-#define DATA_NUM 15  // how many kinds of data here?
+#define Frame_NUM 15  // how many kinds of frame here?
+#define DATA_NUM 15   // how many kinds of data here?
 // define Frame type here
-#define _CP_FB1 1  // front box 1
-#define _CP_FB2 2  // front box 2
-#define _CP_RB1 3  // rear box 1
-#define _CP_RB2 4  // rear box 2
-#define _CP_DB1 5  // Dash Board 1
-#define _CP_DB2 6  // Dash Board 2
-#define _CP_INV 7  // inverter
-#define _CP_BMS 8  // BMS
-#define _CP_HIA 9  // accelerometer frame from Honeywell IMU
-#define _CP_HIG 10 // gyroscope frame from Honeywell IMU
-#define _CP_HIC 11 // slope frame from Honeywell IMU
-#define _CP_OIS 12 // slope frame from Open IMU
-#define _CP_OIA 13 // accelerometer frame from Open IMU
-#define _CP_OIG 14 // gyroscope frame from Open IMU
-#define _CP_OIC 15 // pose frame from Open IMU
+#define _CP_FB1 1   // front box 1
+#define _CP_FB2 2   // front box 2
+#define _CP_RB1 3   // rear box 1
+#define _CP_RB2 4   // rear box 2
+#define _CP_DB1 5   // Dash Board 1
+#define _CP_DB2 6   // Dash Board 2
+#define _CP_INV 7   // inverter
+#define _CP_BMS 8   // BMS
+#define _CP_HIA 9   // accelerometer frame from Honeywell IMU
+#define _CP_HIG 10  // gyroscope frame from Honeywell IMU
+#define _CP_HIC 11  // slope frame from Honeywell IMU
+#define _CP_OIS 12  // slope frame from Open IMU
+#define _CP_OIA 13  // accelerometer frame from Open IMU
+#define _CP_OIG 14  // gyroscope frame from Open IMU
+#define _CP_OIC 15  // pose frame from Open IMU
 // and so on...
 // define data type here
 #define _CP_ACC 1   // accelerometer
@@ -56,35 +68,31 @@
 #define TWOPOW08 256
 #define TWOPOW26 67108864
 
-class NTURT_CAN_parser {
+// for each frame, thay have id and a list of data, we f()store the key and its component, so there are 2 string
+typedef struct can_frame
+{
+  std::vector<std::pair<std::string, std::string>> data_key;
+} Frame;
+
+// for each data type, there is certain rule to convert between can data and physical value
+typedef struct can_data_rule
+{
+  // can frame id and type
+  int id;
+  // store in a manner of bit or byte
+  int bitbyte;
+  // big/small endian
+  int endian;
+  // if start = 2 and stop = 4, we consider 2nd and 3rd bit/byte
+  int startbyte, stopbyte;
+  int startbit, stopbit;
+  // physical value = (can data * scale) + offset
+  double scale, offset;
+} Rule;
+
+class NTURT_CAN_parser
+{
 public:
-  /* parameter:
-   *   Frame type
-   *   CAN id (or PGN of the id)
-   * return:
-   *   return OK or ERR
-   */
-  int assign_id(int type, int id) {
-    int idsize = sizeof(id_) / sizeof(int); // Should be Frame_NUM
-    if (type < idsize) {
-      id_[type] = id;
-      return OK;
-    } else {
-      return ERR;
-    }
-  }
-
-  /* parameter:
-   * return:
-   *   return OK or ERR
-   */
-  int print_id() {
-    for (int i = 1; i < Frame_NUM; i++) {
-      std::cout << "type: " << i << ", id: " << id_[i] << std::endl;
-    }
-    return OK;
-  }
-
   /* parameter:
    * return:
    *   return OK or ERR
@@ -92,11 +100,45 @@ public:
    * Check here for PGN meanings:
    * https://www.kvaser.com/about-can/higher-layer-protocols/j1939-introduction/
    */
-  int get_PGN(int id) {
+  int get_PGN(int id)
+  {
     // we want the
     id /= TWOPOW08;
     id = id % TWOPOW26;
     return id;
+  }
+
+  /*  */
+  int check_key(int id, std::string key, std::string comp)
+  {
+    for (auto keys : frame_[id].data_key) {
+      if (keys.first.compare(key) == 0) {
+        if (keys.second.compare(comp) == 0) {
+          return OK;
+        }
+      }
+    }
+    return ERR;
+  }
+  int check_key(int id, std::string key)
+  {
+    for (auto keys : frame_[id].data_key) {
+      if (keys.first.compare(key) == 0) {
+        return OK;
+      }
+    }
+    return ERR;
+  }
+
+  /* 
+   */
+  std::vector<std::pair<std::string, std::string>> get_key(int id)
+  {
+    if (frame_.find(id) == frame_.end()) {
+      err_log(__func__, "No such frame id");
+      return std::vector<std::pair<std::string, std::string>>();
+    }
+    return frame_[id].data_key;
   }
 
   /* parameter:
@@ -107,33 +149,25 @@ public:
    */
   int init_parser();
 
-  /* parameter:
-   *   CAN id (or PGN of the id)
-   * return:
-   *   Frame type
-   */
-  int get_type(int id) {
-    // Check with full ID
-    for (int i = 1; i <= Frame_NUM; i++) {
-      if (id_[i] == id) {
-        return i;
-      }
-    }
-    // check with PGN
-    for (int i = 1; i <= Frame_NUM; i++) {
-      if (id_[i] == get_PGN(id)) {
-        return i;
-      }
-    }
-    return ERR;
+  /**/
+  int update_rule(
+    std::string key, std::string comp, int & id, int & bitbyte, int & endian, int & startbyte,
+    int & stopbyte, int & startbit, int & stopbit, double & scale, double & offset);
+
+  /*  */
+  int import_rule(std::string path);
+
+  /*  */
+  void err_log(const char * fun, std::string msg)
+  {
+    err += "[" + std::string(fun) + "] " + msg + "\r\n";
   }
 
-  /* parameter:
-   *   Frame type
-   * return:
-   *   CAN id (or PGN of the id)
-   */
-  int get_id(int type) { return id_[type]; }
+  /*  */
+  void get_err_log(std::string & _err) { _err = err; }
+
+  /*  */
+  void print_err_log() { std::cout << err; }
 
   /* parameters:
    *   Frame type
@@ -143,7 +177,7 @@ public:
    * It decode data according to Frame type,
    * and it store the result to the class member variable.
    */
-  int decode(int type, int *data);
+  int decode(int type, int * data);
 
   /* parameters:
    *   Frame type
@@ -154,79 +188,36 @@ public:
    * It encode tbe (data to-be-encoded) according to Frame type,
    * and it store the result to data (int[8]).
    */
-  int encode(int type, double *tbe, int *data);
+  int encode(int type, int * data);
 #ifdef BOOST_ARRAY
-  int encode(int type, double* tbe, boost::array<unsigned char, 8> &data);
+  int decode(int id, boost::array<unsigned char, 8> & data);
+  int encode(int id, boost::array<unsigned char, 8> & data);
 #endif
+
+  /**/
+  int set_tbe(std::string key, std::map<std::string, double> & _tbe);
+
+  /**/
+  int set_tbe(std::string key, std::string comp, double _tbe);
+
+  /**/
+  int get_afd(std::string key, std::map<std::string, double> & _afd);
+
+  /**/
+  double get_afd(std::string key, std::string comp);
+
   /* parameters:
    *   variables to-be-updated(i.e. sensor data)
    *   Here they are accelerometer data
    * return:
    *   OK or ERR
    */
-  int get_ACC(double &ax, double &ay, double &az);
-
-  /* parameters:
-   *   variables to-be-updated(i.e. sensor data)
-   *   Here they are gyroscope data
-   * return:
-   *   OK or ERR
-   */
-  int get_GYR(double &gx, double &gy, double &gz);
-
-  /* parameters:
-   *   variables to-be-updated(i.e. sensor data)
-   *   Here they are pose (compass) data (roll pitch yaw)
-   * return:
-   *   OK or ERR
-   */
-  int get_CMP(double &cx, double &cy, double &cz);
-
-  /* parameters:
-   *   variables to-be-updated(i.e. sensor data)
-   *   Here they are front wheel speed data (left/right)
-   * return:
-   *   OK or ERR
-   */
-  int get_FWS(double &fws_l, double &fws_r);
-
-  /* parameters:
-   *   variables to-be-updated(i.e. sensor data)
-   *   Here they are rear wheel speed data (left/right)
-   * return:
-   *   OK or ERR
-   */
-  int get_RWS(double &rws_l, double &rws_r);
-
-  /* parameters:
-   *   variables to-be-updated(i.e. sensor data)
-   *   Here they are throttle data
-   * return:
-   *   OK or ERR
-   */
-  int get_THR(double &th_1, double &th_2);
-
-  /* parameters:
-   *   variables to-be-updated(i.e. sensor data)
-   *   Here they are brake data
-   * return:
-   *   OK or ERR
-   */
-  int get_BRK(double &brk);
-
-  /* parameters:
-   *   variables to-be-updated(i.e. sensor data)
-   *   Here they are steer data
-   * return:
-   *   OK or ERR
-   */
-  int get_STR(double &str);
-  // and BMS data...
 private:
   /* The id of different CAN message frame.
    * ex: id[FBX] is the id of front box messages
    */
-  int id_[Frame_NUM + 1];
+  // int id_[Frame_NUM + 1];
+  std::map<int, Frame> frame_;
 
   /* The flag of different sensor data, which indicates if there is new data.
    * ex: flag[ACC] means if we got new accelerometer data.
@@ -235,22 +226,23 @@ private:
    * If we accessed this data via get_XXX(),
    * then flag[the data] will be 0
    */
-  int flag_[DATA_NUM + 1];
+  // int flag_[DATA_NUM + 1];
+  std::map<std::string, std::map<std::string, bool>> flag_;
 
+  /*  */
+  std::map<std::string, std::map<std::string, Rule>> rule_;
+
+  /*  */
+  unsigned long pow256[8];
+  unsigned long pow2[8];
+
+  /*  */
+  std::string err;
   // declare every data as member function
-  // IMU
-  double accx_, accy_, accz_, gyrx_, gyry_, gyrz_, cmpx_, cmpy_, cmpz_;
-  // Front box
-  double brk_, thr1_, thr2_, str_;
-  // Wheel Speed
-  double fws_l_, fws_r_, rws_l_, rws_r_;
-  // Suspension ride height
-  double frh_l_, frh_r_, rrh_l_, rrh_r_;
-  // Rear box
-  // BMS
-  // Inverter
-  // Dashboard
-  // and so on.......
+  // The physical value to be encoded
+  std::map<std::string, std::map<std::string, double>> tbe;
+  // The physical value after decoded
+  std::map<std::string, std::map<std::string, double>> afd;
 };
 
 typedef NTURT_CAN_parser Parser;

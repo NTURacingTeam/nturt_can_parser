@@ -1,271 +1,234 @@
 #include <NTURT_CAN_Parser.hpp>
 
-int Parser::init_parser(){
-    assign_id(_CP_FB1, 0x080AD091);
-    assign_id(_CP_FB2, 0x080AD092);
-    assign_id(_CP_RB1, 0x080AD093);
-    assign_id(_CP_RB2, 0x080AD094);
-    // assign_id(_CP_OIA, 0x08f02de2);
-    // assign_id(_CP_OIG, 0x0cf02ae2);
-    // assign_id(_CP_OIC, 0x0cf029e2);
-    // assign_id(_CP_OIS, 0x0cf029e2);
-    assign_id(_CP_HIA, 0x08f02de2);
-    assign_id(_CP_HIG, 0x0cf02ae2);
-    assign_id(_CP_HIC, 0x0cf029e2);
-    std::cout<<"Parser Initialize~~"<<std::endl;
-    print_id();
-    return OK;
+int Parser::init_parser()
+{
+  import_rule("rule.csv");
+  // prepare 2 power chart
+  for (int i = 0; i < 8; i++) {
+    pow256[i] = pow(256, i);
+    pow2[i] = pow(2, i);
+  }
+  return OK;
 }
 
-int Parser::decode(int type, int* data){
-    if(type == _CP_FB1){
-        fws_l_ = (data[0]*256+data[1])*0.002;
-        fws_r_ = (data[2]*256+data[3])*0.002;
-        // flags
-        flag_[_CP_FWS] = 1;
-        return OK;
-    }
-    else if(type == _CP_FB2){
-        thr1_  = data[0]*100/255;
-        thr2_  = data[1]*100/255;
-        brk_   = data[2]*100/255;
-        str_   = data[3]*100/255;
-        // flags
-        flag_[_CP_THR] = 1;
-        flag_[_CP_BRK] = 1;
-        flag_[_CP_STR] = 1;
-        // No such message yet
-        return OK;
-    }
-    else if(type == _CP_RB1){
-        rws_l_ = (data[0]*256+data[1])*0.002;
-        rws_r_ = (data[2]*256+data[3])*0.002;
-        // flags
-        flag_[_CP_RWS] = 1;
-        return OK;
-    }
-    else if(type == _CP_RB2){
-        rws_l_ = (data[2]*256+data[3])*0.002;
-        rws_r_ = (data[4]*256+data[5])*0.002;
-        // flags
-        flag_[_CP_RWS] = 1;
-        return OK;
-    }
-    else if(type == _CP_HIA){
-        accx_ = ((data[3]*256+data[2])-32000)/100;
-        accy_ = ((data[1]*256+data[0])-32000)/100;
-        accz_ = ((data[5]*256+data[4])-32000)/100;
-        // flags
-        flag_[_CP_ACC] = 1;
-        return OK;
-    }
-    else if(type == _CP_HIG){
-        gyrx_ = ((data[3]*256+data[2])-32000)/128;
-        gyry_ = ((data[1]*256+data[0])-32000)/128;
-        gyrz_ = ((data[5]*256+data[4])-32000)/128;
-        // flags
-        flag_[_CP_GYR] = 1;
-        return OK;
-    }
-    else if(type == _CP_HIC){
-        cmpx_ = ((data[2]*65536+data[1]*256+data[0])-8192000)/32768;
-        cmpy_ = ((data[5]*65536+data[4]*256+data[3])-8192000)/32768;
-        // no cmpz_ for Honeywell IMU
-        // flags
-        flag_[_CP_CMP] = 1;
-        return OK;
-    }
-    // still have to decode BMS and INVerter
-    else{
-        // Wrong Message
-        return ERR;
-    }
+int Parser::update_rule(
+  std::string key, std::string comp, int & id, int & bitbyte, int & endian, int & startbyte,
+  int & stopbyte, int & startbit, int & stopbit, double & scale, double & offset)
+{
+  // update rule map
+  rule_[key][comp].id = id;
+  rule_[key][comp].bitbyte = bitbyte;
+  rule_[key][comp].endian = endian;
+  rule_[key][comp].startbyte = startbyte;
+  rule_[key][comp].stopbyte = stopbyte;
+  rule_[key][comp].startbit = startbit;
+  rule_[key][comp].stopbit = stopbit;
+  rule_[key][comp].scale = scale;
+  rule_[key][comp].offset = offset;
+  // update id-frame pair
+  frame_[id].data_key.push_back(std::pair<std::string, std::string>(key, comp));
+  // update data flag
+  flag_[key][comp] = 0;
+  // update tbe and afd
+  tbe[key][comp] = 0;
+  afd[key][comp] = 0;
+  return OK;
 }
 
-int Parser::encode(int type, double* tbe, int* data){
-    if(type==_CP_INV){
-        // encode torque data here
-        return OK;
+int Parser::import_rule(std::string path)
+{
+  std::ifstream file(path);
+  if (!file) {
+    err_log(__func__, "File open error");
+    return ERR;
+  }
+  std::string buf, word;
+  char _key[10], _frame[4], _comp[10];
+  while (getline(file, buf)) {
+    std::vector<std::string> row;
+    std::stringstream str(buf);
+    int id, bitbyte, endian, startbyte, stopbyte, startbit, stopbit;
+    double scale, offset;
+    while (getline(str, word, ',')) {
+      row.push_back(word);
     }
-    else if(type == _CP_FB1){
-        int fws_l = tbe[0]/0.002;
-        int fws_r = tbe[1]/0.002;
-        int ft_l1 = (tbe[2]-(-273.15))/0.02;
-        int ft_l2 = (tbe[3]-(-273.15))/5.12;
-        int ft_r1 = (tbe[4]-(-273.15))/0.02;
-        int ft_r2 = (tbe[5]-(-273.15))/5.12;
-        data[0] = fws_l/256;
-        data[1] = fws_l%256;
-        data[2] = fws_r/256;
-        data[3] = fws_r%256;
-        data[4] = ft_l1%256;
-        data[5] = ft_l2%256;
-        data[6] = ft_r1%256;
-        data[7] = ft_r2%256;
-        // flags
-        flag_[_CP_FWS] = 1;
-        flag_[_CP_FWT] = 1;
-        return OK;
+    std::string key(row[0]);
+    std::string comp(row[1]);
+    bitbyte = std::stoi(row[3]);
+    endian = std::stoi(row[4]);
+    startbyte = std::stoi(row[5]);
+    stopbyte = std::stoi(row[6]);
+    startbit = std::stoi(row[7]);
+    stopbit = std::stoi(row[8]);
+    scale = std::stod(row[9]);
+    offset = std::stod(row[10]);
+    // id need other way to handle
+    std::stringstream ss;
+    ss << std::hex << row[2];
+    ss >> id;
+    update_rule(
+      key, comp, id, bitbyte, endian, startbyte, stopbyte, startbit, stopbit, scale, offset);
+  }
+  std::cout << "key, comp: " << frame_[0x040AD091].data_key.at(1).first << ", "
+            << frame_[0x040AD091].data_key.at(1).second << std::endl;
+  return OK;
+}
+
+int Parser::decode(int id, int * data)
+{
+  for (auto keys : frame_[id].data_key) {
+    Rule r = rule_[keys.first][keys.second];
+    // if stored in byte
+    unsigned long compose = 0;
+    if (r.bitbyte == _CP_BYTE) {
+      if (r.endian == _CP_LITTLE) {
+        for (int i = r.startbyte; i < r.stopbyte; i++) {
+          compose += data[i] << 8 * (i - r.startbyte);
+        }
+      } else if (r.endian == _CP_BIG) {
+        for (int i = r.stopbyte; i > r.startbyte; i--) {
+          compose += data[i] << 8 * (r.stopbyte - i);
+        }
+      } else {
+        err_log(__func__, "Wrong endian");
+      }
     }
-    else if(type == _CP_FB2){
-        int fws_l = tbe[0]/0.002;
-        int fws_r = tbe[1]/0.002;
-        int ft_l1 = (tbe[2]-(-273.15))/0.02;
-        int ft_l2 = (tbe[3]-(-273.15))/5.12;
-        int ft_r1 = (tbe[4]-(-273.15))/0.02;
-        int ft_r2 = (tbe[5]-(-273.15))/5.12;
-        data[0] = fws_l/256;
-        data[1] = fws_l%256;
-        data[2] = fws_r/256;
-        data[3] = fws_r%256;
-        data[4] = ft_l1%256;
-        data[5] = ft_l2%256;
-        data[6] = ft_r1%256;
-        data[7] = ft_r2%256;
-        // flags
-        flag_[_CP_FWS] = 1;
-        flag_[_CP_FWT] = 1;
-        return OK;
+    // if stored in bit
+    else if (r.bitbyte == _CP_BIT) {
+      // forced little endian
+      compose = (data[r.startbyte] >> r.startbit) % pow2[r.stopbit];
+    } else {
+      err_log(__func__, "Wrong bit/byte setting");
     }
-    else if(type == _CP_RB1){
-        int rws_l = tbe[0]/0.002;
-        int rws_r = tbe[1]/0.002;
-        int rt_l1 = (tbe[2]-(-273.15))/0.02;
-        int rt_l2 = (tbe[3]-(-273.15))/5.12;
-        int rt_r1 = (tbe[4]-(-273.15))/0.02;
-        int rt_r2 = (tbe[5]-(-273.15))/5.12;
-        data[0] = rws_l/256;
-        data[1] = rws_l%256;
-        data[2] = rws_r/256;
-        data[3] = rws_r%256;
-        data[4] = rt_l1%256;
-        data[5] = rt_l2%256;
-        data[6] = rt_r1%256;
-        data[7] = rt_r2%256;
-        // flags
-        flag_[_CP_RWS] = 1;
-        flag_[_CP_RWT] = 1;
-        return OK;
+    afd[keys.first][keys.second] = ((double)r.scale * compose) + r.offset;
+    flag_[keys.first][keys.second] = true;
+  }
+  return OK;
+}
+
+int Parser::encode(int id, int * data)
+{
+  for (auto keys : frame_[id].data_key) {
+    Rule r = rule_[keys.first][keys.second];
+    double _tbe = tbe[keys.first][keys.second];
+    unsigned long __tbe = (_tbe - r.offset) / r.scale;
+    // std::cout << "comp: " << keys.second << " start,stop: " << r.startbyte << r.stopbyte
+    //          << " byte? " << (r.bitbyte == _CP_BYTE) << " tbe " << _tbe << std::endl;
+    // if stored in byte
+    if (r.bitbyte == _CP_BYTE) {
+      if (r.endian == _CP_LITTLE) {
+        for (int i = r.startbyte; i < r.stopbyte; i++) {
+          data[i] = (__tbe >> (i - r.startbyte) * 8) % TWOPOW08;
+          // std::cout << "i, data: " << i << "," << data[i] << std::endl;
+        }
+      } else if (r.endian == _CP_BIG) {
+        for (int i = r.stopbyte; i > r.startbyte; i--) {
+          data[i] = (__tbe >> (r.stopbyte - i) * 8) % TWOPOW08;
+        }
+      } else {
+        err_log(__func__, "Wrong endian");
+      }
     }
-    else{
-        return ERR;
+    // if stored in bit
+    else if (r.bitbyte == _CP_BIT) {
+      // forced little endian
+      unsigned char mask = ~(((~0) << r.startbit) % pow2[r.stopbit]);
+      data[r.startbyte] = (data[r.startbyte] & mask) | (__tbe);
+    } else {
+      err_log(__func__, "Wrong bit/byte setting");
     }
+  }
+  return OK;
 }
 
 #ifdef BOOST_ARRAY
-int Parser::encode(int type, double* tbe, boost::array<unsigned char, 8> &data){
-    if(type==_CP_INV){
-        // encode torque data here
-        return OK;
-    }
-    else{
-        return ERR;
-    }
+int Parser::decode(int id, boost::array<unsigned char, 8> & data)
+{
+  int idata[8];
+  for (int i = 0; i < 8; i++) {
+    idata[i] = data[i];
+  }
+  int res = decode(id, idata);
+  return res;
+}
+int Parser::encode(int id, boost::array<unsigned char, 8> & data)
+{
+  int idata[8];
+  int res = encode(id, idata);
+  for (int i = 0; i < 8; i++) {
+    data[i] = idata[i];
+  }
+  return res;
 }
 #endif
 
-int Parser::get_ACC(double &ax, double &ay, double &az){
-    if(flag_[_CP_ACC]){
-        ax = accx_;
-        ay = accy_;
-        az = accz_;
-        flag_[_CP_ACC] = 0;
-        return OK;
-    }
-    else{
-        // not decoded yet
-        return ERR;
-    }
+int Parser::set_tbe(std::string key, std::map<std::string, double> & _tbe)
+{
+  // key check
+  if (tbe.find(key) == tbe.end()) {
+    err_log(__func__, "No such key");
+    return ERR;
+  } else {
+    tbe[key] = _tbe;
+    return OK;
+  }
 }
 
-int Parser::get_GYR(double &gx, double &gy, double &gz){
-    if(flag_[_CP_GYR]){
-        gx = gyrx_;
-        gy = gyry_;
-        gz = gyrz_;
-        flag_[_CP_GYR] = 0;
-        return OK;
+int Parser::set_tbe(std::string key, std::string comp, double _tbe)
+{
+  // key check
+  if (tbe.find(key) == tbe.end()) {
+    err_log(__func__, "No such key");
+    return ERR;
+  } else {
+    if (tbe[key].find(comp) == tbe[key].end()) {
+      err_log(__func__, "No such comp");
+      return ERR;
     }
-    else{
-        // not decoded yet
-        return ERR;
-    }
+    tbe[key][comp] = _tbe;
+    return OK;
+  }
 }
 
-int Parser::get_CMP(double &cx, double &cy, double &cz){
-    if(flag_[_CP_CMP]){
-        cx = cmpx_;
-        cy = cmpy_;
-        cz = cmpz_;
-        flag_[_CP_CMP] = 0;
-        return OK;
+int Parser::get_afd(std::string key, std::map<std::string, double> & _afd)
+{
+  // key check
+  if (afd.find(key) == afd.end()) {
+    err_log(__func__, "No such key");
+    return ERR;
+  }
+  auto it = _afd.begin();
+  int res = OK;
+  while (it != _afd.end()) {
+    if (flag_[key][it->first]) {
+      it->second = afd[key][it->first];
+      flag_[key][it->first] = false;
+    } else {
+      err_log(__func__, "(key,comp) = (" + key + "," + it->first + ") Get data before decode");
+      res = ERR;
     }
-    else{
-        // not decoded yet
-        return ERR;
-    }
+  }
+  return res;
 }
 
-int Parser::get_FWS(double &fws_l, double &fws_r){
-    if(flag_[_CP_FWS]){
-        fws_l = fws_l_;
-        fws_r = fws_r_;
-        flag_[_CP_FWS] = 0;
-        return OK;
-    }
-    else{
-        // not decoded yet
-        return ERR;
-    }
-}
-
-int Parser::get_RWS(double &rws_l, double &rws_r){
-    if(flag_[_CP_RWS]){
-        rws_l = rws_l_;
-        rws_r = rws_r_;
-        flag_[_CP_RWS] = 0;
-        return OK;
-    }
-    else{
-        // not decoded yet
-        return ERR;
-    }
-}
-
-int Parser::get_THR(double &th_1, double &th_2){
-    if(flag_[_CP_THR]){
-        th_1 = thr1_;
-        th_2 = thr2_;
-        flag_[_CP_THR] = 0;
-        return OK;
-    }
-    else{
-        // not decoded yet
-        return ERR;
-    }
-}
-    
-int Parser::get_BRK(double &brk){
-    if(flag_[_CP_BRK]){
-        brk = brk_;
-        flag_[_CP_BRK] = 0;
-        return OK;
-    }
-    else{
-        // not decoded yet
-        return ERR;
-    }
-}
-
-int Parser::get_STR(double &str){
-    if(flag_[_CP_STR]){
-        str = str_;
-        flag_[_CP_STR] = 0;
-        return OK;
-    }
-    else{
-        // not decoded yet
-        return ERR;
-    }
-
+double Parser::get_afd(std::string key, std::string comp)
+{
+  // key check
+  if (afd.find(key) == afd.end()) {
+    err_log(__func__, "No such key");
+    return ERR;
+  }
+  if (afd[key].find(comp) == afd[key].end()) {
+    err_log(__func__, "No such comp");
+    return ERR;
+  }
+  int res = OK;
+  if (flag_[key][comp]) {
+    flag_[key][comp] = false;
+    return afd[key][comp];
+  } else {
+    err_log(__func__, "(key,comp) = (" + key + "," + comp + ") Get data before decode");
+    res = ERR;
+  }
+  return res;
 }
