@@ -17,5 +17,10 @@
 #define _CAN_OIA 0x08F02DE2 // accelerometer frame from OpenIMU
 #define _CAN_OIG 0x0CF02AE2 // gyroscope frame from OpenIMU
 #define _CAN_OIC 0x18FF6AE2 // pose frame from OpenIMU
+#define _CAN_CIA 0x188
+#define _CAN_CIG 0x288
+#define _CAN_CIE 0x388
+#define _CAN_CIQ 0x488
+#define _CAN_CIP 0x688
 
 #endif

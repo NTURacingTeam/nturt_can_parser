@@ -76,19 +76,30 @@ int Parser::decode(int id, int *data) {
   for (auto keys : frame_[id].data_key) {
     Rule r = rule_[keys.first][keys.second];
     // if stored in byte
-    unsigned long compose = 0;
+    long long compose = 0;
     if (r.bitbyte == _CP_BYTE) {
       if (r.endian == _CP_LITTLE) {
         for (int i = r.startbyte; i < r.stopbyte; i++) {
-          compose += data[i] << 8 * (i - r.startbyte);
+          compose |= data[i] << 8 * (i - r.startbyte);
         }
       } else if (r.endian == _CP_BIG) {
         for (int i = r.stopbyte; i > r.startbyte; i--) {
-          compose += data[i] << 8 * (r.stopbyte - i);
+          compose |= data[i - 1] << 8 * (r.stopbyte - i);
         }
       } else {
         err_log(__func__, "Wrong endian");
       }
+      // handle the signed int stuff.
+      int sign_handling_bit = 8 * (r.stopbyte - r.startbyte) - 1;
+      bool negative = (compose >> sign_handling_bit) & 1;
+      long long neg_mask;
+      if (negative) {
+        neg_mask = ~((int)pow256[r.stopbyte - r.startbyte] - 1);
+        compose |= neg_mask;
+      }
+      // std::cout << "sign bit: " << sign_handling_bit
+      //           << ", negative: " << negative << ", neg mask: " << neg_mask
+      //          << ", compose: " << compose << std::endl;
     }
     // if stored in bit
     else if (r.bitbyte == _CP_BIT) {
@@ -107,7 +118,7 @@ int Parser::encode(int id, int *data) {
   for (auto keys : frame_[id].data_key) {
     Rule r = rule_[keys.first][keys.second];
     double _tbe = tbe[keys.first][keys.second];
-    unsigned long __tbe = (_tbe - r.offset) / r.scale;
+    long long __tbe = (_tbe - r.offset) / r.scale;
     // std::cout << "comp: " << keys.second << " start,stop: " << r.startbyte <<
     // r.stopbyte
     //          << " byte? " << (r.bitbyte == _CP_BYTE) << " tbe " << _tbe <<
@@ -116,12 +127,15 @@ int Parser::encode(int id, int *data) {
     if (r.bitbyte == _CP_BYTE) {
       if (r.endian == _CP_LITTLE) {
         for (int i = r.startbyte; i < r.stopbyte; i++) {
-          data[i] = (__tbe >> (i - r.startbyte) * 8) % TWOPOW08;
+          data[i] = (__tbe >> (i - r.startbyte) * 8) & _CP_MASK_LAST_8_BIT;
           // std::cout << "i, data: " << i << "," << data[i] << std::endl;
         }
       } else if (r.endian == _CP_BIG) {
         for (int i = r.stopbyte; i > r.startbyte; i--) {
-          data[i] = (__tbe >> (r.stopbyte - i) * 8) % TWOPOW08;
+          data[i - 1] = (__tbe >> (r.stopbyte - i) * 8) & _CP_MASK_LAST_8_BIT;
+          // std::cout << "i, data: " << i - 1 << ", tbe: " << __tbe
+          //           << ", shifted: " << (__tbe >> (r.stopbyte - i) * 8)
+          //           << ", result: " << data[i - 1] << std::endl;
         }
       } else {
         err_log(__func__, "Wrong endian");

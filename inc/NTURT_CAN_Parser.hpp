@@ -31,6 +31,8 @@
 // define Constants
 #define TWOPOW08 256
 #define TWOPOW26 67108864
+// define mask
+#define _CP_MASK_LAST_8_BIT 255 // b0000000011111111
 
 // for each frame, thay have id and a list of data, we f()store the key and its
 // component, so there are 2 string
