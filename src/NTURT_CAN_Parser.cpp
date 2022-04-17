@@ -1,7 +1,7 @@
 #include <NTURT_CAN_Parser.hpp>
 
 int Parser::init_parser() {
-  import_rule("/home/ros/test_ws/src/nturt_can_parser/rule.csv");
+  import_rule("/home/ros/nturt_ws/src/nturt_can_parser/rule.csv");
   // prepare 2 power chart
   for (int i = 0; i < 8; i++) {
     pow256[i] = pow(256, i);
