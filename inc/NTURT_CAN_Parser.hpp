@@ -52,6 +52,7 @@ typedef struct can_data_rule {
   // if start = 2 and stop = 4, we consider 2nd and 3rd bit/byte
   int startbyte, stopbyte;
   int startbit, stopbit;
+  int ifsigned;
   // physical value = (can data * scale) + offset
   double scale, offset;
 } Rule;
@@ -113,7 +114,7 @@ public:
   /**/
   int update_rule(std::string key, std::string comp, int &id, int &bitbyte,
                   int &endian, int &startbyte, int &stopbyte, int &startbit,
-                  int &stopbit, double &scale, double &offset);
+                  int &stopbit, int &ifsigned, double &scale, double &offset);
 
   /*  */
   int import_rule(std::string path);

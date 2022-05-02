@@ -13,7 +13,7 @@ int Parser::init_parser() {
 int Parser::update_rule(std::string key, std::string comp, int &id,
                         int &bitbyte, int &endian, int &startbyte,
                         int &stopbyte, int &startbit, int &stopbit,
-                        double &scale, double &offset) {
+                        int &ifsigned, double &scale, double &offset) {
   // update rule map
   rule_[key][comp].id = id;
   rule_[key][comp].bitbyte = bitbyte;
@@ -22,6 +22,7 @@ int Parser::update_rule(std::string key, std::string comp, int &id,
   rule_[key][comp].stopbyte = stopbyte;
   rule_[key][comp].startbit = startbit;
   rule_[key][comp].stopbit = stopbit;
+  rule_[key][comp].ifsigned = ifsigned;
   rule_[key][comp].scale = scale;
   rule_[key][comp].offset = offset;
   // update id-frame pair
@@ -45,7 +46,7 @@ int Parser::import_rule(std::string path) {
   while (getline(file, buf)) {
     std::vector<std::string> row;
     std::stringstream str(buf);
-    int id, bitbyte, endian, startbyte, stopbyte, startbit, stopbit;
+    int id, bitbyte, endian, startbyte, stopbyte, startbit, stopbit, ifsigned;
     double scale, offset;
     while (getline(str, word, ',')) {
       row.push_back(word);
@@ -58,14 +59,15 @@ int Parser::import_rule(std::string path) {
     stopbyte = std::stoi(row[6]);
     startbit = std::stoi(row[7]);
     stopbit = std::stoi(row[8]);
-    scale = std::stod(row[9]);
-    offset = std::stod(row[10]);
+    ifsigned = std::stoi(row[9]);
+    scale = std::stod(row[10]);
+    offset = std::stod(row[11]);
     // id need other way to handle
     std::stringstream ss;
     ss << std::hex << row[2];
     ss >> id;
     update_rule(key, comp, id, bitbyte, endian, startbyte, stopbyte, startbit,
-                stopbit, scale, offset);
+                stopbit, ifsigned, scale, offset);
   }
   std::cout << "key, comp: " << frame_[0x040AD091].data_key.at(1).first << ", "
             << frame_[0x040AD091].data_key.at(1).second << std::endl;
@@ -89,17 +91,23 @@ int Parser::decode(int id, int *data) {
       } else {
         err_log(__func__, "Wrong endian");
       }
+      // std::cout << "start: " << r.startbyte << ", stop: " << r.stopbyte
+      //           << ", key 1st: " << keys.first << ", key 2nd: " <<
+      //           keys.second
+      //           << ", compose: " << compose << std::endl;
       // handle the signed int stuff.
-      int sign_handling_bit = 8 * (r.stopbyte - r.startbyte) - 1;
-      bool negative = (compose >> sign_handling_bit) & 1;
-      long long neg_mask;
-      if (negative) {
-        neg_mask = ~((int)pow256[r.stopbyte - r.startbyte] - 1);
-        compose |= neg_mask;
+      if (r.ifsigned) {
+        int sign_handling_bit = 8 * (r.stopbyte - r.startbyte) - 1;
+        bool negative = (compose >> sign_handling_bit) & 1;
+        long long neg_mask;
+        if (negative) {
+          neg_mask = ~((int)pow256[r.stopbyte - r.startbyte] - 1);
+          compose |= neg_mask;
+        }
+        // std::cout << "sign bit: " << sign_handling_bit
+        //           << ", negative: " << negative << ", neg mask: " << neg_mask
+        //          << ", compose: " << compose << std::endl;
       }
-      // std::cout << "sign bit: " << sign_handling_bit
-      //           << ", negative: " << negative << ", neg mask: " << neg_mask
-      //          << ", compose: " << compose << std::endl;
     }
     // if stored in bit
     else if (r.bitbyte == _CP_BIT) {
