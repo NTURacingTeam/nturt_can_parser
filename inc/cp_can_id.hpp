@@ -2,10 +2,10 @@
 #define _CP_CAN_ID_HPP
 
 // define Frame ID here
-#define _CAN_FB1 0x040AD091 // front box 1
-#define _CAN_FB2 0x040AD092 // front box 2
-#define _CAN_RB1 0x040AD093 // rear box 1
-#define _CAN_RB2 0x040AD094 // rear box 2
+#define _CAN_FB1 0x080AD091 // front box 1
+#define _CAN_FB2 0x080AD092 // front box 2
+#define _CAN_RB1 0x080AD093 // rear box 1
+#define _CAN_RB2 0x080AD094 // rear box 2
 #define _CAN_DB1 5          // Dash Board 1
 #define _CAN_DB2 6          // Dash Board 2
 #define _CAN_MCM 0x0C0      // inverter
@@ -22,5 +22,9 @@
 #define _CAN_CIE 0x388
 #define _CAN_CIQ 0x488
 #define _CAN_CIP 0x688
+#define _CAN_MBT 0x0A1      // MCU_Board_Temp
+#define _CAN_MMT 0x0A2      // MCU_Motor_Temp
+#define _CAN_MMS 0x0A5      // MCU_Motor_Speed
+#define _CAN_MOV 0x0A7      // MUC_Output_Voltage
 
 #endif
