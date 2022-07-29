@@ -1,7 +1,7 @@
 #include <NTURT_CAN_Parser.hpp>
 
 int Parser::init_parser() {
-  import_rule("/home/ros/test_ws/src/nturt_can_parser/rule.csv");
+  import_rule("/home/docker/ws/src/nturt_can_parser/rule.csv");
   // prepare 2 power chart
   for (int i = 0; i < 8; i++) {
     pow256[i] = pow(256, i);
@@ -69,8 +69,6 @@ int Parser::import_rule(std::string path) {
     update_rule(key, comp, id, bitbyte, endian, startbyte, stopbyte, startbit,
                 stopbit, ifsigned, scale, offset);
   }
-  std::cout << "key, comp: " << frame_[0x040AD091].data_key.at(1).first << ", "
-            << frame_[0x040AD091].data_key.at(1).second << std::endl;
   return OK;
 }
 
