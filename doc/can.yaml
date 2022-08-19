@@ -1,0 +1,45 @@
+can:
+  frame:
+    name: front_box_2
+    id: 0x080AD092
+    is_extended_id: true
+    dlc: 8
+    period: 0
+    dataset:
+      data:
+        name: accelerator_level_1
+        start_byte: 1
+        stop_byte: 2
+        start_bit: 0
+        stop_bit: 0
+        resolution: 1
+        offset: 0
+        is_signed: false
+        is_little_endian: false
+      data:
+        name: accelerator_level_2
+        start_byte: 2
+        stop_byte: 3
+        start_bit: 0
+        stop_bit: 0
+        resolution: 1
+        offset: 0
+        is_signed: false
+        is_little_endian: false
+  frame:
+    name: inverter_motor_speed
+    id: 0x0A5
+    is_extended_id: false
+    dlc: 8
+    period: 0
+    dataset:
+      data:
+        name: motor_speed
+        start_byte: 1
+        stop_byte: 3
+        start_bit: 0
+        stop_bit: 0
+        resolution: 1
+        offset: 0
+        is_signed: true
+        is_little_endian: false
