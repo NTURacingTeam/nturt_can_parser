@@ -9,9 +9,10 @@ can:
       data:
         name: accelerator_level_1
         start_byte: 1
-        stop_byte: 2
+        end_byte: 2
         start_bit: 0
-        stop_bit: 0
+        end_bit: 0
+        default: 0
         resolution: 1
         offset: 0
         is_signed: false
@@ -19,9 +20,10 @@ can:
       data:
         name: accelerator_level_2
         start_byte: 2
-        stop_byte: 3
+        end_byte: 3
         start_bit: 0
-        stop_bit: 0
+        end_bit: 0
+        default: 0
         resolution: 1
         offset: 0
         is_signed: false
@@ -36,9 +38,10 @@ can:
       data:
         name: motor_speed
         start_byte: 1
-        stop_byte: 3
+        end_byte: 3
         start_bit: 0
-        stop_bit: 0
+        end_bit: 0
+        default: 0
         resolution: 1
         offset: 0
         is_signed: true
