@@ -35,9 +35,10 @@ class Frame {
         unsigned int id_;
         bool is_extended_id_;
         int dlc_;
-        double period_;
+        double frequency_;
         std::map<std::string, Data> dataset_;
         std::string get_string() const;
+        std::vector<Data> datavector_;
     private:
         double dt_;
 };
@@ -52,6 +53,24 @@ inline std::ostream& operator<<(std::ostream &_ostream, const Frame &_frame) {
 
 namespace YAML {
 template<>
+struct convert<Frame> {
+    static bool decode(const Node &_node, Frame &_cType) {
+        _cType.name_ = _node["name"].as<std::string>();
+        _cType.id_ = _node["id"].as<unsigned int>();
+        _cType.is_extended_id_ = _node["is_extended_id"].as<bool>();
+        _cType.dlc_ = _node["dlc"].as<int>();
+        _cType.frequency_ = _node["frequency"].as<double>();
+        for(const_iterator it = _node["dataset"].begin(); it != _node["dataset"].end(); it++) {
+            Data data = it->second.as<Data>();
+            //std::cout << data <<std::endl;
+            _cType.dataset_[data.name_] = data;
+            _cType.datavector_.push_back(data);
+        }
+        return true;
+    }
+};
+
+template<>
 struct convert<Data> {
     static bool decode(const Node &_node, Data &_cType) {
         _cType.name_ = _node["name"].as<std::string>();
@@ -64,23 +83,6 @@ struct convert<Data> {
         _cType.offset_ = _node["offset"].as<double>();
         _cType.is_signed_ = _node["is_signed"].as<bool>();
         _cType.is_little_endian_ = _node["is_little_endian"].as<bool>();
-        return true;
-    }
-};
-
-template<>
-struct convert<Frame> {
-    static bool decode(const Node &_node, Frame &_cType) {
-        _cType.name_ = _node["name"].as<std::string>();
-        _cType.id_ = _node["id"].as<unsigned int>();
-        _cType.is_extended_id_ = _node["is_extended_id"].as<bool>();
-        _cType.dlc_ = _node["dlc"].as<int>();
-        _cType.period_ = _node["period"].as<double>();
-        for(const_iterator it = _node["dataset"].begin(); it != _node["dataset"].end(); it++) {
-            Data data = it->second.as<Data>();
-            std::cout << data <<std::endl;
-            _cType.dataset_[data.name_] = data;
-        }
         return true;
     }
 };

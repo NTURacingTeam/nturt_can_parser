@@ -4,7 +4,7 @@ can:
     id: 0x080AD092
     is_extended_id: true
     dlc: 8
-    period: 0
+    frequency: 0
     dataset:
       data:
         name: accelerator_level_1
@@ -33,7 +33,7 @@ can:
     id: 0x0A5
     is_extended_id: false
     dlc: 8
-    period: 0
+    frequency: 0
     dataset:
       data:
         name: motor_speed

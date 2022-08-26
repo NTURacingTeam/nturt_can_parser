@@ -21,9 +21,11 @@ int main(int argc, char **argv) {
     // frequancy 1000 Hz
     ros::Rate loop_rate(1000);
 
+    CanParser test;
     // Main loop
     while (ros::ok()) {
         ros::spinOnce();
+        //std::cout << "while\n";
         loop_rate.sleep();
     }
     return 0;
