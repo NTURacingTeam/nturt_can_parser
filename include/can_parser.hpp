@@ -2,6 +2,7 @@
 #define CAN_PARSER_HPP
 
 #include <string>
+#include <cmath>
 #include <boost/array.hpp>
 #include <memory>
 #include <bitset>
@@ -12,15 +13,26 @@
 
 #include "yaml_loader.hpp"
 
+#define OK -1
+#define ERR 0
+
 using std::vector; using std::map; using std::string; using std::pair; using std::cout; 
 
 class CanParser{
 public:
     CanParser();
 
+    void print_err_log();
+    int init_parser();
+    int check_key(int id, string key, string comp);
+    int check_key(int id, string key);
     vector<pair<string, string>> get_key(int id);
+
     map<string, Frame> frameset_;
     map<int, vector<pair<string, string>>> find_id_to_get_two_name;
+
+    unsigned long pow256[8];
+    unsigned long pow2[8];
 };
 
 CanParser::CanParser() {
@@ -37,8 +49,30 @@ CanParser::CanParser() {
 }
 
 vector<pair<string, string>> CanParser::get_key(int id) {
-    //vector<pair<string, string>> _result;
+    //TODO: add ERR condition
     return find_id_to_get_two_name[id];
-    //return _result;
 }
+
+int CanParser::init_parser() {
+  // prepare 2 power chart
+  for (int i = 0; i < 8; i++) {
+    pow256[i] = pow(256, i);
+    pow2[i] = pow(2, i);
+  }
+  return OK;
+}
+int CanParser::check_key(int id, std::string key, std::string comp) {
+    //TODO: add ERR condition
+    return OK;
+}
+int CanParser::check_key(int id, std::string key) {
+    //TODO: add ERR condition
+    return OK;
+}
+
+void CanParser::print_err_log() {
+    //TODO: add ERR condition
+    cout << "no error\n";
+}
+
 #endif // CAN_PARSER_HPP
