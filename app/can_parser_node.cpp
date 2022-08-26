@@ -22,7 +22,14 @@ int main(int argc, char **argv) {
     ros::Rate loop_rate(1000);
 
     CanParser test;
+    //std::vector<std::pair<std::string, std::string>> result = test.get_key(123);
+    //std::cout << result[0].first << "\n" << result[0].second << "\n";
     // Main loop
+    auto result = test.get_key(0x080AD092);
+    for (auto it = result.begin(); it != result.end(); it++) {
+        cout << it->first << "\n";
+        cout << it->second << "\n";
+    }
     while (ros::ok()) {
         ros::spinOnce();
         //std::cout << "while\n";
