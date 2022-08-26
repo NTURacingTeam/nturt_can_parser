@@ -25,6 +25,12 @@ class Data {
         bool is_signed_;
         bool is_little_endian_;
         std::string get_string() const;
+        
+
+        double after_decode_;    // test
+        bool flag_;              // test
+
+
     private:
         double last_data_;
 };
@@ -83,6 +89,8 @@ struct convert<Data> {
         _cType.offset_ = _node["offset"].as<double>();
         _cType.is_signed_ = _node["is_signed"].as<bool>();
         _cType.is_little_endian_ = _node["is_little_endian"].as<bool>();
+        _cType.after_decode_ = 0.0;
+        _cType.flag_ = false;
         return true;
     }
 };
