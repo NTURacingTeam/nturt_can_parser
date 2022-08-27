@@ -36,10 +36,11 @@ public:
     int init_parser();
     int check_key(int id, string key, string comp);
     int check_key(int id, string key);
-    int set_tbe(string key, string comp, double _tbe);
     int decode(int id, int *data);
     //int decode(int id, const boost::array<unsigned char, 8> data);    // not sure
     int encode(int id, int *data);
+    int set_tbe(string frame_name, string comp_name, double val);
+    double get_afd(string key, string comp);
     vector<pair<string, string>> get_key(int id);
 
     map<string, Frame> frameset_;
@@ -54,7 +55,16 @@ public:
     unsigned long pow2[8];
 };
 
-int CanParser::set_tbe(std::string frame_name, std::string comp_name, double val) {
+double CanParser::get_afd(string frame_name, string comp_name) {
+    if (flag_[frame_name][comp_name]) {
+        flag_[frame_name][comp_name] = false;
+        return after_decode[frame_name][comp_name];
+    } 
+    //if (frameset_[frame_name][])
+    return ERR;
+}
+
+int CanParser::set_tbe(string frame_name, string comp_name, double val) {
     //TODO: add ERR condition
     to_be_encode[frame_name][comp_name] = val;
     return OK;
@@ -116,9 +126,9 @@ int CanParser::decode(int id, int *data) {
                     compose |= data[i - 1] << 8 * (comp.end_byte_ - i);
                 }
             } 
-            //else {
-            //    err_log(__func__, "Wrong is_little_endian_");
-            //}
+            else {
+                return ERR;
+            }
             if (comp.is_signed_) {
                 int sign_handling_bit = 8 * (comp.end_byte_ - comp.start_byte_) - 1;
                 bool negative = (compose >> sign_handling_bit) & 1;
@@ -132,16 +142,15 @@ int CanParser::decode(int id, int *data) {
         else if (comp.start_byte_== comp.end_byte_) {
           compose = (data[comp.start_byte_] >> comp.start_bit_) % pow2[comp.end_bit_];
         } 
-        //else {
-        //  err_log(__func__, "Wrong bit/byte setting");
-        //}
-        //
+        else {
+            return ERR;
+        }
 
         after_decode[curr_frame][comp.name_] = ((double)comp.resolution_ * compose) + comp.offset_;
         flag_[curr_frame][comp.name_] = true;
 
         comp.after_decode_ = ((double)comp.resolution_ * compose) + comp.offset_;   //test
-        comp.flag_ = true;                                                          //test
+        //comp.flag_ = true;                                                          //test
 
         cout << curr_frame << ": " << comp.name_ << "\n" << compose << "\n";
     }
