@@ -37,12 +37,14 @@ public:
     int check_key(int id, string key, string comp);
     int check_key(int id, string key);
     int decode(int id, int *data);
-    int decode(int id, const boost::array<unsigned char, 8> data);
+    //int decode(int id, const boost::array<unsigned char, 8> data);    // not sure
+    int encode(int id, int *data);
     vector<pair<string, string>> get_key(int id);
 
     map<string, Frame> frameset_;
     map<string, map<string, bool>> flag_;
     map<string, map<string, double>> after_decode;
+    map<string, map<string, double>> to_be_decode;
     //map<string, vector<bool>> flag_;
     map<int, vector<pair<string, string>>> find_id_to_get_two_name;
     map<int, string> find_id_to_get_frame;
@@ -51,24 +53,48 @@ public:
     unsigned long pow2[8];
 };
 
-int CanParser::decode(int id, const boost::array<unsigned char, 8> data) {
-  int idata[8];
-  for (int i = 0; i < 8; i++) {
-    idata[i] = data[i];
-  }
-  int res = decode(id, idata);
-  return res;
+
+int CanParser::encode(int id, int *data) {
+    cout << "encode\n";
+    string curr_frame = find_id_to_get_frame[id];
+    for (auto comp : frameset_[curr_frame].datavector_) {
+        long long compose = 0;
+        double _tbe = to_be_decode[curr_frame][comp.name_];     // to be replaced
+        //double _tbe = comp.to_be_decode_;                     // going to replace
+        long long __tbe = (_tbe - comp.offset_) / comp.resolution_;
+        if (comp.start_byte_ != comp.end_byte_) {
+            if (comp.is_little_endian_ == _CP_LITTLE) {
+                for (int i = comp.start_byte_; i < comp.end_byte_; i++) {
+                  data[i] = (__tbe >> (i - comp.start_byte_) * 8) & _CP_MASK_LAST_8_BIT;
+                  // std::cout << "i, data: " << i << "," << data[i] << std::endl;
+                }
+            }   
+            else if (comp.is_little_endian_ == _CP_BIG) {
+                for (int i = comp.end_byte_; i > comp.start_byte_; i--) {
+                    data[i - 1] = (__tbe >> (comp.end_byte_ - i) * 8) & _CP_MASK_LAST_8_BIT;
+                  }
+            }     
+            //else {
+            //      err_log(__func__, "Wrong is_little_endian_");
+            //}
+        }
+        else if (comp.start_byte_ == comp.end_byte_) {
+            //forced little is_little_endian_
+            unsigned char mask = ~(((~0) << comp.start_bit_) % pow2[comp.end_bit_]);
+            data[comp.start_byte_] = (data[comp.start_byte_] & mask) | (__tbe);
+        }   
+        //else {
+        //    err_log(__func__, "Wrong bit/byte setting");
+        //}
+    }
+    return OK;
 }
+
 int CanParser::decode(int id, int *data) {
     cout << "decode" << "\n";
     string curr_frame = find_id_to_get_frame[id]; 
-    //cout << curr_frame << "\n";
     for (auto comp : frameset_[curr_frame].datavector_) {
-        //cout << "in vec\n"; 
-        //cout << comp.name_ << "\n";
-
         long long compose = 0;
-
         if (comp.start_byte_!= comp.end_byte_) {
             if (comp.is_little_endian_ == _CP_LITTLE) {
                 for (int i = comp.start_byte_; i < comp.end_byte_; i++) {
@@ -111,6 +137,17 @@ int CanParser::decode(int id, int *data) {
     }
     return OK;
 }
+
+/*
+int CanParser::decode(int id, const boost::array<unsigned char, 8> data) {
+  int idata[8];
+  for (int i = 0; i < 8; i++) {
+    idata[i] = data[i];
+  }
+  int res = decode(id, idata);
+  return res;
+}
+*/
 
 CanParser::CanParser() {
     std::cout << "CanParser constructing\n";

@@ -28,6 +28,7 @@ class Data {
         
 
         double after_decode_;    // test
+        double to_be_encode_;    // test
         bool flag_;              // test
 
 
@@ -90,6 +91,7 @@ struct convert<Data> {
         _cType.is_signed_ = _node["is_signed"].as<bool>();
         _cType.is_little_endian_ = _node["is_little_endian"].as<bool>();
         _cType.after_decode_ = 0.0;
+        _cType.to_be_encode_= 0.0;
         _cType.flag_ = false;
         return true;
     }
