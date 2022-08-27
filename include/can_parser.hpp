@@ -36,6 +36,7 @@ public:
     int init_parser();
     int check_key(int id, string key, string comp);
     int check_key(int id, string key);
+    int set_tbe(string key, string comp, double _tbe);
     int decode(int id, int *data);
     //int decode(int id, const boost::array<unsigned char, 8> data);    // not sure
     int encode(int id, int *data);
@@ -44,7 +45,7 @@ public:
     map<string, Frame> frameset_;
     map<string, map<string, bool>> flag_;
     map<string, map<string, double>> after_decode;
-    map<string, map<string, double>> to_be_decode;
+    map<string, map<string, double>> to_be_encode;
     //map<string, vector<bool>> flag_;
     map<int, vector<pair<string, string>>> find_id_to_get_two_name;
     map<int, string> find_id_to_get_frame;
@@ -53,14 +54,20 @@ public:
     unsigned long pow2[8];
 };
 
+int CanParser::set_tbe(std::string frame_name, std::string comp_name, double val) {
+    //TODO: add ERR condition
+    to_be_encode[frame_name][comp_name] = val;
+    return OK;
+}
 
 int CanParser::encode(int id, int *data) {
     cout << "encode\n";
     string curr_frame = find_id_to_get_frame[id];
     for (auto comp : frameset_[curr_frame].datavector_) {
         long long compose = 0;
-        double _tbe = to_be_decode[curr_frame][comp.name_];     // to be replaced
-        //double _tbe = comp.to_be_decode_;                     // going to replace
+        double _tbe = to_be_encode[curr_frame][comp.name_];     //TODO: be replaced
+        to_be_encode[curr_frame][comp.name_] = 0;     
+        //double _tbe = comp.to_be_encode_;                     //TODO: going to replace
         long long __tbe = (_tbe - comp.offset_) / comp.resolution_;
         if (comp.start_byte_ != comp.end_byte_) {
             if (comp.is_little_endian_ == _CP_LITTLE) {
@@ -83,6 +90,9 @@ int CanParser::encode(int id, int *data) {
             unsigned char mask = ~(((~0) << comp.start_bit_) % pow2[comp.end_bit_]);
             data[comp.start_byte_] = (data[comp.start_byte_] & mask) | (__tbe);
         }   
+        else {
+            cout << "Wrong bit/byte\n";
+        }
         //else {
         //    err_log(__func__, "Wrong bit/byte setting");
         //}
@@ -158,6 +168,7 @@ CanParser::CanParser() {
         for (auto it_ = it->second.datavector_.begin(); it_ != it->second.datavector_.end(); it_++) {
             find_id_to_get_two_name[it->second.id_].push_back(pair<string, string>(it->second.name_, it_->name_));
             //std::cout << *it_ << "\n";
+            to_be_encode[it->second.name_][it_->name_] = 0;
         }
     }
     std::cout << "CanParser constructed\n";
