@@ -33,6 +33,7 @@ public:
     CanParser();
 
     void print_err_log();
+    void map_print();
     int init_parser();
     int check_key(int id, string key, string comp);
     int check_key(int id, string key);
@@ -55,6 +56,19 @@ public:
     unsigned long pow2[8];
 };
 
+
+void CanParser::map_print() {
+
+    std::cout << "CanParser map printing...\n";
+    frameset_ = load_yaml("/home/docker/ws/src/nturt_can_parser/doc/can.yaml");
+    for (auto it = frameset_.begin(); it != frameset_.end(); it++) {
+        std::cout << it->second << "\n";
+        for (auto it_ = it->second.datavector_.begin(); it_ != it->second.datavector_.end(); it_++) {
+            std::cout << *it_ << "\n";
+        }
+    }
+    std::cout << "CanParser map printed\n";
+}
 double CanParser::get_afd(string frame_name, string comp_name) {
     if (flag_[frame_name][comp_name]) {
         flag_[frame_name][comp_name] = false;
@@ -172,11 +186,9 @@ CanParser::CanParser() {
     std::cout << "CanParser constructing\n";
     frameset_ = load_yaml("/home/docker/ws/src/nturt_can_parser/doc/can.yaml");
     for (auto it = frameset_.begin(); it != frameset_.end(); it++) {
-        //std::cout << it->second << "\n";
         find_id_to_get_frame[it->second.id_] = it->second.name_;
         for (auto it_ = it->second.datavector_.begin(); it_ != it->second.datavector_.end(); it_++) {
             find_id_to_get_two_name[it->second.id_].push_back(pair<string, string>(it->second.name_, it_->name_));
-            //std::cout << *it_ << "\n";
             to_be_encode[it->second.name_][it_->name_] = 0;
         }
     }
