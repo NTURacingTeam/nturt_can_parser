@@ -50,7 +50,7 @@ void print_data(int i) {
     append += "start_bit: ";
     append += buff_vec[i][7];
     s8();
-    append += "stop_bit: ";
+    append += "end_bit: ";
     append += buff_vec[i][8];
     s8();
     append += "default: 0";
@@ -62,7 +62,7 @@ void print_data(int i) {
     append += buff_vec[i][11];
     s8();
     append += "is_signed: ";
-    append += buff_vec[i][9];
+    (buff_vec[i][9] == "1")? append += "true": append += "false";
     s8();
     append += "is_little_endian: ";
     string little_endian = "true";

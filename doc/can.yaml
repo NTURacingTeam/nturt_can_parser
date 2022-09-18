@@ -11,77 +11,77 @@ can:
         start_byte: 0
         end_byte: 2
         start_bit: 0
-        stop_bit: 0
+        end_bit: 0
         default: 0
         resolution: 0.003921568627451
         offset: 0
-        is_signed: 0
+        is_signed: false
         is_little_endian: true
       data:
         name: R
         start_byte: 2
         end_byte: 4
         start_bit: 0
-        stop_bit: 0
+        end_bit: 0
         default: 0
         resolution: 0.003921568627451
         offset: 0
-        is_signed: 0
+        is_signed: false
         is_little_endian: true
       data:
         name: L1
         start_byte: 4
         end_byte: 5
         start_bit: 0
-        stop_bit: 0
+        end_bit: 0
         default: 0
         resolution: 0.02
         offset: -273.15
-        is_signed: 0
+        is_signed: false
         is_little_endian: true
       data:
         name: L2
         start_byte: 5
         end_byte: 6
         start_bit: 0
-        stop_bit: 0
+        end_bit: 0
         default: 0
         resolution: 5.12
         offset: -272.15
-        is_signed: 0
+        is_signed: false
         is_little_endian: true
       data:
         name: R1
         start_byte: 6
         end_byte: 7
         start_bit: 0
-        stop_bit: 0
+        end_bit: 0
         default: 0
         resolution: 0.02
         offset: -271.15
-        is_signed: 0
+        is_signed: false
         is_little_endian: true
       data:
         name: R2
         start_byte: 7
         end_byte: 8
         start_bit: 0
-        stop_bit: 0
+        end_bit: 0
         default: 0
         resolution: 5.12
         offset: -270.15
-        is_signed: 0
+        is_signed: false
         is_little_endian: true
       data:
         name: R2
         start_byte: 7
         end_byte: 8
         start_bit: 0
-        stop_bit: 0
+        end_bit: 0
         default: 0
         resolution: 5.12
         offset: -270.15
-        is_signed: 0
+        is_signed: false
         is_little_endian: true
   frame:
     name: BRK
@@ -95,110 +95,110 @@ can:
         start_byte: 0
         end_byte: 1
         start_bit: 0
-        stop_bit: 0
+        end_bit: 0
         default: 0
         resolution: 0.098039215686275
         offset: 0
-        is_signed: 0
+        is_signed: false
         is_little_endian: true
       data:
         name: A
         start_byte: 1
         end_byte: 2
         start_bit: 0
-        stop_bit: 0
+        end_bit: 0
         default: 0
         resolution: 0.0039
         offset: 0
-        is_signed: 0
+        is_signed: false
         is_little_endian: true
       data:
         name: B
         start_byte: 2
         end_byte: 3
         start_bit: 0
-        stop_bit: 0
+        end_bit: 0
         default: 0
         resolution: 0.0039
         offset: 0
-        is_signed: 0
+        is_signed: false
         is_little_endian: true
       data:
         name: N
         start_byte: 3
         end_byte: 4
         start_bit: 0
-        stop_bit: 0
+        end_bit: 0
         default: 0
         resolution: 1.406
         offset: -180
-        is_signed: 0
+        is_signed: false
         is_little_endian: true
       data:
         name: L
         start_byte: 4
         end_byte: 5
         start_bit: 0
-        stop_bit: 0
+        end_bit: 0
         default: 0
         resolution: 0.17647058823
         offset: 200
-        is_signed: 0
+        is_signed: false
         is_little_endian: true
       data:
         name: R
         start_byte: 5
         end_byte: 6
         start_bit: 0
-        stop_bit: 0
+        end_bit: 0
         default: 0
         resolution: 0.17647058823
         offset: 200
-        is_signed: 0
+        is_signed: false
         is_little_endian: true
       data:
         name: N
         start_byte: 6
         end_byte: 7
         start_bit: 0
-        stop_bit: 0
+        end_bit: 0
         default: 0
         resolution: 1.96078431373
         offset: 0
-        is_signed: 0
+        is_signed: false
         is_little_endian: true
       data:
         name: N
         start_byte: 7
         end_byte: 0
         start_bit: 0
-        stop_bit: 1
+        end_bit: 1
         default: 0
         resolution: 1
         offset: 0
-        is_signed: 0
+        is_signed: false
         is_little_endian: true
       data:
         name: N
         start_byte: 7
         end_byte: 0
         start_bit: 1
-        stop_bit: 2
+        end_bit: 2
         default: 0
         resolution: 1
         offset: 0
-        is_signed: 0
+        is_signed: false
         is_little_endian: true
       data:
         name: N
         start_byte: 7
         end_byte: 0
         start_bit: 1
-        stop_bit: 2
+        end_bit: 2
         default: 0
         resolution: 1
         offset: 0
-        is_signed: 0
+        is_signed: false
         is_little_endian: true
   frame:
     name: RWS
@@ -212,77 +212,77 @@ can:
         start_byte: 0
         end_byte: 2
         start_bit: 0
-        stop_bit: 0
+        end_bit: 0
         default: 0
         resolution: 0.003921568627451
         offset: 0
-        is_signed: 0
+        is_signed: false
         is_little_endian: true
       data:
         name: R
         start_byte: 2
         end_byte: 4
         start_bit: 0
-        stop_bit: 0
+        end_bit: 0
         default: 0
         resolution: 0.003921568627451
         offset: 0
-        is_signed: 0
+        is_signed: false
         is_little_endian: true
       data:
         name: L1
         start_byte: 4
         end_byte: 5
         start_bit: 0
-        stop_bit: 0
+        end_bit: 0
         default: 0
         resolution: 0.02
         offset: -273.15
-        is_signed: 0
+        is_signed: false
         is_little_endian: true
       data:
         name: L2
         start_byte: 5
         end_byte: 6
         start_bit: 0
-        stop_bit: 0
+        end_bit: 0
         default: 0
         resolution: 5.12
         offset: -272.15
-        is_signed: 0
+        is_signed: false
         is_little_endian: true
       data:
         name: R1
         start_byte: 6
         end_byte: 7
         start_bit: 0
-        stop_bit: 0
+        end_bit: 0
         default: 0
         resolution: 0.02
         offset: -271.15
-        is_signed: 0
+        is_signed: false
         is_little_endian: true
       data:
         name: R2
         start_byte: 7
         end_byte: 8
         start_bit: 0
-        stop_bit: 0
+        end_bit: 0
         default: 0
         resolution: 5.12
         offset: -270.15
-        is_signed: 0
+        is_signed: false
         is_little_endian: true
       data:
         name: R2
         start_byte: 7
         end_byte: 8
         start_bit: 0
-        stop_bit: 0
+        end_bit: 0
         default: 0
         resolution: 5.12
         offset: -270.15
-        is_signed: 0
+        is_signed: false
         is_little_endian: true
   frame:
     name: RSS
@@ -296,33 +296,33 @@ can:
         start_byte: 0
         end_byte: 1
         start_bit: 0
-        stop_bit: 0
+        end_bit: 0
         default: 0
         resolution: 0.17647058823
         offset: 200
-        is_signed: 0
+        is_signed: false
         is_little_endian: true
       data:
         name: R
         start_byte: 1
         end_byte: 2
         start_bit: 0
-        stop_bit: 0
+        end_bit: 0
         default: 0
         resolution: 0.17647058823
         offset: 200
-        is_signed: 0
+        is_signed: false
         is_little_endian: true
       data:
         name: R
         start_byte: 1
         end_byte: 2
         start_bit: 0
-        stop_bit: 0
+        end_bit: 0
         default: 0
         resolution: 0.17647058823
         offset: 200
-        is_signed: 0
+        is_signed: false
         is_little_endian: true
   frame:
     name: RTD
@@ -336,33 +336,33 @@ can:
         start_byte: 0
         end_byte: 0
         start_bit: 0
-        stop_bit: 1
+        end_bit: 1
         default: 0
         resolution: 1
         offset: 0
-        is_signed: 0
+        is_signed: false
         is_little_endian: true
       data:
         name: N
         start_byte: 1
         end_byte: 2
         start_bit: 0
-        stop_bit: 0
+        end_bit: 0
         default: 0
         resolution: 1
         offset: 0
-        is_signed: 0
+        is_signed: false
         is_little_endian: true
       data:
         name: N
         start_byte: 1
         end_byte: 2
         start_bit: 0
-        stop_bit: 0
+        end_bit: 0
         default: 0
         resolution: 1
         offset: 0
-        is_signed: 0
+        is_signed: false
         is_little_endian: true
   frame:
     name: HIS
@@ -376,33 +376,33 @@ can:
         start_byte: 0
         end_byte: 3
         start_bit: 0
-        stop_bit: 0
+        end_bit: 0
         default: 0
         resolution: 3.0517578125E-05
         offset: -250
-        is_signed: 0
+        is_signed: false
         is_little_endian: true
       data:
         name: R
         start_byte: 3
         end_byte: 6
         start_bit: 0
-        stop_bit: 0
+        end_bit: 0
         default: 0
         resolution: 3.0517578125E-05
         offset: -250
-        is_signed: 0
+        is_signed: false
         is_little_endian: true
       data:
         name: R
         start_byte: 3
         end_byte: 6
         start_bit: 0
-        stop_bit: 0
+        end_bit: 0
         default: 0
         resolution: 3.0517578125E-05
         offset: -250
-        is_signed: 0
+        is_signed: false
         is_little_endian: true
   frame:
     name: HIA
@@ -416,44 +416,44 @@ can:
         start_byte: 0
         end_byte: 2
         start_bit: 0
-        stop_bit: 0
+        end_bit: 0
         default: 0
         resolution: 0.01
         offset: -320
-        is_signed: 0
+        is_signed: false
         is_little_endian: true
       data:
         name: Y
         start_byte: 2
         end_byte: 4
         start_bit: 0
-        stop_bit: 0
+        end_bit: 0
         default: 0
         resolution: 0.01
         offset: -320
-        is_signed: 0
+        is_signed: false
         is_little_endian: true
       data:
         name: Z
         start_byte: 4
         end_byte: 6
         start_bit: 0
-        stop_bit: 0
+        end_bit: 0
         default: 0
         resolution: 0.01
         offset: -320
-        is_signed: 0
+        is_signed: false
         is_little_endian: true
       data:
         name: Z
         start_byte: 4
         end_byte: 6
         start_bit: 0
-        stop_bit: 0
+        end_bit: 0
         default: 0
         resolution: 0.01
         offset: -320
-        is_signed: 0
+        is_signed: false
         is_little_endian: true
   frame:
     name: HIG
@@ -467,44 +467,44 @@ can:
         start_byte: 0
         end_byte: 2
         start_bit: 0
-        stop_bit: 0
+        end_bit: 0
         default: 0
         resolution: 0.0078125
         offset: -250
-        is_signed: 0
+        is_signed: false
         is_little_endian: true
       data:
         name: Y
         start_byte: 2
         end_byte: 4
         start_bit: 0
-        stop_bit: 0
+        end_bit: 0
         default: 0
         resolution: 0.0078125
         offset: -250
-        is_signed: 0
+        is_signed: false
         is_little_endian: true
       data:
         name: Z
         start_byte: 4
         end_byte: 6
         start_bit: 0
-        stop_bit: 0
+        end_bit: 0
         default: 0
         resolution: 0.0078125
         offset: -250
-        is_signed: 0
+        is_signed: false
         is_little_endian: true
       data:
         name: Z
         start_byte: 4
         end_byte: 6
         start_bit: 0
-        stop_bit: 0
+        end_bit: 0
         default: 0
         resolution: 0.0078125
         offset: -250
-        is_signed: 0
+        is_signed: false
         is_little_endian: true
   frame:
     name: HIC
@@ -518,44 +518,44 @@ can:
         start_byte: 0
         end_byte: 2
         start_bit: 0
-        stop_bit: 0
+        end_bit: 0
         default: 0
         resolution: 0.00025
         offset: -8
-        is_signed: 0
+        is_signed: false
         is_little_endian: true
       data:
         name: Y
         start_byte: 2
         end_byte: 4
         start_bit: 0
-        stop_bit: 0
+        end_bit: 0
         default: 0
         resolution: 0.00025
         offset: -8
-        is_signed: 0
+        is_signed: false
         is_little_endian: true
       data:
         name: Z
         start_byte: 4
         end_byte: 6
         start_bit: 0
-        stop_bit: 0
+        end_bit: 0
         default: 0
         resolution: 0.00025
         offset: -8
-        is_signed: 0
+        is_signed: false
         is_little_endian: true
       data:
         name: Z
         start_byte: 4
         end_byte: 6
         start_bit: 0
-        stop_bit: 0
+        end_bit: 0
         default: 0
         resolution: 0.00025
         offset: -8
-        is_signed: 0
+        is_signed: false
         is_little_endian: true
   frame:
     name: OIS
@@ -569,33 +569,33 @@ can:
         start_byte: 0
         end_byte: 3
         start_bit: 0
-        stop_bit: 0
+        end_bit: 0
         default: 0
         resolution: 3.0517578125E-05
         offset: -250
-        is_signed: 0
+        is_signed: false
         is_little_endian: true
       data:
         name: R
         start_byte: 3
         end_byte: 6
         start_bit: 0
-        stop_bit: 0
+        end_bit: 0
         default: 0
         resolution: 3.0517578125E-05
         offset: -250
-        is_signed: 0
+        is_signed: false
         is_little_endian: true
       data:
         name: R
         start_byte: 3
         end_byte: 6
         start_bit: 0
-        stop_bit: 0
+        end_bit: 0
         default: 0
         resolution: 3.0517578125E-05
         offset: -250
-        is_signed: 0
+        is_signed: false
         is_little_endian: true
   frame:
     name: OIA
@@ -609,44 +609,44 @@ can:
         start_byte: 0
         end_byte: 2
         start_bit: 0
-        stop_bit: 0
+        end_bit: 0
         default: 0
         resolution: 0.01
         offset: -320
-        is_signed: 0
+        is_signed: false
         is_little_endian: true
       data:
         name: Y
         start_byte: 2
         end_byte: 4
         start_bit: 0
-        stop_bit: 0
+        end_bit: 0
         default: 0
         resolution: 0.01
         offset: -320
-        is_signed: 0
+        is_signed: false
         is_little_endian: true
       data:
         name: Z
         start_byte: 4
         end_byte: 6
         start_bit: 0
-        stop_bit: 0
+        end_bit: 0
         default: 0
         resolution: 0.01
         offset: -320
-        is_signed: 0
+        is_signed: false
         is_little_endian: true
       data:
         name: Z
         start_byte: 4
         end_byte: 6
         start_bit: 0
-        stop_bit: 0
+        end_bit: 0
         default: 0
         resolution: 0.01
         offset: -320
-        is_signed: 0
+        is_signed: false
         is_little_endian: true
   frame:
     name: OIG
@@ -660,44 +660,44 @@ can:
         start_byte: 0
         end_byte: 2
         start_bit: 0
-        stop_bit: 0
+        end_bit: 0
         default: 0
         resolution: 0.0078125
         offset: -250
-        is_signed: 0
+        is_signed: false
         is_little_endian: true
       data:
         name: Y
         start_byte: 2
         end_byte: 4
         start_bit: 0
-        stop_bit: 0
+        end_bit: 0
         default: 0
         resolution: 0.0078125
         offset: -250
-        is_signed: 0
+        is_signed: false
         is_little_endian: true
       data:
         name: Z
         start_byte: 4
         end_byte: 6
         start_bit: 0
-        stop_bit: 0
+        end_bit: 0
         default: 0
         resolution: 0.0078125
         offset: -250
-        is_signed: 0
+        is_signed: false
         is_little_endian: true
       data:
         name: Z
         start_byte: 4
         end_byte: 6
         start_bit: 0
-        stop_bit: 0
+        end_bit: 0
         default: 0
         resolution: 0.0078125
         offset: -250
-        is_signed: 0
+        is_signed: false
         is_little_endian: true
   frame:
     name: OIC
@@ -711,44 +711,44 @@ can:
         start_byte: 0
         end_byte: 2
         start_bit: 0
-        stop_bit: 0
+        end_bit: 0
         default: 0
         resolution: 0.00025
         offset: -8
-        is_signed: 0
+        is_signed: false
         is_little_endian: true
       data:
         name: Y
         start_byte: 2
         end_byte: 4
         start_bit: 0
-        stop_bit: 0
+        end_bit: 0
         default: 0
         resolution: 0.00025
         offset: -8
-        is_signed: 0
+        is_signed: false
         is_little_endian: true
       data:
         name: Z
         start_byte: 4
         end_byte: 6
         start_bit: 0
-        stop_bit: 0
+        end_bit: 0
         default: 0
         resolution: 0.00025
         offset: -8
-        is_signed: 0
+        is_signed: false
         is_little_endian: true
       data:
         name: Z
         start_byte: 4
         end_byte: 6
         start_bit: 0
-        stop_bit: 0
+        end_bit: 0
         default: 0
         resolution: 0.00025
         offset: -8
-        is_signed: 0
+        is_signed: false
         is_little_endian: true
   frame:
     name: CIA
@@ -762,44 +762,44 @@ can:
         start_byte: 0
         end_byte: 2
         start_bit: 0
-        stop_bit: 0
+        end_bit: 0
         default: 0
         resolution: 0.001
         offset: 0
-        is_signed: 1
+        is_signed: true
         is_little_endian: false
       data:
         name: Y
         start_byte: 2
         end_byte: 4
         start_bit: 0
-        stop_bit: 0
+        end_bit: 0
         default: 0
         resolution: 0.001
         offset: 0
-        is_signed: 1
+        is_signed: true
         is_little_endian: false
       data:
         name: Z
         start_byte: 4
         end_byte: 6
         start_bit: 0
-        stop_bit: 0
+        end_bit: 0
         default: 0
         resolution: 0.001
         offset: 0
-        is_signed: 1
+        is_signed: true
         is_little_endian: false
       data:
         name: Z
         start_byte: 4
         end_byte: 6
         start_bit: 0
-        stop_bit: 0
+        end_bit: 0
         default: 0
         resolution: 0.001
         offset: 0
-        is_signed: 1
+        is_signed: true
         is_little_endian: false
   frame:
     name: CIG
@@ -813,44 +813,44 @@ can:
         start_byte: 0
         end_byte: 2
         start_bit: 0
-        stop_bit: 0
+        end_bit: 0
         default: 0
         resolution: 0.001745
         offset: 0
-        is_signed: 1
+        is_signed: true
         is_little_endian: false
       data:
         name: Y
         start_byte: 2
         end_byte: 4
         start_bit: 0
-        stop_bit: 0
+        end_bit: 0
         default: 0
         resolution: 0.001745
         offset: 0
-        is_signed: 1
+        is_signed: true
         is_little_endian: false
       data:
         name: Z
         start_byte: 4
         end_byte: 6
         start_bit: 0
-        stop_bit: 0
+        end_bit: 0
         default: 0
         resolution: 0.001745
         offset: 0
-        is_signed: 1
+        is_signed: true
         is_little_endian: false
       data:
         name: Z
         start_byte: 4
         end_byte: 6
         start_bit: 0
-        stop_bit: 0
+        end_bit: 0
         default: 0
         resolution: 0.001745
         offset: 0
-        is_signed: 1
+        is_signed: true
         is_little_endian: false
   frame:
     name: CIE
@@ -864,44 +864,44 @@ can:
         start_byte: 0
         end_byte: 2
         start_bit: 0
-        stop_bit: 0
+        end_bit: 0
         default: 0
         resolution: 0.0001745
         offset: 0
-        is_signed: 1
+        is_signed: true
         is_little_endian: false
       data:
         name: P
         start_byte: 2
         end_byte: 4
         start_bit: 0
-        stop_bit: 0
+        end_bit: 0
         default: 0
         resolution: 0.0001745
         offset: 0
-        is_signed: 1
+        is_signed: true
         is_little_endian: false
       data:
         name: Y
         start_byte: 4
         end_byte: 6
         start_bit: 0
-        stop_bit: 0
+        end_bit: 0
         default: 0
         resolution: 0.0001745
         offset: 0
-        is_signed: 1
+        is_signed: true
         is_little_endian: false
       data:
         name: Y
         start_byte: 4
         end_byte: 6
         start_bit: 0
-        stop_bit: 0
+        end_bit: 0
         default: 0
         resolution: 0.0001745
         offset: 0
-        is_signed: 1
+        is_signed: true
         is_little_endian: false
   frame:
     name: CIQ
@@ -915,55 +915,55 @@ can:
         start_byte: 0
         end_byte: 2
         start_bit: 0
-        stop_bit: 0
+        end_bit: 0
         default: 0
         resolution: 0.0001
         offset: 0
-        is_signed: 1
+        is_signed: true
         is_little_endian: false
       data:
         name: X
         start_byte: 2
         end_byte: 4
         start_bit: 0
-        stop_bit: 0
+        end_bit: 0
         default: 0
         resolution: 0.0001
         offset: 0
-        is_signed: 1
+        is_signed: true
         is_little_endian: false
       data:
         name: Y
         start_byte: 4
         end_byte: 6
         start_bit: 0
-        stop_bit: 0
+        end_bit: 0
         default: 0
         resolution: 0.0001
         offset: 0
-        is_signed: 1
+        is_signed: true
         is_little_endian: false
       data:
         name: Z
         start_byte: 6
         end_byte: 8
         start_bit: 0
-        stop_bit: 0
+        end_bit: 0
         default: 0
         resolution: 0.0001
         offset: 0
-        is_signed: 1
+        is_signed: true
         is_little_endian: false
       data:
         name: Z
         start_byte: 6
         end_byte: 8
         start_bit: 0
-        stop_bit: 0
+        end_bit: 0
         default: 0
         resolution: 0.0001
         offset: 0
-        is_signed: 1
+        is_signed: true
         is_little_endian: false
   frame:
     name: CIP
@@ -977,22 +977,22 @@ can:
         start_byte: 0
         end_byte: 4
         start_bit: 0
-        stop_bit: 0
+        end_bit: 0
         default: 0
         resolution: 1
         offset: 0
-        is_signed: 0
+        is_signed: false
         is_little_endian: false
       data:
         name: N
         start_byte: 0
         end_byte: 4
         start_bit: 0
-        stop_bit: 0
+        end_bit: 0
         default: 0
         resolution: 1
         offset: 0
-        is_signed: 0
+        is_signed: false
         is_little_endian: false
   frame:
     name: MTC
@@ -1006,88 +1006,88 @@ can:
         start_byte: 0
         end_byte: 2
         start_bit: 0
-        stop_bit: 0
+        end_bit: 0
         default: 0
         resolution: 0.1
         offset: 0
-        is_signed: 0
+        is_signed: false
         is_little_endian: true
       data:
         name: N
         start_byte: 2
         end_byte: 4
         start_bit: 0
-        stop_bit: 0
+        end_bit: 0
         default: 0
         resolution: 1
         offset: 0
-        is_signed: 0
+        is_signed: false
         is_little_endian: true
       data:
         name: N
         start_byte: 4
         end_byte: 5
         start_bit: 0
-        stop_bit: 1
+        end_bit: 1
         default: 0
         resolution: 1
         offset: 0
-        is_signed: 0
+        is_signed: false
         is_little_endian: true
       data:
         name: N
         start_byte: 5
         end_byte: 6
         start_bit: 0
-        stop_bit: 1
+        end_bit: 1
         default: 0
         resolution: 1
         offset: 0
-        is_signed: 0
+        is_signed: false
         is_little_endian: true
       data:
         name: N
         start_byte: 5
         end_byte: 6
         start_bit: 1
-        stop_bit: 2
+        end_bit: 2
         default: 0
         resolution: 1
         offset: 0
-        is_signed: 0
+        is_signed: false
         is_little_endian: true
       data:
         name: N
         start_byte: 5
         end_byte: 6
         start_bit: 2
-        stop_bit: 3
+        end_bit: 3
         default: 0
         resolution: 1
         offset: 0
-        is_signed: 0
+        is_signed: false
         is_little_endian: true
       data:
         name: N
         start_byte: 6
         end_byte: 8
         start_bit: 0
-        stop_bit: 0
+        end_bit: 0
         default: 0
         resolution: 0.1
         offset: 0
-        is_signed: 0
+        is_signed: false
         is_little_endian: true
       data:
         name: N
         start_byte: 6
         end_byte: 8
         start_bit: 0
-        stop_bit: 0
+        end_bit: 0
         default: 0
         resolution: 0.1
         offset: 0
-        is_signed: 0
+        is_signed: false
         is_little_endian: true
   frame:
     name: MBT
@@ -1101,22 +1101,22 @@ can:
         start_byte: 0
         end_byte: 2
         start_bit: 0
-        stop_bit: 0
+        end_bit: 0
         default: 0
         resolution: 0.1
         offset: 0
-        is_signed: 1
+        is_signed: true
         is_little_endian: false
       data:
         name: N
         start_byte: 0
         end_byte: 2
         start_bit: 0
-        stop_bit: 0
+        end_bit: 0
         default: 0
         resolution: 0.1
         offset: 0
-        is_signed: 1
+        is_signed: true
         is_little_endian: false
   frame:
     name: MMT
@@ -1130,22 +1130,22 @@ can:
         start_byte: 4
         end_byte: 6
         start_bit: 0
-        stop_bit: 0
+        end_bit: 0
         default: 0
         resolution: 0.1
         offset: 0
-        is_signed: 1
+        is_signed: true
         is_little_endian: false
       data:
         name: N
         start_byte: 4
         end_byte: 6
         start_bit: 0
-        stop_bit: 0
+        end_bit: 0
         default: 0
         resolution: 0.1
         offset: 0
-        is_signed: 1
+        is_signed: true
         is_little_endian: false
   frame:
     name: MMS
@@ -1159,22 +1159,22 @@ can:
         start_byte: 2
         end_byte: 4
         start_bit: 0
-        stop_bit: 0
+        end_bit: 0
         default: 0
         resolution: 1
         offset: 0
-        is_signed: 1
+        is_signed: true
         is_little_endian: false
       data:
         name: N
         start_byte: 2
         end_byte: 4
         start_bit: 0
-        stop_bit: 0
+        end_bit: 0
         default: 0
         resolution: 1
         offset: 0
-        is_signed: 1
+        is_signed: true
         is_little_endian: false
   frame:
     name: MOV
@@ -1188,9 +1188,9 @@ can:
         start_byte: 2
         end_byte: 4
         start_bit: 0
-        stop_bit: 0
+        end_bit: 0
         default: 0
         resolution: 0.1
         offset: 0
-        is_signed: 1
+        is_signed: true
         is_little_endian: false
