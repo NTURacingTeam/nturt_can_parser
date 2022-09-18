@@ -236,17 +236,17 @@ can:
         offset: 0
         is_signed: false
         is_little_endian: true
-       data:
-           name: keep_alive
-           start_byte: 7
-           end_byte: 8
-           start_bit: 0
-           end_bit: 0
-           default: 0
-           resolution: 1
-           offset: 0
-           is_signed: false
-           is_little_endian: true
+      data:
+        name: keep_alive
+        start_byte: 7
+        end_byte: 8
+        start_bit: 0
+        end_bit: 0
+        default: 0
+        resolution: 1
+        offset: 0
+        is_signed: false
+        is_little_endian: true
   frame:
     name: mcu_command
     id: 0x0C0
