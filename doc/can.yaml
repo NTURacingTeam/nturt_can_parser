@@ -73,58 +73,58 @@ can:
         is_signed: false
         is_little_endian: true
   frame:
-    name: BRK
+    name: front_box_2
     id: 0x080AD092
     is_extended_id: true
     dlc: 8
     frequency: 0
     dataset:
       data:
-        name: N
+        name: brake
         start_byte: 0
         end_byte: 1
         start_bit: 0
         end_bit: 0
         default: 0
-        resolution: 0.098039215686275
-        offset: 0
+        resolution: 0.00395
+        offset: -0.00395
         is_signed: false
         is_little_endian: true
       data:
-        name: A
+        name: accelerator_1
         start_byte: 1
         end_byte: 2
         start_bit: 0
         end_bit: 0
         default: 0
-        resolution: 0.0039
-        offset: 0
+        resolution: 0.00395
+        offset: -0.00395
         is_signed: false
         is_little_endian: true
       data:
-        name: B
+        name: accelerator_2
         start_byte: 2
         end_byte: 3
         start_bit: 0
         end_bit: 0
         default: 0
-        resolution: 0.0039
-        offset: 0
+        resolution: 0.00395
+        offset: -0.00395
         is_signed: false
         is_little_endian: true
       data:
-        name: N
+        name: steer_angle
         start_byte: 3
         end_byte: 4
         start_bit: 0
         end_bit: 0
         default: 0
         resolution: 1.406
-        offset: -180
+        offset: -180.0
         is_signed: false
         is_little_endian: true
       data:
-        name: L
+        name: travel_front_left
         start_byte: 4
         end_byte: 5
         start_bit: 0
@@ -135,7 +135,7 @@ can:
         is_signed: false
         is_little_endian: true
       data:
-        name: R
+        name: travel_front_right
         start_byte: 5
         end_byte: 6
         start_bit: 0
@@ -146,20 +146,20 @@ can:
         is_signed: false
         is_little_endian: true
       data:
-        name: N
+        name: oil_pressure
         start_byte: 6
         end_byte: 7
         start_bit: 0
         end_bit: 0
         default: 0
-        resolution: 1.96078431373
+        resolution: 19.6078431373
         offset: 0
         is_signed: false
         is_little_endian: true
       data:
-        name: N
+        name: brake_micro
         start_byte: 7
-        end_byte: 0
+        end_byte: 8
         start_bit: 0
         end_bit: 1
         default: 0
@@ -168,20 +168,9 @@ can:
         is_signed: false
         is_little_endian: true
       data:
-        name: N
+        name: accelerator_micro
         start_byte: 7
-        end_byte: 0
-        start_bit: 1
-        end_bit: 2
-        default: 0
-        resolution: 1
-        offset: 0
-        is_signed: false
-        is_little_endian: true
-      data:
-        name: N
-        start_byte: 7
-        end_byte: 0
+        end_byte: 8
         start_bit: 1
         end_bit: 2
         default: 0
@@ -190,98 +179,14 @@ can:
         is_signed: false
         is_little_endian: true
   frame:
-    name: RWS
-    id: 0x080AD093
-    is_extended_id: true
-    dlc: 8
-    frequency: 0
-    dataset:
-      data:
-        name: L
-        start_byte: 0
-        end_byte: 2
-        start_bit: 0
-        end_bit: 0
-        default: 0
-        resolution: 0.003921568627451
-        offset: 0
-        is_signed: false
-        is_little_endian: true
-      data:
-        name: R
-        start_byte: 2
-        end_byte: 4
-        start_bit: 0
-        end_bit: 0
-        default: 0
-        resolution: 0.003921568627451
-        offset: 0
-        is_signed: false
-        is_little_endian: true
-      data:
-        name: L1
-        start_byte: 4
-        end_byte: 5
-        start_bit: 0
-        end_bit: 0
-        default: 0
-        resolution: 0.02
-        offset: -273.15
-        is_signed: false
-        is_little_endian: true
-      data:
-        name: L2
-        start_byte: 5
-        end_byte: 6
-        start_bit: 0
-        end_bit: 0
-        default: 0
-        resolution: 5.12
-        offset: -272.15
-        is_signed: false
-        is_little_endian: true
-      data:
-        name: R1
-        start_byte: 6
-        end_byte: 7
-        start_bit: 0
-        end_bit: 0
-        default: 0
-        resolution: 0.02
-        offset: -271.15
-        is_signed: false
-        is_little_endian: true
-      data:
-        name: R2
-        start_byte: 7
-        end_byte: 8
-        start_bit: 0
-        end_bit: 0
-        default: 0
-        resolution: 5.12
-        offset: -270.15
-        is_signed: false
-        is_little_endian: true
-      data:
-        name: R2
-        start_byte: 7
-        end_byte: 8
-        start_bit: 0
-        end_bit: 0
-        default: 0
-        resolution: 5.12
-        offset: -270.15
-        is_signed: false
-        is_little_endian: true
-  frame:
-    name: RSS
+    name: rear_box_2
     id: 0x080AD094
     is_extended_id: true
     dlc: 8
     frequency: 0
     dataset:
       data:
-        name: L
+        name: travel_rear_left
         start_byte: 0
         end_byte: 1
         start_bit: 0
@@ -292,18 +197,7 @@ can:
         is_signed: false
         is_little_endian: true
       data:
-        name: R
-        start_byte: 1
-        end_byte: 2
-        start_bit: 0
-        end_bit: 0
-        default: 0
-        resolution: 0.17647058823
-        offset: 200
-        is_signed: false
-        is_little_endian: true
-      data:
-        name: R
+        name: travel_rear_right
         start_byte: 1
         end_byte: 2
         start_bit: 0
@@ -314,16 +208,16 @@ can:
         is_signed: false
         is_little_endian: true
   frame:
-    name: RTD
+    name: dashboard
     id: 0x080AD095
     is_extended_id: true
     dlc: 8
     frequency: 0
     dataset:
       data:
-        name: N
+        name: ready_to_drive
         start_byte: 0
-        end_byte: 0
+        end_byte: 1
         start_bit: 0
         end_bit: 1
         default: 0
@@ -332,7 +226,7 @@ can:
         is_signed: false
         is_little_endian: true
       data:
-        name: N
+        name: gear_dial
         start_byte: 1
         end_byte: 2
         start_bit: 0
@@ -342,656 +236,26 @@ can:
         offset: 0
         is_signed: false
         is_little_endian: true
-      data:
-        name: N
-        start_byte: 1
-        end_byte: 2
-        start_bit: 0
-        end_bit: 0
-        default: 0
-        resolution: 1
-        offset: 0
-        is_signed: false
-        is_little_endian: true
+       data:
+           name: keep_alive
+           start_byte: 7
+           end_byte: 8
+           start_bit: 0
+           end_bit: 0
+           default: 0
+           resolution: 1
+           offset: 0
+           is_signed: false
+           is_little_endian: true
   frame:
-    name: HIS
-    id: 0x0CF029E2
-    is_extended_id: true
-    dlc: 8
-    frequency: 0
-    dataset:
-      data:
-        name: P
-        start_byte: 0
-        end_byte: 3
-        start_bit: 0
-        end_bit: 0
-        default: 0
-        resolution: 3.0517578125E-05
-        offset: -250
-        is_signed: false
-        is_little_endian: true
-      data:
-        name: R
-        start_byte: 3
-        end_byte: 6
-        start_bit: 0
-        end_bit: 0
-        default: 0
-        resolution: 3.0517578125E-05
-        offset: -250
-        is_signed: false
-        is_little_endian: true
-      data:
-        name: R
-        start_byte: 3
-        end_byte: 6
-        start_bit: 0
-        end_bit: 0
-        default: 0
-        resolution: 3.0517578125E-05
-        offset: -250
-        is_signed: false
-        is_little_endian: true
-  frame:
-    name: HIA
-    id: 0x08F02DE2
-    is_extended_id: true
-    dlc: 8
-    frequency: 0
-    dataset:
-      data:
-        name: X
-        start_byte: 0
-        end_byte: 2
-        start_bit: 0
-        end_bit: 0
-        default: 0
-        resolution: 0.01
-        offset: -320
-        is_signed: false
-        is_little_endian: true
-      data:
-        name: Y
-        start_byte: 2
-        end_byte: 4
-        start_bit: 0
-        end_bit: 0
-        default: 0
-        resolution: 0.01
-        offset: -320
-        is_signed: false
-        is_little_endian: true
-      data:
-        name: Z
-        start_byte: 4
-        end_byte: 6
-        start_bit: 0
-        end_bit: 0
-        default: 0
-        resolution: 0.01
-        offset: -320
-        is_signed: false
-        is_little_endian: true
-      data:
-        name: Z
-        start_byte: 4
-        end_byte: 6
-        start_bit: 0
-        end_bit: 0
-        default: 0
-        resolution: 0.01
-        offset: -320
-        is_signed: false
-        is_little_endian: true
-  frame:
-    name: HIG
-    id: 0x0CF02AE2
-    is_extended_id: true
-    dlc: 8
-    frequency: 0
-    dataset:
-      data:
-        name: X
-        start_byte: 0
-        end_byte: 2
-        start_bit: 0
-        end_bit: 0
-        default: 0
-        resolution: 0.0078125
-        offset: -250
-        is_signed: false
-        is_little_endian: true
-      data:
-        name: Y
-        start_byte: 2
-        end_byte: 4
-        start_bit: 0
-        end_bit: 0
-        default: 0
-        resolution: 0.0078125
-        offset: -250
-        is_signed: false
-        is_little_endian: true
-      data:
-        name: Z
-        start_byte: 4
-        end_byte: 6
-        start_bit: 0
-        end_bit: 0
-        default: 0
-        resolution: 0.0078125
-        offset: -250
-        is_signed: false
-        is_little_endian: true
-      data:
-        name: Z
-        start_byte: 4
-        end_byte: 6
-        start_bit: 0
-        end_bit: 0
-        default: 0
-        resolution: 0.0078125
-        offset: -250
-        is_signed: false
-        is_little_endian: true
-  frame:
-    name: HIC
-    id: 0x18FF6AE2
-    is_extended_id: true
-    dlc: 8
-    frequency: 0
-    dataset:
-      data:
-        name: X
-        start_byte: 0
-        end_byte: 2
-        start_bit: 0
-        end_bit: 0
-        default: 0
-        resolution: 0.00025
-        offset: -8
-        is_signed: false
-        is_little_endian: true
-      data:
-        name: Y
-        start_byte: 2
-        end_byte: 4
-        start_bit: 0
-        end_bit: 0
-        default: 0
-        resolution: 0.00025
-        offset: -8
-        is_signed: false
-        is_little_endian: true
-      data:
-        name: Z
-        start_byte: 4
-        end_byte: 6
-        start_bit: 0
-        end_bit: 0
-        default: 0
-        resolution: 0.00025
-        offset: -8
-        is_signed: false
-        is_little_endian: true
-      data:
-        name: Z
-        start_byte: 4
-        end_byte: 6
-        start_bit: 0
-        end_bit: 0
-        default: 0
-        resolution: 0.00025
-        offset: -8
-        is_signed: false
-        is_little_endian: true
-  frame:
-    name: OIS
-    id: 0x0CF029E2
-    is_extended_id: true
-    dlc: 8
-    frequency: 0
-    dataset:
-      data:
-        name: P
-        start_byte: 0
-        end_byte: 3
-        start_bit: 0
-        end_bit: 0
-        default: 0
-        resolution: 3.0517578125E-05
-        offset: -250
-        is_signed: false
-        is_little_endian: true
-      data:
-        name: R
-        start_byte: 3
-        end_byte: 6
-        start_bit: 0
-        end_bit: 0
-        default: 0
-        resolution: 3.0517578125E-05
-        offset: -250
-        is_signed: false
-        is_little_endian: true
-      data:
-        name: R
-        start_byte: 3
-        end_byte: 6
-        start_bit: 0
-        end_bit: 0
-        default: 0
-        resolution: 3.0517578125E-05
-        offset: -250
-        is_signed: false
-        is_little_endian: true
-  frame:
-    name: OIA
-    id: 0x08F02DE2
-    is_extended_id: true
-    dlc: 8
-    frequency: 0
-    dataset:
-      data:
-        name: X
-        start_byte: 0
-        end_byte: 2
-        start_bit: 0
-        end_bit: 0
-        default: 0
-        resolution: 0.01
-        offset: -320
-        is_signed: false
-        is_little_endian: true
-      data:
-        name: Y
-        start_byte: 2
-        end_byte: 4
-        start_bit: 0
-        end_bit: 0
-        default: 0
-        resolution: 0.01
-        offset: -320
-        is_signed: false
-        is_little_endian: true
-      data:
-        name: Z
-        start_byte: 4
-        end_byte: 6
-        start_bit: 0
-        end_bit: 0
-        default: 0
-        resolution: 0.01
-        offset: -320
-        is_signed: false
-        is_little_endian: true
-      data:
-        name: Z
-        start_byte: 4
-        end_byte: 6
-        start_bit: 0
-        end_bit: 0
-        default: 0
-        resolution: 0.01
-        offset: -320
-        is_signed: false
-        is_little_endian: true
-  frame:
-    name: OIG
-    id: 0x0CF02AE2
-    is_extended_id: true
-    dlc: 8
-    frequency: 0
-    dataset:
-      data:
-        name: X
-        start_byte: 0
-        end_byte: 2
-        start_bit: 0
-        end_bit: 0
-        default: 0
-        resolution: 0.0078125
-        offset: -250
-        is_signed: false
-        is_little_endian: true
-      data:
-        name: Y
-        start_byte: 2
-        end_byte: 4
-        start_bit: 0
-        end_bit: 0
-        default: 0
-        resolution: 0.0078125
-        offset: -250
-        is_signed: false
-        is_little_endian: true
-      data:
-        name: Z
-        start_byte: 4
-        end_byte: 6
-        start_bit: 0
-        end_bit: 0
-        default: 0
-        resolution: 0.0078125
-        offset: -250
-        is_signed: false
-        is_little_endian: true
-      data:
-        name: Z
-        start_byte: 4
-        end_byte: 6
-        start_bit: 0
-        end_bit: 0
-        default: 0
-        resolution: 0.0078125
-        offset: -250
-        is_signed: false
-        is_little_endian: true
-  frame:
-    name: OIC
-    id: 0x18FF6AE2
-    is_extended_id: true
-    dlc: 8
-    frequency: 0
-    dataset:
-      data:
-        name: X
-        start_byte: 0
-        end_byte: 2
-        start_bit: 0
-        end_bit: 0
-        default: 0
-        resolution: 0.00025
-        offset: -8
-        is_signed: false
-        is_little_endian: true
-      data:
-        name: Y
-        start_byte: 2
-        end_byte: 4
-        start_bit: 0
-        end_bit: 0
-        default: 0
-        resolution: 0.00025
-        offset: -8
-        is_signed: false
-        is_little_endian: true
-      data:
-        name: Z
-        start_byte: 4
-        end_byte: 6
-        start_bit: 0
-        end_bit: 0
-        default: 0
-        resolution: 0.00025
-        offset: -8
-        is_signed: false
-        is_little_endian: true
-      data:
-        name: Z
-        start_byte: 4
-        end_byte: 6
-        start_bit: 0
-        end_bit: 0
-        default: 0
-        resolution: 0.00025
-        offset: -8
-        is_signed: false
-        is_little_endian: true
-  frame:
-    name: CIA
-    id: 0x188
-    is_extended_id: false
-    dlc: 8
-    frequency: 0
-    dataset:
-      data:
-        name: X
-        start_byte: 0
-        end_byte: 2
-        start_bit: 0
-        end_bit: 0
-        default: 0
-        resolution: 0.001
-        offset: 0
-        is_signed: true
-        is_little_endian: false
-      data:
-        name: Y
-        start_byte: 2
-        end_byte: 4
-        start_bit: 0
-        end_bit: 0
-        default: 0
-        resolution: 0.001
-        offset: 0
-        is_signed: true
-        is_little_endian: false
-      data:
-        name: Z
-        start_byte: 4
-        end_byte: 6
-        start_bit: 0
-        end_bit: 0
-        default: 0
-        resolution: 0.001
-        offset: 0
-        is_signed: true
-        is_little_endian: false
-      data:
-        name: Z
-        start_byte: 4
-        end_byte: 6
-        start_bit: 0
-        end_bit: 0
-        default: 0
-        resolution: 0.001
-        offset: 0
-        is_signed: true
-        is_little_endian: false
-  frame:
-    name: CIG
-    id: 0x288
-    is_extended_id: false
-    dlc: 8
-    frequency: 0
-    dataset:
-      data:
-        name: X
-        start_byte: 0
-        end_byte: 2
-        start_bit: 0
-        end_bit: 0
-        default: 0
-        resolution: 0.001745
-        offset: 0
-        is_signed: true
-        is_little_endian: false
-      data:
-        name: Y
-        start_byte: 2
-        end_byte: 4
-        start_bit: 0
-        end_bit: 0
-        default: 0
-        resolution: 0.001745
-        offset: 0
-        is_signed: true
-        is_little_endian: false
-      data:
-        name: Z
-        start_byte: 4
-        end_byte: 6
-        start_bit: 0
-        end_bit: 0
-        default: 0
-        resolution: 0.001745
-        offset: 0
-        is_signed: true
-        is_little_endian: false
-      data:
-        name: Z
-        start_byte: 4
-        end_byte: 6
-        start_bit: 0
-        end_bit: 0
-        default: 0
-        resolution: 0.001745
-        offset: 0
-        is_signed: true
-        is_little_endian: false
-  frame:
-    name: CIE
-    id: 0x388
-    is_extended_id: false
-    dlc: 8
-    frequency: 0
-    dataset:
-      data:
-        name: R
-        start_byte: 0
-        end_byte: 2
-        start_bit: 0
-        end_bit: 0
-        default: 0
-        resolution: 0.0001745
-        offset: 0
-        is_signed: true
-        is_little_endian: false
-      data:
-        name: P
-        start_byte: 2
-        end_byte: 4
-        start_bit: 0
-        end_bit: 0
-        default: 0
-        resolution: 0.0001745
-        offset: 0
-        is_signed: true
-        is_little_endian: false
-      data:
-        name: Y
-        start_byte: 4
-        end_byte: 6
-        start_bit: 0
-        end_bit: 0
-        default: 0
-        resolution: 0.0001745
-        offset: 0
-        is_signed: true
-        is_little_endian: false
-      data:
-        name: Y
-        start_byte: 4
-        end_byte: 6
-        start_bit: 0
-        end_bit: 0
-        default: 0
-        resolution: 0.0001745
-        offset: 0
-        is_signed: true
-        is_little_endian: false
-  frame:
-    name: CIQ
-    id: 0x488
-    is_extended_id: false
-    dlc: 8
-    frequency: 0
-    dataset:
-      data:
-        name: W
-        start_byte: 0
-        end_byte: 2
-        start_bit: 0
-        end_bit: 0
-        default: 0
-        resolution: 0.0001
-        offset: 0
-        is_signed: true
-        is_little_endian: false
-      data:
-        name: X
-        start_byte: 2
-        end_byte: 4
-        start_bit: 0
-        end_bit: 0
-        default: 0
-        resolution: 0.0001
-        offset: 0
-        is_signed: true
-        is_little_endian: false
-      data:
-        name: Y
-        start_byte: 4
-        end_byte: 6
-        start_bit: 0
-        end_bit: 0
-        default: 0
-        resolution: 0.0001
-        offset: 0
-        is_signed: true
-        is_little_endian: false
-      data:
-        name: Z
-        start_byte: 6
-        end_byte: 8
-        start_bit: 0
-        end_bit: 0
-        default: 0
-        resolution: 0.0001
-        offset: 0
-        is_signed: true
-        is_little_endian: false
-      data:
-        name: Z
-        start_byte: 6
-        end_byte: 8
-        start_bit: 0
-        end_bit: 0
-        default: 0
-        resolution: 0.0001
-        offset: 0
-        is_signed: true
-        is_little_endian: false
-  frame:
-    name: CIP
-    id: 0x688
-    is_extended_id: false
-    dlc: 8
-    frequency: 0
-    dataset:
-      data:
-        name: N
-        start_byte: 0
-        end_byte: 4
-        start_bit: 0
-        end_bit: 0
-        default: 0
-        resolution: 1
-        offset: 0
-        is_signed: false
-        is_little_endian: false
-      data:
-        name: N
-        start_byte: 0
-        end_byte: 4
-        start_bit: 0
-        end_bit: 0
-        default: 0
-        resolution: 1
-        offset: 0
-        is_signed: false
-        is_little_endian: false
-  frame:
-    name: MTC
+    name: mcu_command
     id: 0x0C0
     is_extended_id: false
     dlc: 8
     frequency: 0
     dataset:
       data:
-        name: N
+        name: torque_command
         start_byte: 0
         end_byte: 2
         start_bit: 0
@@ -999,12 +263,23 @@ can:
         default: 0
         resolution: 0.1
         offset: 0
-        is_signed: false
+        is_signed: true
         is_little_endian: true
       data:
-        name: N
+        name: speed_command
         start_byte: 2
         end_byte: 4
+        start_bit: 0
+        end_bit: 0
+        default: 0
+        resolution: 1
+        offset: 0
+        is_signed: true
+        is_little_endian: true
+      data:
+        name: direction_cmd
+        start_byte: 4
+        end_byte: 5
         start_bit: 0
         end_bit: 0
         default: 0
@@ -1013,18 +288,7 @@ can:
         is_signed: false
         is_little_endian: true
       data:
-        name: N
-        start_byte: 4
-        end_byte: 5
-        start_bit: 0
-        end_bit: 1
-        default: 0
-        resolution: 1
-        offset: 0
-        is_signed: false
-        is_little_endian: true
-      data:
-        name: N
+        name: inverter_enable
         start_byte: 5
         end_byte: 6
         start_bit: 0
@@ -1035,7 +299,7 @@ can:
         is_signed: false
         is_little_endian: true
       data:
-        name: N
+        name: inverter_discharge
         start_byte: 5
         end_byte: 6
         start_bit: 1
@@ -1046,7 +310,7 @@ can:
         is_signed: false
         is_little_endian: true
       data:
-        name: N
+        name: speed_mode
         start_byte: 5
         end_byte: 6
         start_bit: 2
@@ -1057,18 +321,7 @@ can:
         is_signed: false
         is_little_endian: true
       data:
-        name: N
-        start_byte: 6
-        end_byte: 8
-        start_bit: 0
-        end_bit: 0
-        default: 0
-        resolution: 0.1
-        offset: 0
-        is_signed: false
-        is_little_endian: true
-      data:
-        name: N
+        name: torque_limit
         start_byte: 6
         end_byte: 8
         start_bit: 0
@@ -1079,25 +332,14 @@ can:
         is_signed: false
         is_little_endian: true
   frame:
-    name: MBT
+    name: mcu_board
     id: 0x0A1
     is_extended_id: false
     dlc: 8
     frequency: 0
     dataset:
       data:
-        name: N
-        start_byte: 0
-        end_byte: 2
-        start_bit: 0
-        end_bit: 0
-        default: 0
-        resolution: 0.1
-        offset: 0
-        is_signed: true
-        is_little_endian: false
-      data:
-        name: N
+        name: control_board_temp
         start_byte: 0
         end_byte: 2
         start_bit: 0
@@ -1108,25 +350,14 @@ can:
         is_signed: true
         is_little_endian: false
   frame:
-    name: MMT
+    name: mcu_motor_temp
     id: 0x0A2
     is_extended_id: false
     dlc: 8
     frequency: 0
     dataset:
       data:
-        name: N
-        start_byte: 4
-        end_byte: 6
-        start_bit: 0
-        end_bit: 0
-        default: 0
-        resolution: 0.1
-        offset: 0
-        is_signed: true
-        is_little_endian: false
-      data:
-        name: N
+        name: motor_temp
         start_byte: 4
         end_byte: 6
         start_bit: 0
@@ -1137,7 +368,7 @@ can:
         is_signed: true
         is_little_endian: false
   frame:
-    name: MMS
+    name: mcu_motor_speed
     id: 0x0A5
     is_extended_id: false
     dlc: 8
@@ -1154,26 +385,15 @@ can:
         offset: 0
         is_signed: true
         is_little_endian: false
-      data:
-        name: N
-        start_byte: 2
-        end_byte: 4
-        start_bit: 0
-        end_bit: 0
-        default: 0
-        resolution: 1
-        offset: 0
-        is_signed: true
-        is_little_endian: false
   frame:
-    name: MOV
+    name: mcu_output_voltage
     id: 0x0A7
     is_extended_id: false
     dlc: 8
     frequency: 0
     dataset:
       data:
-        name: N
+        name: output_voltage
         start_byte: 2
         end_byte: 4
         start_bit: 0
@@ -1183,3 +403,76 @@ can:
         offset: 0
         is_signed: true
         is_little_endian: false
+  frame:
+    name: rear_box_1
+    id: 0x080AD093
+    is_extended_id: true
+    dlc: 8
+    frequency: 0
+    dataset:
+      data:
+        name: wheel_speed_front_left
+        start_byte: 0
+        end_byte: 2
+        start_bit: 0
+        end_bit: 0
+        default: 0
+        resolution: 0.003921568627451
+        offset: 0
+        is_signed: false
+        is_little_endian: true
+      data:
+        name: wheel_speed_front_right
+        start_byte: 2
+        end_byte: 4
+        start_bit: 0
+        end_bit: 0
+        default: 0
+        resolution: 0.003921568627451
+        offset: 0
+        is_signed: false
+        is_little_endian: true
+      data:
+        name: tyre_temp_rear_left_1
+        start_byte: 4
+        end_byte: 5
+        start_bit: 0
+        end_bit: 0
+        default: 0
+        resolution: 0.5
+        offset: 0
+        is_signed: false
+        is_little_endian: true
+      data:
+        name: tyre_temp_rear_left_2
+        start_byte: 5
+        end_byte: 6
+        start_bit: 0
+        end_bit: 0
+        default: 0
+        resolution: 0.5
+        offset: 0
+        is_signed: false
+        is_little_endian: true
+      data:
+        name: tyre_temp_rear_right_1
+        start_byte: 6
+        end_byte: 7
+        start_bit: 0
+        end_bit: 0
+        default: 0
+        resolution: 0.5
+        offset: 0
+        is_signed: false
+        is_little_endian: true
+      data:
+        name: tyre_temp_rear_right_2
+        start_byte: 7
+        end_byte: 8
+        start_bit: 0
+        end_bit: 0
+        default: 0
+        resolution: 0.5
+        offset: 0
+        is_signed: false
+        is_little_endian: true
