@@ -10,7 +10,8 @@ std::string Data::get_string() const {
         "\n\t\tresolution: " + std::to_string(resolution_) +
         "\n\t\toffset: " + std::to_string(offset_) +
         "\n\t\tis_signed: " + (is_signed_ ? "true" : "false") +
-        "\n\t\tis_little_endian: " + (is_little_endian_ ? "true" : "false");
+        "\n\t\tis_little_endian: " + (is_little_endian_ ? "true" : "false") +
+        "\n\t\tlast_data: " + std::to_string(last_data_);
     return string;
 }
 
@@ -43,8 +44,8 @@ std::string Frame::get_string() const {
 
 std::bitset<64> Frame::get_occupied_bit() {
     std::bitset<64> occupied_bit = 0;
-    for(std::map<std::string, Data>::iterator it = dataset_.begin(); it != dataset_.end(); it ++) {
-        std::bitset<64> data_occupied_bit = it->second.get_occupied_bit();
+    for(auto it = dataset_.begin(); it != dataset_.end(); it ++) {
+        std::bitset<64> data_occupied_bit = it->second->get_occupied_bit();
         if((data_occupied_bit & occupied_bit) != 0) {
             throw std::runtime_error(std::string("Error: There are two can data in can frame \"") + name_ +
                                                  "\" that have overlapping data position.\n");
@@ -58,8 +59,8 @@ std::bitset<64> Frame::get_occupied_bit() {
 
 std::bitset<8> Frame::get_occupied_byte() {
     std::bitset<8> occupied_byte = 0;
-    for(std::map<std::string, Data>::iterator it = dataset_.begin(); it != dataset_.end(); it ++) {
-        occupied_byte |= it->second.get_occupied_byte();
+    for(auto it = dataset_.begin(); it != dataset_.end(); it ++) {
+        occupied_byte |= it->second->get_occupied_byte();
     }
     return occupied_byte;
 }
@@ -214,9 +215,9 @@ bool YAML::convert<Frame>::decode(const Node &_node, Frame &_cType) {
     if(_node["dataset"]) {
         // check if "data" tag exist
         if(_node["dataset"]["data"]) {
-            for(const_iterator it = _node["dataset"].begin(); it != _node["dataset"].end(); it ++) {
-                Data data = it->second.as<Data>();
-                _cType.dataset_[data.name_] = data;
+            for(auto it = _node["dataset"].begin(); it != _node["dataset"].end(); it ++) {
+                auto data = std::make_shared<Data>(it->second.as<Data>());
+                _cType.dataset_[data->name_] = data;
                 _cType.datavector_.push_back(data);
             }
         }
@@ -250,12 +251,12 @@ bool YAML::convert<Frame>::decode(const Node &_node, Frame &_cType) {
     return true;
 }
 
-std::map<std::string, Frame> load_yaml(std::string _file) {
-    std::map<std::string, Frame> frameset;
+std::map<std::string, FramePtr> load_yaml(std::string _file) {
+    std::map<std::string, FramePtr> frameset;
     YAML::Node can = YAML::LoadFile(_file)["can"];
-    for(YAML::const_iterator it = can.begin(); it != can.end(); it++) {
-        Frame frame = it->second.as<Frame>();
-        frameset[frame.name_] = frame;
+    for(auto it = can.begin(); it != can.end(); it++) {
+        auto frame = std::make_shared<Frame>(it->second.as<Frame>());
+        frameset[frame->name_] = frame;
     }
     return frameset;
 }

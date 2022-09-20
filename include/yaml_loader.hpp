@@ -1,8 +1,8 @@
 /**
  * @file yaml_loader.hpp
- * @brief Yaml loader for can parser to load can rules from a yaml file.
  * @author QuantumSpawner jet22854111@gmail.com
  * @author LY queeniiee02@gmail.com
+ * @brief Yaml loader for can parser to load can rules from a yaml file.
  */
 
 #ifndef YAML_LAODER_HPP
@@ -12,6 +12,7 @@
 #include <bitset>
 #include <iostream>
 #include <map>
+#include <memory>
 #include <stdexcept>
 #include <string>
 
@@ -22,9 +23,9 @@
 #include <yaml-cpp/yaml.h>
 
 /**
- * @brief Class for storing data format.
  * @author QuantumSpawner jet22854111@gmail.com
  * @author LY queeniiee02@gmail.com
+ * @brief Class for storing can data format.
  */
 class Data {
     public:
@@ -59,6 +60,9 @@ class Data {
 
         /// @brief If this can data is little endian, i.e. most significant bit first.
         bool is_little_endian_;
+
+        /// @brief Buffer storing the value of this can data last time it was sent/received.
+        double last_data_;
         
         /**
          * @brief Get the string repersentation of can data.
@@ -82,12 +86,15 @@ class Data {
         double after_decode_;    // test
         double to_be_encode_;    // test
         bool flag_;              // test
-
-    private:
-        /// @brief Buffer storing the value of this can data last time it was sent/received.
-        double last_data_;
 };
 
+typedef std::shared_ptr<Data> DataPtr;
+
+/**
+ * @brief Class for storing can frame format.
+ * @author QuantumSpawner jet22854111@gmail.com
+ * @author LY queeniiee02@gmail.com
+ */
 class Frame {
     public:
         /// @brief Name of this can frame, it will be used as key of the "frameset" map which stores all can frames.
@@ -106,8 +113,14 @@ class Frame {
         /// @brief Frequency that this can frame is sent, set to 0 to disable sending this can frame.
         double frequency_;
 
-        /// @brief Map storing can data correspond to this can frame, with key being the name of the can data .
-        std::map<std::string, Data> dataset_;
+        /// @brief Time difference between the last frame was sent [s].
+        double dt_;
+
+        /// @brief Map storing pointer to can data correspond to this can frame, with key being the name of the can data .
+        std::map<std::string, DataPtr> dataset_;
+
+        /// @brief Vector storing pointer ro can data correspond to this can frame.
+        std::vector<DataPtr> datavector_;
         
         /**
          * @brief Get the string representation of can frame.
@@ -134,14 +147,9 @@ class Frame {
          * @return Which byte is the hightest occupied byte.
          */
         int get_higtest_occupied_byte();
-
-        /// @brief 
-        std::vector<Data> datavector_;
-
-    private:
-        /// @brief 
-        double dt_;
 };
+
+typedef std::shared_ptr<Frame> FramePtr;
 
 /**
  * @brief Operator used for passing the string representsation of can data to ostream.
@@ -200,9 +208,9 @@ struct convert<Frame> {
 /**
  * @brief Function to load a yaml file into a map containing all can frames and their corresponding data.
  * @param[in] _file The path of the yaml file which contains the can rule.
- * @return Map storing can frame, with key being the name of the can frame.
+ * @return Map storing pointer to can frame, with key being the name of the can frame.
  */
 
-std::map<std::string, Frame> load_yaml(std::string _file);
+std::map<std::string, FramePtr> load_yaml(std::string _file);
 
 #endif // YAML_LAODER_HPP

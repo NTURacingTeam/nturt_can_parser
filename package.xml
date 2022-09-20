@@ -1,17 +1,19 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>nturt_can_parser</name>
-  <version>0.0.0</version>
-  <description>CAN message parser</description>
-  <maintainer email="jet22854111@gmail.com">QuantumSpawner</maintainer>
-  <license>TODO</license>
+    <name>nturt_can_parser</name>
+    <version>0.0.0</version>
+    <description>CAN message parser</description>
+    <maintainer email="jet22854111@gmail.com">QuantumSpawner</maintainer>
+    <license>TODO</license>
 
-  <!-- build dependency -->
-  <buildtool_depend>catkin</buildtool_depend>
-  <build_depend>can_msgs</build_depend>
-  <build_depend>roscpp</build_depend>
+    <!-- build dependency -->
+    <buildtool_depend>catkin</buildtool_depend>
+    <build_depend>can_msgs</build_depend>
+    <build_depend>message_generation</build_depend>
+    <build_depend>roscpp</build_depend>
 
-  <!-- execute dependency -->
-  <exec_depend>can_msgs</exec_depend>
-  <exec_depend>roscpp</exec_depend>
+    <!-- execute dependency -->
+    <exec_depend>can_msgs</exec_depend>
+    <exec_depend>message_generation</exec_depend>
+    <exec_depend>roscpp</exec_depend>
 </package>
