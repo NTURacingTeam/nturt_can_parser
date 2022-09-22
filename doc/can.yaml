@@ -8,71 +8,59 @@ can:
     dataset:
       data:
         name: front_left_wheel_speed
+        is_signed: false
+        is_little_endian: true
+        is_byte: true
         start_byte: 0
         end_byte: 2
-        start_bit: 0
-        end_bit: 0
         default: 0
         resolution: 0.003921568627451
         offset: 0
-        is_signed: false
-        is_little_endian: true
       data:
         name: front_right_wheel_speed
+        is_signed: false
+        is_little_endian: true
+        is_byte: true
         start_byte: 2
         end_byte: 4
-        start_bit: 0
-        end_bit: 0
         default: 0
         resolution: 0.003921568627451
         offset: 0
-        is_signed: false
-        is_little_endian: true
       data:
         name: tyre_temp_front_left_1
+        is_signed: false
+        is_byte: true
         start_byte: 4
         end_byte: 5
-        start_bit: 0
-        end_bit: 0
         default: 0
         resolution: 0.5
         offset: 0
-        is_signed: false
-        is_little_endian: true
       data:
         name: tyre_temp_front_left_2
+        is_signed: false
+        is_byte: true
         start_byte: 5
         end_byte: 6
-        start_bit: 0
-        end_bit: 0
         default: 0
         resolution: 0.5
         offset: 0
-        is_signed: false
-        is_little_endian: true
       data:
         name: tyre_temp_front_right_1
+        is_signed: false
+        is_byte: true
         start_byte: 6
         end_byte: 7
-        start_bit: 0
-        end_bit: 0
-        default: 0
         resolution: 0.5
         offset: 0
-        is_signed: false
-        is_little_endian: true
       data:
         name: tyre_temp_front_right_2
+        is_signed: false
+        is_byte: true
         start_byte: 7
         end_byte: 8
-        start_bit: 0
-        end_bit: 0
-        default: 0
         resolution: 0.5
         offset: 0
-        is_signed: false
-        is_little_endian: true
-  frame:
+    frame:
     name: front_box_2
     id: 0x080AD092
     is_extended_id: true
@@ -81,103 +69,87 @@ can:
     dataset:
       data:
         name: brake
+        is_signed: false
+        is_byte: true
         start_byte: 0
         end_byte: 1
-        start_bit: 0
-        end_bit: 0
         default: 0
         resolution: 0.00395
         offset: -0.00395
-        is_signed: false
-        is_little_endian: true
       data:
         name: accelerator_1
+        is_signed: false
+        is_byte: true
         start_byte: 1
         end_byte: 2
-        start_bit: 0
-        end_bit: 0
         default: 0
         resolution: 0.00395
         offset: -0.00395
-        is_signed: false
-        is_little_endian: true
       data:
         name: accelerator_2
+        is_signed: false
+        is_byte: true
         start_byte: 2
         end_byte: 3
-        start_bit: 0
-        end_bit: 0
         default: 0
         resolution: 0.00395
         offset: -0.00395
-        is_signed: false
-        is_little_endian: true
       data:
         name: steer_angle
+        is_signed: false
+        is_byte: true
         start_byte: 3
         end_byte: 4
-        start_bit: 0
-        end_bit: 0
         default: 0
         resolution: 1.406
         offset: -180.0
-        is_signed: false
-        is_little_endian: true
       data:
         name: travel_front_left
+        is_signed: false
+        is_byte: true
         start_byte: 4
         end_byte: 5
-        start_bit: 0
-        end_bit: 0
         default: 0
         resolution: 0.17647058823
         offset: 200
-        is_signed: false
-        is_little_endian: true
       data:
         name: travel_front_right
+        is_signed: false
+        is_byte: true
         start_byte: 5
         end_byte: 6
-        start_bit: 0
-        end_bit: 0
         default: 0
         resolution: 0.17647058823
         offset: 200
-        is_signed: false
-        is_little_endian: true
       data:
         name: oil_pressure
+        is_signed: false
+        is_byte: true
         start_byte: 6
         end_byte: 7
-        start_bit: 0
-        end_bit: 0
         default: 0
         resolution: 19.6078431373
         offset: 0
-        is_signed: false
-        is_little_endian: true
       data:
         name: brake_micro
-        start_byte: 7
-        end_byte: 7
+        is_signed: false
+        is_byte: false
+        byte: 7
         start_bit: 0
         end_bit: 1
         default: 0
         resolution: 1
         offset: 0
-        is_signed: false
-        is_little_endian: true
       data:
         name: accelerator_micro
-        start_byte: 7
-        end_byte: 7
+        is_signed: false
+        is_byte: false
+        byte: 7
         start_bit: 1
         end_bit: 2
         default: 0
         resolution: 1
         offset: 0
-        is_signed: false
-        is_little_endian: true
   frame:
     name: rear_box_2
     id: 0x080AD094
@@ -187,26 +159,22 @@ can:
     dataset:
       data:
         name: travel_rear_left
+        is_signed: false
+        is_byte: true
         start_byte: 0
         end_byte: 1
-        start_bit: 0
-        end_bit: 0
         default: 0
         resolution: 0.17647058823
         offset: 200
-        is_signed: false
-        is_little_endian: true
       data:
         name: travel_rear_right
+        is_signed: false
+        is_byte: true
         start_byte: 1
         end_byte: 2
-        start_bit: 0
-        end_bit: 0
         default: 0
         resolution: 0.17647058823
         offset: 200
-        is_signed: false
-        is_little_endian: true
   frame:
     name: dashboard
     id: 0x080AD095
@@ -216,37 +184,33 @@ can:
     dataset:
       data:
         name: ready_to_drive
-        start_byte: 0
-        end_byte: 0
+        is_signed: false
+        is_byte: false
+        byte: 0
         start_bit: 0
         end_bit: 1
         default: 0
         resolution: 1
         offset: 0
-        is_signed: false
-        is_little_endian: true
       data:
         name: gear_dial
+        is_signed: false
+        is_byte: true
         start_byte: 1
         end_byte: 2
-        start_bit: 0
-        end_bit: 0
         default: 0
         resolution: 1
         offset: 0
-        is_signed: false
-        is_little_endian: true
       data:
         name: keep_alive
-        start_byte: 7
-        end_byte: 8
+        is_signed: false
+        is_byte: false
+        byte: 7
         start_bit: 0
-        end_bit: 0
+        end_bit: 1
         default: 0
         resolution: 1
         offset: 0
-        is_signed: false
-        is_little_endian: true
   frame:
     name: mcu_command
     id: 0x0C0
@@ -256,81 +220,73 @@ can:
     dataset:
       data:
         name: torque_command
+        is_signed: true
+        is_byte: true
+        is_little_endian: false
         start_byte: 0
         end_byte: 2
-        start_bit: 0
-        end_bit: 0
         default: 0
         resolution: 0.1
         offset: 0
-        is_signed: true
-        is_little_endian: true
       data:
         name: speed_command
+        is_signed: true
+        is_byte: true
+        is_little_endian: false
         start_byte: 2
         end_byte: 4
-        start_bit: 0
-        end_bit: 0
         default: 0
         resolution: 1
         offset: 0
-        is_signed: true
-        is_little_endian: true
       data:
         name: direction_cmd
+        is_signed: false
+        is_byte: true
         start_byte: 4
         end_byte: 5
-        start_bit: 0
-        end_bit: 0
         default: 0
         resolution: 1
         offset: 0
-        is_signed: false
-        is_little_endian: true
       data:
         name: inverter_enable
-        start_byte: 5
-        end_byte: 5
+        is_signed: false
+        is_byte: false
+        byte: 5
         start_bit: 0
         end_bit: 1
         default: 0
         resolution: 1
         offset: 0
-        is_signed: false
-        is_little_endian: true
       data:
         name: inverter_discharge
-        start_byte: 5
-        end_byte: 5
+        is_signed: false
+        is_byte: false
+        byte: 5
         start_bit: 1
         end_bit: 2
         default: 0
         resolution: 1
         offset: 0
-        is_signed: false
-        is_little_endian: true
       data:
         name: speed_mode
-        start_byte: 5
-        end_byte: 5
+        is_signed: false
+        is_byte: false
+        byte: 5
         start_bit: 2
         end_bit: 3
         default: 0
         resolution: 1
         offset: 0
-        is_signed: false
-        is_little_endian: true
       data:
         name: torque_limit
+        is_signed: false
+        is_byte: true
+        is_little_endian: true
         start_byte: 6
         end_byte: 8
-        start_bit: 0
-        end_bit: 0
         default: 0
         resolution: 0.1
         offset: 0
-        is_signed: false
-        is_little_endian: true
   frame:
     name: mcu_board
     id: 0x0A1
@@ -340,15 +296,14 @@ can:
     dataset:
       data:
         name: control_board_temp
+        is_signed: true
+        is_byte: true
+        is_little_endian: false
         start_byte: 0
         end_byte: 2
-        start_bit: 0
-        end_bit: 0
         default: 0
         resolution: 0.1
         offset: 0
-        is_signed: true
-        is_little_endian: false
   frame:
     name: mcu_motor_temp
     id: 0x0A2
@@ -358,15 +313,14 @@ can:
     dataset:
       data:
         name: motor_temp
+        is_signed: true
+        is_byte: true
+        is_little_endian: false
         start_byte: 4
         end_byte: 6
-        start_bit: 0
-        end_bit: 0
         default: 0
         resolution: 0.1
         offset: 0
-        is_signed: true
-        is_little_endian: false
   frame:
     name: mcu_motor_speed
     id: 0x0A5
@@ -375,16 +329,15 @@ can:
     frequency: 0
     dataset:
       data:
-        name: N
+        name: motor_speed
+        is_signed: true
+        is_byte: true
+        is_little_endian: false
         start_byte: 2
         end_byte: 4
-        start_bit: 0
-        end_bit: 0
         default: 0
         resolution: 1
         offset: 0
-        is_signed: true
-        is_little_endian: false
   frame:
     name: mcu_output_voltage
     id: 0x0A7
@@ -394,15 +347,13 @@ can:
     dataset:
       data:
         name: output_voltage
+        is_signed: true
+        is_byte: true
+        is_little_endian: false
         start_byte: 2
         end_byte: 4
-        start_bit: 0
-        end_bit: 0
-        default: 0
         resolution: 0.1
         offset: 0
-        is_signed: true
-        is_little_endian: false
   frame:
     name: rear_box_1
     id: 0x080AD093
@@ -412,67 +363,56 @@ can:
     dataset:
       data:
         name: wheel_speed_front_left
+        is_signed: false
+        is_byte: true
+        is_little_endian: true
         start_byte: 0
         end_byte: 2
-        start_bit: 0
-        end_bit: 0
         default: 0
         resolution: 0.003921568627451
         offset: 0
-        is_signed: false
-        is_little_endian: true
       data:
         name: wheel_speed_front_right
+        is_signed: false
+        is_byte: true
+        is_little_endian: true
         start_byte: 2
         end_byte: 4
-        start_bit: 0
-        end_bit: 0
         default: 0
         resolution: 0.003921568627451
         offset: 0
-        is_signed: false
-        is_little_endian: true
       data:
         name: tyre_temp_rear_left_1
+        is_signed: false
+        is_byte: true
         start_byte: 4
         end_byte: 5
-        start_bit: 0
-        end_bit: 0
-        default: 0
         resolution: 0.5
         offset: 0
-        is_signed: false
-        is_little_endian: true
       data:
         name: tyre_temp_rear_left_2
+        is_signed: false
+        is_byte: true
         start_byte: 5
         end_byte: 6
-        start_bit: 0
-        end_bit: 0
         default: 0
         resolution: 0.5
         offset: 0
-        is_signed: false
-        is_little_endian: true
       data:
         name: tyre_temp_rear_right_1
+        is_signed: false
+        is_byte: true
         start_byte: 6
         end_byte: 7
-        start_bit: 0
-        end_bit: 0
         default: 0
         resolution: 0.5
         offset: 0
-        is_signed: false
-        is_little_endian: true
       data:
         name: tyre_temp_rear_right_2
+        is_signed: false
+        is_byte: true
         start_byte: 7
         end_byte: 8
-        start_bit: 0
-        end_bit: 0
         default: 0
         resolution: 0.5
         offset: 0
-        is_signed: false
-        is_little_endian: true

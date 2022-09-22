@@ -183,6 +183,7 @@ struct convert<Data> {
      * @param[in] _node The yaml node containing can data.
      * @param[out] _cType The reference of can data class, used to store can data.
      * @return true
+     * @throw std::runtime_error
      */
     static bool decode(const Node &_node, Data &_cType);
 };
@@ -196,6 +197,7 @@ struct convert<Frame> {
      * @param[in] _node The yaml node containing can frame.
      * @param[out] _cType The reference of can frame class, used to store can frame.
      * @return true
+     * @throw std::runtime_error
      */
     static bool decode(const Node &_node, Frame &_cType);
 };
@@ -208,6 +210,7 @@ struct convert<Frame> {
  * @brief Function to load a yaml file into a map containing all can frames and their corresponding data.
  * @param[in] _file The path of the yaml file which contains the can rule.
  * @return Map storing pointer to can frame, with key being the name of the can frame.
+ * @throw std::runtime_error
  */
 
 std::map<std::string, FramePtr> load_yaml(std::string _file);

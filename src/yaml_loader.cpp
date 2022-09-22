@@ -58,7 +58,7 @@ bool YAML::convert<Data>::decode(const Node &_node, Data &_cType) {
         _cType.is_byte_ = _node["is_byte"].as<bool>();
     }
     else {
-        throw std::runtime_error(std::string("Error: \"is_byte\" tag does not exist in ") + _cType.name_ + "\" can data.\n" +
+        throw std::runtime_error(std::string("Error: \"is_byte\" tag does not exist in \"") + _cType.name_ + "\" can data.\n" +
             "\"is_byte\" tag is required for determining if this data is a byte data.\n");
     }
 
@@ -317,7 +317,7 @@ bool YAML::convert<Frame>::decode(const Node &_node, Frame &_cType) {
     }
     
     // check if "frequency" tag exist
-    _cType.frequency_ = _cType.frequency_ = (_node["frequency"] ? _node["frequency"].as<double>() : 0);
+    _cType.frequency_ = _cType.frequency_ = (_node["frequency"] ? _node["frequency"].as<double>() : 0); // frequency default to 0
 
     // check if "dataset" tag exist
     if(_node["dataset"]) {
@@ -330,13 +330,14 @@ bool YAML::convert<Frame>::decode(const Node &_node, Frame &_cType) {
             }
         }
         else {
-            throw std::runtime_error(std::string("Error: There is no \"data\" tag under \"dataset\".\n") +
-                "There sould be at least one \"data\" tag to store can data of this frame.\n");
+            throw std::runtime_error(std::string("Error: \"data\" tag does not exist under \"dataset\" in \"") +  _cType.name_ +
+                "\" can frame.\n" +
+                "At least one \"data\" tag is rquired for storing can data of this frame.\n");
         }
     }
     else {
-        throw std::runtime_error(std::string("Error: There is no \"dataset\" tag in \"") + _cType.name_ + "\" can frame.\n" +
-            "There sould be \"dataset\" tag in every can frame to store can data of this frame.\n");
+        throw std::runtime_error(std::string("Error: \"dataset\" tag does not in \"") + _cType.name_ + "\" can frame.\n" +
+            "\"dataset\" tag is required for storing can data of this frame.\n");
     }
 
     int hightest_occupied_byte = _cType.get_higtest_occupied_byte();
@@ -361,10 +362,18 @@ bool YAML::convert<Frame>::decode(const Node &_node, Frame &_cType) {
 
 std::map<std::string, FramePtr> load_yaml(std::string _file) {
     std::map<std::string, FramePtr> frameset;
-    YAML::Node can = YAML::LoadFile(_file)["can"];
-    for(auto it = can.begin(); it != can.end(); it++) {
-        auto frame = std::make_shared<Frame>(it->second.as<Frame>());
-        frameset[frame->name_] = frame;
+    YAML::Node file = YAML::LoadFile(_file);
+    // check if "can" tag exist
+    if(!file["can"]) {
+        throw std::runtime_error(std::string("Error: \"can\" tag dose not exist in \"") + _file + "\" file.\n" +
+            "\"can\" tag is required as the root of the can configuration file.\n");
+    }
+    else {
+        YAML::Node can = file["can"];
+        for(auto it = can.begin(); it != can.end(); it++) {
+            auto frame = std::make_shared<Frame>(it->second.as<Frame>());
+            frameset[frame->name_] = frame;
+        }
     }
     return frameset;
 }

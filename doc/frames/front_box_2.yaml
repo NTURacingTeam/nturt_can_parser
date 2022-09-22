@@ -1,4 +1,4 @@
-  frame:
+    frame:
     name: front_box_2
     id: 0x080AD092
     is_extended_id: true
@@ -7,100 +7,84 @@
     dataset:
       data:
         name: brake
+        is_signed: false
+        is_byte: true
         start_byte: 0
         end_byte: 1
-        start_bit: 0
-        end_bit: 0
         default: 0
         resolution: 0.00395
         offset: -0.00395
-        is_signed: false
-        is_little_endian: true
       data:
         name: accelerator_1
+        is_signed: false
+        is_byte: true
         start_byte: 1
         end_byte: 2
-        start_bit: 0
-        end_bit: 0
         default: 0
         resolution: 0.00395
         offset: -0.00395
-        is_signed: false
-        is_little_endian: true
       data:
         name: accelerator_2
+        is_signed: false
+        is_byte: true
         start_byte: 2
         end_byte: 3
-        start_bit: 0
-        end_bit: 0
         default: 0
         resolution: 0.00395
         offset: -0.00395
-        is_signed: false
-        is_little_endian: true
       data:
         name: steer_angle
+        is_signed: false
+        is_byte: true
         start_byte: 3
         end_byte: 4
-        start_bit: 0
-        end_bit: 0
         default: 0
         resolution: 1.406
         offset: -180.0
-        is_signed: false
-        is_little_endian: true
       data:
         name: travel_front_left
+        is_signed: false
+        is_byte: true
         start_byte: 4
         end_byte: 5
-        start_bit: 0
-        end_bit: 0
         default: 0
         resolution: 0.17647058823
         offset: 200
-        is_signed: false
-        is_little_endian: true
       data:
         name: travel_front_right
+        is_signed: false
+        is_byte: true
         start_byte: 5
         end_byte: 6
-        start_bit: 0
-        end_bit: 0
         default: 0
         resolution: 0.17647058823
         offset: 200
-        is_signed: false
-        is_little_endian: true
       data:
         name: oil_pressure
+        is_signed: false
+        is_byte: true
         start_byte: 6
         end_byte: 7
-        start_bit: 0
-        end_bit: 0
         default: 0
         resolution: 19.6078431373
         offset: 0
-        is_signed: false
-        is_little_endian: true
       data:
         name: brake_micro
-        start_byte: 7
-        end_byte: 8
+        is_signed: false
+        is_byte: false
+        byte: 7
         start_bit: 0
         end_bit: 1
         default: 0
         resolution: 1
         offset: 0
-        is_signed: false
-        is_little_endian: true
       data:
         name: accelerator_micro
-        start_byte: 7
-        end_byte: 8
+        is_signed: false
+        is_byte: false
+        byte: 7
         start_bit: 1
         end_bit: 2
         default: 0
         resolution: 1
         offset: 0
-        is_signed: false
-        is_little_endian: true

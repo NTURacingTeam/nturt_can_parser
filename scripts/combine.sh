@@ -1,4 +1,4 @@
-#!usr/bin/sh
+#!/bin/bash
 
 # put your frames into ./frames and enter the command "./combine.sh"
 
