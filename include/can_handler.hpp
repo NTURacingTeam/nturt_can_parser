@@ -33,6 +33,12 @@ class CanHandler {
         /// @brief ROS node handler.
         std::shared_ptr<ros::NodeHandle> nh_;
 
+        /// @brief ROS publisher to "/sent_messages".
+        ros::Publisher can_pub_;
+
+        /// @brief ROS sbscriber to "/received_messages".
+        ros::Subscriber can_sub_;
+
         /// @brief ROS subscriber to "/send_can_data".
         ros::Subscriber send_can_data_sub_;
         
@@ -42,7 +48,9 @@ class CanHandler {
         /// @brief CAN parser for parsing can data.
         CanParser can_parser_;
 
-        void onSendCanData(const nturt_can_parser::SendCanData &_msg);
+        void onCan(const can_msgs::Frame::ConstPtr &_msg);
+
+        void onSendCanData(const nturt_can_parser::SendCanData::ConstPtr &_msg);
 
         bool onGetCanData(nturt_can_parser::GetCanData::Request &_req,
             nturt_can_parser::GetCanData::Response &_res);

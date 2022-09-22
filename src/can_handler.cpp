@@ -1,12 +1,18 @@
 #include "can_handler.hpp"
 
 CanHandler::CanHandler(std::shared_ptr<ros::NodeHandle> _nh) : nh_(_nh),
-    send_can_data_sub_(_nh->subscribe("/send_can_data", 100, &CanHandler::onSendCanData, this)),
+    can_pub_(_nh->advertise<can_msgs::Frame>("/sent_messages", 10)),
+    can_sub_(_nh->subscribe("received_messages", 10, &CanHandler::onCan, this)),
+    send_can_data_sub_(_nh->subscribe("/send_can_data", 10, &CanHandler::onSendCanData, this)),
     get_can_data_srv_(_nh->advertiseService("/get_can_data", &CanHandler::onGetCanData, this)) {
 
 }
 
-void CanHandler::onSendCanData(const nturt_can_parser::SendCanData &_msg) {
+void CanHandler::onCan(const can_msgs::Frame::ConstPtr &_msg) {
+
+}
+
+void CanHandler::onSendCanData(const nturt_can_parser::SendCanData::ConstPtr &_msg) {
 
 }
 

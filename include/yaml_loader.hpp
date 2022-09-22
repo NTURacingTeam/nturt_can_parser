@@ -1,7 +1,6 @@
 /**
  * @file yaml_loader.hpp
  * @author QuantumSpawner jet22854111@gmail.com
- * @author LY queeniiee02@gmail.com
  * @brief Yaml loader for can parser to load can rules from a yaml file.
  */
 
@@ -24,13 +23,21 @@
 
 /**
  * @author QuantumSpawner jet22854111@gmail.com
- * @author LY queeniiee02@gmail.com
  * @brief Class for storing can data format.
  */
 class Data {
     public:
         /// @brief Name of this can data, it will be used as key of the "dataset" map which stores all can data.
         std::string name_;
+
+        /// @brief If this can data is signed.
+        bool is_signed_;
+
+        /// @brief If this can data is a byte data.
+        bool is_byte_;
+
+        /// @brief If this can data is little endian, i.e. most significant bit first.
+        bool is_little_endian_;
 
         /// @brief Start byte of this can data, the range will be determined as [start_byte, end_byte).
         int start_byte_;
@@ -54,12 +61,6 @@ class Data {
 
         /// @brief Offset of this can data, calculated as original value - offset.
         double offset_;
-
-        /// @brief If this can data is signed.
-        bool is_signed_;
-
-        /// @brief If this can data is little endian, i.e. most significant bit first.
-        bool is_little_endian_;
 
         /// @brief Buffer storing the value of this can data last time it was sent/received.
         double last_data_;
@@ -93,7 +94,6 @@ typedef std::shared_ptr<Data> DataPtr;
 /**
  * @brief Class for storing can frame format.
  * @author QuantumSpawner jet22854111@gmail.com
- * @author LY queeniiee02@gmail.com
  */
 class Frame {
     public:
@@ -113,7 +113,7 @@ class Frame {
         /// @brief Frequency that this can frame is sent, set to 0 to disable sending this can frame.
         double frequency_;
 
-        /// @brief Time difference between the last frame was sent [s].
+        /// @brief Time difference between the last this frame was sent [s].
         double dt_;
 
         /// @brief Map storing pointer to can data correspond to this can frame, with key being the name of the can data .
@@ -171,7 +171,6 @@ inline std::ostream& operator<<(std::ostream &_ostream, const Frame &_frame) {
     return _ostream << _frame.get_string();
 }
 
-
 /// @cond YAML
 namespace YAML {
 
@@ -212,5 +211,12 @@ struct convert<Frame> {
  */
 
 std::map<std::string, FramePtr> load_yaml(std::string _file);
+
+/**
+ * @brief Function to print frameset.
+ * @param[in] _frameset The frameset to print.
+ * @return The string of representation of the frameset.
+ */
+std::string get_string(std::map<std::string, FramePtr> _frameset);
 
 #endif // YAML_LAODER_HPP

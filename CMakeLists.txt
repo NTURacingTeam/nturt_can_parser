@@ -9,6 +9,8 @@ find_package(catkin REQUIRED COMPONENTS
         roscpp
 )
 
+find_package(yaml-cpp REQUIRED)
+
 # custom interfaces
 # message
 add_message_files(FILES
@@ -33,6 +35,7 @@ catkin_package(
 include_directories(
         include
         ${catkin_INCLUDE_DIRS}
+        ${YAML_CPP_INCLUDE_DIRS}
 )
 
 # libraries
