@@ -159,7 +159,7 @@ can:
       data:
         name: brake_micro
         start_byte: 7
-        end_byte: 8
+        end_byte: 7
         start_bit: 0
         end_bit: 1
         default: 0
@@ -170,7 +170,7 @@ can:
       data:
         name: accelerator_micro
         start_byte: 7
-        end_byte: 8
+        end_byte: 7
         start_bit: 1
         end_bit: 2
         default: 0
@@ -217,7 +217,7 @@ can:
       data:
         name: ready_to_drive
         start_byte: 0
-        end_byte: 1
+        end_byte: 0
         start_bit: 0
         end_bit: 1
         default: 0
@@ -290,7 +290,7 @@ can:
       data:
         name: inverter_enable
         start_byte: 5
-        end_byte: 6
+        end_byte: 5
         start_bit: 0
         end_bit: 1
         default: 0
@@ -301,7 +301,7 @@ can:
       data:
         name: inverter_discharge
         start_byte: 5
-        end_byte: 6
+        end_byte: 5
         start_bit: 1
         end_bit: 2
         default: 0
@@ -312,7 +312,7 @@ can:
       data:
         name: speed_mode
         start_byte: 5
-        end_byte: 6
+        end_byte: 5
         start_bit: 2
         end_bit: 3
         default: 0
