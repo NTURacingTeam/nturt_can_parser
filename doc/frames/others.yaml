@@ -127,7 +127,7 @@
         offset: 0
       data:
         name: torque_limit
-        is_signed: false
+        is_signed: true
         is_byte: true
         is_little_endian: true
         start_byte: 6

@@ -15,7 +15,7 @@ int main(int argc, char **argv) {
     ros::init(argc, argv, "nturt_can_parser_node");
 
     // create a node handle
-    std::shared_ptr<ros::NodeHandle> nh = std::shared_ptr<ros::NodeHandle>(new ros::NodeHandle());
+    auto nh = std::make_shared<ros::NodeHandle>(ros::NodeHandle());
 
     // frequancy 1000 Hz
     ros::Rate loop_rate(1000);

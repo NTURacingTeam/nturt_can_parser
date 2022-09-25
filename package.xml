@@ -9,11 +9,11 @@
     <!-- build dependency -->
     <buildtool_depend>catkin</buildtool_depend>
     <build_depend>can_msgs</build_depend>
-    <build_depend>message_generation</build_depend>
+    <build_depend>nturt_ros_interface</build_depend>
     <build_depend>roscpp</build_depend>
 
     <!-- execute dependency -->
     <exec_depend>can_msgs</exec_depend>
-    <exec_depend>message_generation</exec_depend>
+    <exec_depend>nturt_ros_interface</exec_depend>
     <exec_depend>roscpp</exec_depend>
 </package>

@@ -360,8 +360,8 @@ bool YAML::convert<Frame>::decode(const Node &_node, Frame &_cType) {
     return true;
 }
 
-std::map<std::string, FramePtr> load_yaml(std::string _file) {
-    std::map<std::string, FramePtr> frameset;
+Frameset load_yaml(std::string _file) {
+    Frameset frameset;
     YAML::Node file = YAML::LoadFile(_file);
     // check if "can" tag exist
     if(!file["can"]) {
@@ -372,13 +372,13 @@ std::map<std::string, FramePtr> load_yaml(std::string _file) {
         YAML::Node can = file["can"];
         for(auto it = can.begin(); it != can.end(); it++) {
             auto frame = std::make_shared<Frame>(it->second.as<Frame>());
-            frameset[frame->name_] = frame;
+            frameset[frame->id_] = frame;
         }
     }
     return frameset;
 }
 
-std::string get_string(std::map<std::string, FramePtr> _frameset) {
+std::string get_string(Frameset _frameset) {
     std::string string;
     for(auto it = _frameset.begin(); it != _frameset.end(); it++) {
         string += it->second->get_string();

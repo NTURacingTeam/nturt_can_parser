@@ -44,6 +44,35 @@ using std::vector; using std::map; using std::string; using std::pair;
 class CanParser{
     public:
         CanParser();
+
+        /**
+         * @brief Function to publish the periodically published frame.
+         * @param[in] _dt The time difference between tthis and last call of the function.
+         * @param[in] publish_callback The callback function to publish the frame, whose arguments are id and data of the frame.
+         */
+        void publish(double _dt, void (*publish_callback)(int, uint8_t*));
+
+        /**
+         * @brief Function to update the can data of a frame.
+         * @param[in] _id The id of the frame.
+         * @param[in] _data The data of the frame.
+         * @return The pointer to the updated frame.
+         */
+        FramePtr update_frame(int _id, uint8_t *_data);
+
+        /**
+         * @brief Get the can data using the data's name.
+         * @param[in] _name The name of the can data.
+         * @return The value of the data.
+         */
+        double get_data(std::string _name);
+        
+        /**
+         * @brief Get the frameset stored in the can parser.
+         * @return Frameset, a map storing pointer to can frame, with key being the id of the can frame.
+         */
+        Frameset get_frameset();
+
         int init_parser();
         void print_err_log();
         void map_print();

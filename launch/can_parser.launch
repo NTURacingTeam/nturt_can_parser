@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<launch>
+    <node pkg="nturt_can_parser" name="nturt_can_parser_node" type="nturt_can_parser_node" output="screen">
+        <param name="can_config" value="$(find nturt_can_parser)/doc/can.yaml"/>
+    </node>
+</launch>

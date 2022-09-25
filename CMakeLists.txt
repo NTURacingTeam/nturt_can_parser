@@ -5,31 +5,16 @@ set(CMAKE_CXX_STANDARD 17)
 
 find_package(catkin REQUIRED COMPONENTS
         can_msgs
-        message_generation
+        nturt_ros_interface
         roscpp
 )
 
 find_package(yaml-cpp REQUIRED)
 
-# custom interfaces
-# message
-add_message_files(FILES
-        SendCanData.msg
-)
-
-# service
-add_service_files(FILES
-        GetCanData.srv
-)
-
-generate_messages(DEPENDENCIES
-        std_msgs
-)
-
 catkin_package(
         INCLUDE_DIRS include
         LIBRARIES ${PROJECT_NAME}
-        CATKIN_DEPENDS can_msgs message_generation roscpp
+        CATKIN_DEPENDS can_msgs nturt_ros_interface roscpp
 )
 
 include_directories(
