@@ -16,7 +16,11 @@ void CanParser::publish(double _dt, void (*publish_callback)(int, const boost::a
 
 FramePtr CanParser::update_frame(int _id, const boost::array<u_int8_t, 8> &_data){}
 
-double CanParser::get_data(std::string _name){}
+DataPtr CanParser::get_data(std::string _name) {}
+
+FramePtr CanParser::get_data(int _name) {}
+
+FramePtr CanParser::get_data(std::string _name) {}
 
 Frameset CanParser::get_frameset() {}
 

@@ -57,10 +57,11 @@ class CanHandler {
 
         /** @brief The cursed object.
          * 
-         * The vector containing the nodes that registered to be notified when can data update, which is mapped by the name of the
-         * can data name that the nodes registed to, which iteslf is mapped by the frame that contains these can data.
+         * The vector containing the pointer to the publisher to nodes that registered to be notified when can data update,
+         * which is mapped by the name of the can data name that the nodes registed to, which iteslf is mapped by the frame
+         * that contains these can data.
          */
-        std::map<int, std::map<std::string, std::vector<ros::Publisher>>> registration_;
+        std::map<int, std::map<std::string, std::vector<std::shared_ptr<ros::Publisher>>>> registration_;
 
         /**
          * @brief Callback function when receiving can message from "/received_messages".

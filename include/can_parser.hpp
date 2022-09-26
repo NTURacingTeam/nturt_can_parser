@@ -47,7 +47,7 @@ class CanParser{
 
         /**
          * @brief Function to publish the periodically published frame.
-         * @param[in] _dt The time difference between tthis and last call of the function.
+         * @param[in] _dt The time difference between this and last call of this function.
          * @param[in] publish_callback The callback function to publish the frame, whose arguments are id and data of the frame.
          */
         void publish(double _dt, void (*publish_callback)(int, const boost::array<u_int8_t, 8>&));
@@ -63,9 +63,28 @@ class CanParser{
         /**
          * @brief Get the can data using the data's name.
          * @param[in] _name The name of the can data.
-         * @return The value of the data.
+         * @return The pointer to the data null_ptr if not found.
          */
-        double get_data(std::string _name);
+        DataPtr get_data(std::string _name);
+
+        /**
+         * @brief Function to update the can data of a frame.
+         * @param _id Id of the frame.
+         * @return The pointer to the frame null_ptr if not found.
+         */
+        FramePtr get_frame(int _id);
+
+        /**
+         * @brief Get the frame object
+         * 
+         * @param _name The name of the can frame.
+         * @return FramePtr 
+         */
+        FramePtr get_frame(std::string _name);
+
+        void get_raw_frame(std::string _name, int &_id, boost::array<u_int8_t, 8> &_data);
+        
+        void get_raw_frame(int _id, boost::array<u_int8_t, 8> &_data);
         
         /**
          * @brief Get the frameset stored in the can parser.
@@ -87,9 +106,9 @@ class CanParser{
 
     private:
         /// @brief Map storing can frame.
-        Frameset frameset_;
+        Frameset frameset_; // should be two tupes of frameset, one using id as key, another using frame name as key.
         std::map<int, std::map<std::string, bool>> flag_;
-        std::map<int, std::map<std::string, double>> after_decode;
+        std::map<int, std::map<std::string, double>> after_decode; // move to last_data_ in Data, should be deleted
         std::map<int, std::map<std::string, double>> to_be_encode;
         //map<string, vector<bool>> flag_;
         std::map<int, std::vector<std::pair<std::string, std::string>>> find_id_to_get_two_name;

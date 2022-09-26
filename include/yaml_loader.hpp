@@ -108,8 +108,9 @@ struct Frame {
     /// @brief The number of bytes in this can frame.
     int dlc_;
 
-    /// @brief Frequency that this can frame is sent, set to 0 to disable sending this can frame.
-    double frequency_;
+    /// @brief Period that this can frame is sent, set to 0 to disable sending this can frame.
+    /// @todo Change all instalces of frequency to period.
+    double period_;
 
     /// @brief Time difference between the last this frame was sent [s].
     double dt_;
