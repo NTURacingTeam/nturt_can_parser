@@ -8,7 +8,7 @@ find_package(catkin REQUIRED COMPONENTS
         nturt_ros_interface
         roscpp
 )
-
+find_package(Boost REQUIRED)
 find_package(yaml-cpp REQUIRED)
 
 catkin_package(
@@ -19,6 +19,7 @@ catkin_package(
 
 include_directories(
         include
+        ${Boost_INCLUDE_DIRS}
         ${catkin_INCLUDE_DIRS}
         ${YAML_CPP_INCLUDE_DIRS}
 )
@@ -33,6 +34,7 @@ add_library(${PROJECT_NAME}
 
 target_link_libraries(${PROJECT_NAME}
         ${catkin_LIBRARIES}
+        ${Boost_LIBRARIES}
         yaml-cpp
 )
 

@@ -50,7 +50,7 @@ class CanParser{
          * @param[in] _dt The time difference between tthis and last call of the function.
          * @param[in] publish_callback The callback function to publish the frame, whose arguments are id and data of the frame.
          */
-        void publish(double _dt, void (*publish_callback)(int, uint8_t*));
+        void publish(double _dt, void (*publish_callback)(int, const boost::array<u_int8_t, 8>&));
 
         /**
          * @brief Function to update the can data of a frame.
@@ -58,7 +58,7 @@ class CanParser{
          * @param[in] _data The data of the frame.
          * @return The pointer to the updated frame.
          */
-        FramePtr update_frame(int _id, uint8_t *_data);
+        FramePtr update_frame(int _id, const boost::array<u_int8_t, 8> &_data);
 
         /**
          * @brief Get the can data using the data's name.
@@ -78,22 +78,21 @@ class CanParser{
         void map_print();
         int check_key(int id, std::string key, std::string comp);
         int check_key(int id, std::string key);
-        int decode(int id, int *data);
+        int decode(int _id, int *_data);
         //int decode(int id, const boost::array<unsigned char, 8> data);    // not sure
-        int encode(int id, int *data);
-        int set_tbe(std::string frame_name, std::string comp_name, double val);
-        double get_afd(std::string key, std::string comp);
+        int encode(int _id, int *_data);
+        int set_tbe(int _id, string _data_name, double _value);
+        double get_afd(int _id, std::string _data_name);
         std::vector<std::pair<std::string, std::string>> get_key(int id);
 
     private:
         /// @brief Map storing can frame.
-        std::map<std::string, FramePtr> frameset_;
-        std::map<std::string, std::map<std::string, bool>> flag_;
-        std::map<std::string, std::map<std::string, double>> after_decode;
-        std::map<std::string, std::map<std::string, double>> to_be_encode;
+        Frameset frameset_;
+        std::map<int, std::map<std::string, bool>> flag_;
+        std::map<int, std::map<std::string, double>> after_decode;
+        std::map<int, std::map<std::string, double>> to_be_encode;
         //map<string, vector<bool>> flag_;
         std::map<int, std::vector<std::pair<std::string, std::string>>> find_id_to_get_two_name;
-        std::map<int, std::string> find_id_to_get_frame;
         
         const unsigned long pow256[8] = {1, 256, 65536, 16777216, 4294967296, 1099511627776, 281474976710656, 72057594037927940};
         const unsigned long pow2[8] = {1, 2, 4, 8, 16, 32, 64, 128};

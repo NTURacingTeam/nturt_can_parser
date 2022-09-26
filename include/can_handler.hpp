@@ -8,6 +8,7 @@
 #define CAN_HANDLER_HPP
 
 // std include
+#include <array>
 #include <memory>
 #include <vector>
 
@@ -23,19 +24,6 @@
 #include "nturt_ros_interface/RegisterCanNotification.h"
 #include "nturt_ros_interface/SendCanData.h"
 
-/**
- * @author QuantumSpawner jet22854111@gmail.com
- * @brief 
- */
-struct Registration {
-    Registration();
-
-    /// @brief Publisher to corresponding registered node.
-    ros::Publisher notify_pub_;
-
-    /// @brief Data list when updated to publish to the registered node.
-    std::vector<std::string> data_list_;
-};
 
 /**
  * @author QuantumSpawner jet22854111@gmail.com
@@ -66,6 +54,13 @@ class CanHandler {
 
         /// @brief CAN parser for parsing can data.
         CanParser can_parser_;
+
+        /** @brief The cursed object.
+         * 
+         * The vector containing the nodes that registered to be notified when can data update, which is mapped by the name of the
+         * can data name that the nodes registed to, which iteslf is mapped by the frame that contains these can data.
+         */
+        std::map<int, std::map<std::string, std::vector<ros::Publisher>>> registration_;
 
         /**
          * @brief Callback function when receiving can message from "/received_messages".
