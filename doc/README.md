@@ -14,7 +14,7 @@ can:
     id: 0x0C0
     is_extended_id: false
     dlc: 8
-    frequency: 0
+    period: 0
     dataset:
       data: # byte data
         name: torque_command
@@ -92,9 +92,9 @@ Listed in the order of the example above.
 - raise: std::runtime_error
   - If the hightest byte occupied by the data stored in this frame is greater to dlc.
 
-### frequency:
+### period:
 
-- The frequency at which this frame is sent to can bus, if set to 0, the frame will not be sent to can bus.
+- The period at which this frame is sent to can bus, if set to 0, the frame will not be sent to can bus.
 - type: double
 - required: false
   - Default to 0.

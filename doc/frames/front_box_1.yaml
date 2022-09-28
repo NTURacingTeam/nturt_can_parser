@@ -4,7 +4,7 @@ can:
     id: 0x080AD091
     is_extended_id: true
     dlc: 8
-    frequency: 0
+    period: 0
     dataset:
       data:
         name: front_left_wheel_speed

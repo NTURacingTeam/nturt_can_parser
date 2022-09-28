@@ -3,7 +3,7 @@
     id: 0x080AD093
     is_extended_id: true
     dlc: 8
-    frequency: 0
+    period: 0
     dataset:
       data:
         name: wheel_speed_front_left

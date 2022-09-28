@@ -16,14 +16,31 @@
 #include <string>
 
 // boost include
+#include <boost/array.hpp>
 #include <boost/format.hpp>
 
 // yaml include
 #include <yaml-cpp/yaml.h>
 
+// forward definition of classes
+struct Data;
+
+struct Frame;
+
+// type definitions
+typedef std::shared_ptr<Data> DataPtr;
+
+typedef std::map<std::string, DataPtr> Dataset;
+
+typedef std::shared_ptr<Frame> FramePtr;
+
+typedef std::map<int, FramePtr> IdFrameset;
+
+typedef std::map<std::string, FramePtr> NameFrameset;
+
 /**
  * @author QuantumSpawner jet22854111@gmail.com
- * @brief Struct for storing can data format.
+ * @brief Struct for storing can data.
  */
 struct Data {
     /// @brief Name of this can data, it will be used as key of the "dataset" map which stores all can data.
@@ -51,18 +68,22 @@ struct Data {
     int end_bit_;
 
     /// @brief Default value of this can data if this can data has never been sent/received, default to 0 if not
-    ///        specified in the yaml file.
+    /// specified in the yaml file.
     double default_;
 
     /// @brief Resolution of this can data, i.e. the change of value of this can data if on least significant bit
-    ///        is changed.
+    /// is changed, default to 0 if not specified in the yaml file.
     double resolution_;
 
-    /// @brief Offset of this can data, calculated as original value - offset.
+    /// @brief Offset of this can data, calculated as original value - offset, default to 0 if not specified in
+    /// the yaml file.
     double offset_;
 
     /// @brief Buffer storing the value of this can data last time it was sent/received.
     double last_data_;
+
+    /// @brief Pointer to the can frame that store this can data.
+    FramePtr frame_;
     
     /**
      * @brief Get the string repersentation of can data.
@@ -74,25 +95,19 @@ struct Data {
      * @brief Get which bit of the can frame is occupied by this can data.
      * @return Which bit(s) is/are occupied by this can data in the can frame, which is determined as #byte * 8 + #bit.
      */
-    std::bitset<64> get_occupied_bit();
+    std::bitset<64> get_occupied_bit() const;
 
     /**
      * @brief Get which byte of this can data is occupied.
      * @param _data Can data whose occupation of a can frame data byte is to be determined.
      * @return Which byte(s) is/are occupied by this can data in the can frame.
      */
-    std::bitset<8> get_occupied_byte();
-    
-    double after_decode_;    // test
-    double to_be_encode_;    // test
-    bool flag_;              // test
+    std::bitset<8> get_occupied_byte() const;
 };
 
-typedef std::shared_ptr<Data> DataPtr;
-
 /**
- * @brief Struct for storing can frame format.
  * @author QuantumSpawner jet22854111@gmail.com
+ * @brief Struct for storing can frame.
  */
 struct Frame {
     /// @brief Name of this can frame, it will be used as key of the "frameset" map which stores all can frames.
@@ -102,24 +117,21 @@ struct Frame {
     unsigned int id_;
 
     /// @brief If the id is extended format, determined automatically when not specified, i.e. true if the id is
-    ///        more than 15 bit long.
+    /// more than 15 bit long.
     bool is_extended_id_;
 
     /// @brief The number of bytes in this can frame.
     int dlc_;
 
-    /// @brief Period that this can frame is sent, set to 0 to disable sending this can frame.
-    /// @todo Change all instalces of frequency to period.
+    /// @brief Period that this can frame is sent, set to 0 to disable sending this can frame, default to 0 if not
+    /// specified in the yaml file.
     double period_;
 
     /// @brief Time difference between the last this frame was sent [s].
     double dt_;
 
-    /// @brief Map storing pointer to can data correspond to this can frame, with key being the name of the can data .
-    std::map<std::string, DataPtr> dataset_;
-
-    /// @brief Vector storing pointer ro can data correspond to this can frame.
-    std::vector<DataPtr> datavector_;
+    /// @brief Map storing pointer to can data correspond to this can frame, with key being can data's name.
+    Dataset dataset_;
     
     /**
      * @brief Get the string representation of can frame.
@@ -132,23 +144,21 @@ struct Frame {
      * @return Which bit(s) is/are occupied in this can frame, which is determined as #byte * 8 + #bit.
      * @throw std::runtime_error Throw exception when two can data have overlapping data positions.
      */
-    std::bitset<64> get_occupied_bit();
+    std::bitset<64> get_occupied_bit() const ;
 
     /**
      * @brief Get which byte of this can frame is occupied.
      * @return Which byte(s) is/are occupied in this can frame.
      * @todo Currently no checking will be done if two can data have overlapping data positions.
      */
-    std::bitset<8> get_occupied_byte();
+    std::bitset<8> get_occupied_byte() const ;
 
     /**
      * @brief Get the higest occupied byte of this can frame.
      * @return Which byte is the hightest occupied byte.
      */
-    int get_higtest_occupied_byte();
+    int get_higtest_occupied_byte() const ;
 };
-
-typedef std::shared_ptr<Frame> FramePtr;
 
 /**
  * @brief Operator used for passing the string representsation of can data to ostream.
@@ -178,7 +188,7 @@ template<>
 struct convert<Data> {
     /**
      * @brief Function to convert yaml node containing can data into C++ can data class, which is implemented in yaml-cpp
-     *        as "as<Data>()" function.
+     * as "as<Data>()" function.
      * @param[in] _node The yaml node containing can data.
      * @param[out] _cType The reference of can data class, used to store can data.
      * @return true
@@ -192,7 +202,7 @@ template<>
 struct convert<Frame> {
     /**
      * @brief Function to convert yaml node containing can frame into C++ can frame class, which is implemented in yaml-cpp
-     *        as "as<Frame>()" function.
+     * as "as<Frame>()" function.
      * @param[in] _node The yaml node containing can frame.
      * @param[out] _cType The reference of can frame class, used to store can frame.
      * @return true
@@ -205,21 +215,47 @@ struct convert<Frame> {
 
 /// @endcond
 
-typedef std::map<int, FramePtr> Frameset;
-
 /**
  * @brief Function to load a yaml file into a map containing all can frames and their corresponding data.
  * @param[in] _file The path of the yaml file which contains the can rule.
- * @return Frameset, a map storing pointer to can frame, with key being the id of the can frame.
+ * @return Id frameset, a map storing pointer to can frame, with key being the frame's.
  * @throw std::runtime_error
  */
-Frameset load_yaml(std::string _file);
+IdFrameset load_yaml(const std::string &_file);
 
 /**
- * @brief Function to print frameset.
- * @param[in] _frameset The frameset to print.
+ * @brief Function to convert id frameset to name frameset.
+ * @param _id_frameset Id frameset.
+ * @return Name frameset, a map storing pointer to can frame, with key being the frame's name.
+ */
+NameFrameset convert_to_name_frame(const IdFrameset &_id_frameset);
+
+/**
+ * @brief Get the dataset from all frameset.
+ * @param _frameset The frameset to get dataset.
+ * @return Dataset, a map storing pointer to  can data with key being the can data's name.
+ */
+Dataset get_dataset(const IdFrameset &_frameset);
+
+/**
+ * @brief Get the dataset from all frameset.
+ * @param _frameset The frameset to get dataset.
+ * @return Dataset, a map storing pointer to  can data with key being the can data's name.
+ */
+Dataset get_dataset(const NameFrameset &_frameset);
+
+/**
+ * @brief Get the string representation of frameset.
+ * @param[in] _frameset The frameset to get string.
  * @return The string representation of the frameset.
  */
-std::string get_string(Frameset _frameset);
+std::string get_string(const IdFrameset &_frameset);
+
+/**
+ * @brief Get the string representation of frameset.
+ * @param[in] _frameset The frameset to get string.
+ * @return The string representation of the frameset.
+ */
+std::string get_string(const NameFrameset &_frameset);
 
 #endif // YAML_LAODER_HPP

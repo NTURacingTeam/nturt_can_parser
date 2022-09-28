@@ -3,7 +3,7 @@
     id: 0x080AD092
     is_extended_id: true
     dlc: 8
-    frequency: 0
+    period: 0
     dataset:
       data:
         name: brake

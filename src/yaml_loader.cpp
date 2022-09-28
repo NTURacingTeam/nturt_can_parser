@@ -12,11 +12,11 @@ std::string Data::get_string() const {
         "\n\t\tdefault: " + std::to_string(default_) +
         "\n\t\tresolution: " + std::to_string(resolution_) +
         "\n\t\toffset: " + std::to_string(offset_) +
-        "\n\t\tlast_data: " + std::to_string(last_data_) + '\n';
+        "\n\t\tlast_data: " + std::to_string(last_data_);
     return string;
 }
 
-std::bitset<64> Data::get_occupied_bit() {
+std::bitset<64> Data::get_occupied_bit() const {
     std::bitset<64> occupied_bit = 0;
     for(int i = 0; i < (end_byte_ - start_byte_ - 1) * 8 + (end_bit_ - start_bit_); i ++) {
         occupied_bit[i] = 1;
@@ -25,7 +25,7 @@ std::bitset<64> Data::get_occupied_bit() {
     return occupied_bit;
 }
 
-std::bitset<8> Data::get_occupied_byte() {
+std::bitset<8> Data::get_occupied_byte() const {
     std::bitset<8> occupied_byte = 0;
     for(int i = 0; i < end_byte_ - start_byte_; i ++) {
         occupied_byte[i] = 1;
@@ -222,6 +222,8 @@ bool YAML::convert<Data>::decode(const Node &_node, Data &_cType) {
     // check if "offset" tag exist
     _cType.offset_ = (_node["offset"] ? _node["offset"].as<double>() : 0.0); // offset default to 0
     
+    _cType.last_data_ = _cType.default_; // lase_data default to default
+
     return true;
 }
 
@@ -235,12 +237,12 @@ std::string Frame::get_string() const {
         "\n\tid: " + (boost::format("%x") % id_).str() +
         "\n\tis_extended_id: " + (is_extended_id_ ? "true" : "false") +
         "\n\tdlc: " + std::to_string(dlc_) +
-        "\n\tfrequency: " + std::to_string(frequency_) + '\n' +
+        "\n\tperiod: " + std::to_string(period_) + '\n' +
         data;
     return string;
 }
 
-std::bitset<64> Frame::get_occupied_bit() {
+std::bitset<64> Frame::get_occupied_bit() const {
     std::bitset<64> occupied_bit = 0;
     for(auto it = dataset_.begin(); it != dataset_.end(); it ++) {
         std::bitset<64> data_occupied_bit = it->second->get_occupied_bit();
@@ -255,7 +257,7 @@ std::bitset<64> Frame::get_occupied_bit() {
     return occupied_bit;
 }
 
-std::bitset<8> Frame::get_occupied_byte() {
+std::bitset<8> Frame::get_occupied_byte() const {
     std::bitset<8> occupied_byte = 0;
     for(auto it = dataset_.begin(); it != dataset_.end(); it ++) {
         occupied_byte |= it->second->get_occupied_byte();
@@ -263,7 +265,7 @@ std::bitset<8> Frame::get_occupied_byte() {
     return occupied_byte;
 }
 
-int Frame::get_higtest_occupied_byte() {
+int Frame::get_higtest_occupied_byte() const {
     int hightest_occupied_byte = 0;
     std::bitset<8> occupied_byte = get_occupied_byte();
     while(occupied_byte != 0) {
@@ -316,8 +318,8 @@ bool YAML::convert<Frame>::decode(const Node &_node, Frame &_cType) {
         }
     }
     
-    // check if "frequency" tag exist
-    _cType.frequency_ = _cType.frequency_ = (_node["frequency"] ? _node["frequency"].as<double>() : 0); // frequency default to 0
+    // check if "period" tag exist
+    _cType.period_ = _cType.period_ = (_node["period"] ? _node["period"].as<double>() : 0); // period default to 0
 
     // check if "dataset" tag exist
     if(_node["dataset"]) {
@@ -326,7 +328,6 @@ bool YAML::convert<Frame>::decode(const Node &_node, Frame &_cType) {
             for(auto it = _node["dataset"].begin(); it != _node["dataset"].end(); it ++) {
                 auto data = std::make_shared<Data>(it->second.as<Data>());
                 _cType.dataset_[data->name_] = data;
-                _cType.datavector_.push_back(data);
             }
         }
         else {
@@ -360,8 +361,8 @@ bool YAML::convert<Frame>::decode(const Node &_node, Frame &_cType) {
     return true;
 }
 
-Frameset load_yaml(std::string _file) {
-    Frameset frameset;
+IdFrameset load_yaml(const std::string &_file) {
+    IdFrameset frameset;
     YAML::Node file = YAML::LoadFile(_file);
     // check if "can" tag exist
     if(!file["can"]) {
@@ -370,15 +371,56 @@ Frameset load_yaml(std::string _file) {
     }
     else {
         YAML::Node can = file["can"];
-        for(auto it = can.begin(); it != can.end(); it++) {
-            auto frame = std::make_shared<Frame>(it->second.as<Frame>());
+        for(auto frame_it = can.begin(); frame_it != can.end(); frame_it++) {
+            auto frame = std::make_shared<Frame>(frame_it->second.as<Frame>());
+            
+            // this is pretty stupid to initialize a data after it has been initialized, but custom yaml convert is also stupid
+            for(auto data_it = frame->dataset_.begin(); data_it != frame->dataset_.end(); data_it++) {
+                data_it->second->frame_ = frame;
+            }
             frameset[frame->id_] = frame;
         }
     }
     return frameset;
 }
 
-std::string get_string(Frameset _frameset) {
+NameFrameset convert_to_name_frame(const IdFrameset &_id_frameset) {
+    NameFrameset frameset;
+    for(auto it = _id_frameset.begin(); it != _id_frameset.end(); it++) {
+        frameset[it->second->name_] = it->second;
+    }
+    return frameset;
+}
+
+Dataset get_dataset(const IdFrameset &_frameset) {
+    Dataset dataset;
+    for(auto frame_it = _frameset.begin(); frame_it != _frameset.end(); frame_it++) {
+        for(auto data_it = frame_it->second->dataset_.begin(); data_it != frame_it->second->dataset_.end(); data_it++) {
+            dataset[data_it->first] = data_it->second;
+        }
+    }
+    return dataset;
+}
+
+Dataset get_dataset(const NameFrameset &_frameset) {
+    Dataset dataset;
+    for(auto frame_it = _frameset.begin(); frame_it != _frameset.end(); frame_it++) {
+        for(auto data_it = frame_it->second->dataset_.begin(); data_it != frame_it->second->dataset_.end(); data_it++) {
+            dataset[data_it->first] = data_it->second;
+        }
+    }
+    return dataset;
+}
+
+std::string get_string(const IdFrameset &_frameset) {
+    std::string string;
+    for(auto it = _frameset.begin(); it != _frameset.end(); it++) {
+        string += it->second->get_string();
+    }
+    return string;
+}
+
+std::string get_string(const NameFrameset &_frameset) {
     std::string string;
     for(auto it = _frameset.begin(); it != _frameset.end(); it++) {
         string += it->second->get_string();

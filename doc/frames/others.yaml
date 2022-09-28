@@ -3,7 +3,7 @@
     id: 0x080AD094
     is_extended_id: true
     dlc: 8
-    frequency: 0
+    period: 0
     dataset:
       data:
         name: travel_rear_left
@@ -28,7 +28,7 @@
     id: 0x080AD095
     is_extended_id: true
     dlc: 8
-    frequency: 0
+    period: 0
     dataset:
       data:
         name: ready_to_drive
@@ -64,7 +64,7 @@
     id: 0x0C0
     is_extended_id: false
     dlc: 8
-    frequency: 0
+    period: 0
     dataset:
       data:
         name: torque_command
@@ -140,7 +140,7 @@
     id: 0x0A1
     is_extended_id: false
     dlc: 8
-    frequency: 0
+    period: 0
     dataset:
       data:
         name: control_board_temp
@@ -157,7 +157,7 @@
     id: 0x0A2
     is_extended_id: false
     dlc: 8
-    frequency: 0
+    period: 0
     dataset:
       data:
         name: motor_temp
@@ -174,7 +174,7 @@
     id: 0x0A5
     is_extended_id: false
     dlc: 8
-    frequency: 0
+    period: 0
     dataset:
       data:
         name: motor_speed
@@ -191,7 +191,7 @@
     id: 0x0A7
     is_extended_id: false
     dlc: 8
-    frequency: 0
+    period: 0
     dataset:
       data:
         name: output_voltage

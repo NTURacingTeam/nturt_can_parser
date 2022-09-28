@@ -15,7 +15,7 @@ int main(int argc, char **argv) {
         std::cout << "Usage: <can file>" << std::endl;
     }
     else {
-        Frameset frameset = load_yaml(argv[1]);
+        IdFrameset frameset = load_yaml(argv[1]);
         std::string can = get_string(frameset);
         std::cout << can;
     }
