@@ -7,22 +7,69 @@ CanParser::CanParser() {
     std::cout << "CanParser constructed\n";
 }
 
-void CanParser::publish(const std::string &_name, const void (*publish_fun)(const FramePtr&, const boost::array<u_int8_t, 8>&)) const {}
+bool CanParser::publish(const std::string &_name, const PublishFun publish_fun) const {
+    boost::array<uint8_t, 8> data;
+    // if frame not found
+    if(name_frameset_.find(_name) == name_frameset_.end()) {
+        return false;
+    }
 
-void CanParser::periodic_publish(const double &_dt, const void (*publish_fun)(const FramePtr&, const boost::array<u_int8_t, 8>&)) const {}
+    // encode data into a frame, then publish it
+    return true;
+}
 
-FramePtr CanParser::update_frame(const int &_id, const boost::array<u_int8_t, 8> &_data) {}
+void CanParser::periodic_publish(const double &_dt, const PublishFun publish_fun) const {
+
+}
+
+DataPtr CanParser::update_data(const std::string &_name, const double &_value) {
+    // if frame not found
+    if(dataset_.find(_name) == dataset_.end()) {
+        return nullptr;
+    }
+
+    dataset_[_name]->last_data_ = _value;
+    return dataset_[_name];
+}
+
+FramePtr CanParser::update_frame(const int &_id, const boost::array<u_int8_t, 8> &_data) {
+    // if frame not found
+    if(id_frameset_.find(_id) == id_frameset_.end()) {
+        return nullptr;
+    }
+
+    // decode frame to can data
+}
 
 DataPtr CanParser::get_data(const std::string &_name) const {
+    // if data not found
+    if(dataset_.find(_name) == dataset_.end()) {
+        return nullptr;
+    }
+
     return dataset_.at(_name);
 }
 
 FramePtr CanParser::get_frame(const int &_id) const {
+    // if frame not found
+    if(id_frameset_.find(_id) == id_frameset_.end()) {
+        return nullptr;
+    }
+
     return id_frameset_.at(_id);
 }
 
 FramePtr CanParser::get_frame(const std::string &_name) const {
+    // if frame not found
+    if(name_frameset_.find(_name) == name_frameset_.end()) {
+        return nullptr;
+    }
+
     return name_frameset_.at(_name);
+}
+
+Dataset CanParser::get_dataset() const {
+    return dataset_;
 }
 
 IdFrameset CanParser::get_id_frameset() const {

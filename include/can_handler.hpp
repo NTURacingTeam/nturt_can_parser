@@ -39,22 +39,22 @@ class CanHandler {
         /// @brief ROS node handler.
         std::shared_ptr<ros::NodeHandle> nh_;
 
-        /// @brief ROS publisher to "/sent_messages".
+        /// @brief ROS publisher to "/sent_messages", for sending can signal.
         ros::Publisher can_pub_;
 
-        /// @brief ROS sbscriber to "/received_messages".
+        /// @brief ROS sbscriber to "/received_messages", for receiving can signal.
         ros::Subscriber can_sub_;
 
-        /// @brief ROS subscriber to "/publish_can_frame".
+        /// @brief ROS subscriber to "/publish_can_frame", for publishing can frame.
         ros::Subscriber publish_frame_sub_;
 
-        /// @brief ROS subscriber to "/update_can_data".
+        /// @brief ROS subscriber to "/update_can_data", for updating can data in parser.
         ros::Subscriber update_data_sub_;
 
-        /// @brief ROS service server to "/get_can_data".
+        /// @brief ROS service server to "/get_can_data", for getting can data in parser.
         ros::ServiceServer get_data_srv_;
 
-        /// @brief ROS service server to "/register_can_notification"
+        /// @brief ROS service server to "/register_can_notification", for registering notification.
         ros::ServiceServer register_srv_;
 
         /// @brief CAN parser for parsing can data.
@@ -68,17 +68,20 @@ class CanHandler {
          */
         std::map<int, std::map<std::string, std::vector<std::shared_ptr<ros::Publisher>>>> registration_;
 
-        /// @brief Callback function when receiving can message from "/received_messages".
+        /// @brief Callback function when receiving message from "/received_messages".
         void onCan(const can_msgs::Frame::ConstPtr &_msg);
 
-        /// @brief Callback function when receiving can message from "/update_can_data".
+        /// @brief Callback function when receiving message from "/publish_can_frame".
+        void onPublishCanFrame(const std_msgs::String::ConstPtr &_msg);
+
+        /// @brief Callback function when receiving message from "/update_can_data".
         void onUpdateCanData(const nturt_ros_interface::UpdateCanData::ConstPtr &_msg);
 
-        /// @brief Callback function when receiving can data request service call from "/get_can_data".
+        /// @brief Callback function when receiving service call from "/get_can_data".
         bool onGetCanData(nturt_ros_interface::GetCanData::Request &_req,
             nturt_ros_interface::GetCanData::Response &_res);
 
-        /// @brief Callback function when receiving registration request service call form "/register_can_notification".
+        /// @brief Callback function when receiving service call form "/register_can_notification".
         bool onRegister(nturt_ros_interface::RegisterCanNotification::Request &_req,
             nturt_ros_interface::RegisterCanNotification::Response &_res);
 
