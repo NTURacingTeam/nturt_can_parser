@@ -8,7 +8,13 @@ CanHandler::CanHandler(std::shared_ptr<ros::NodeHandle> _nh) : nh_(_nh),
     get_data_srv_(_nh->advertiseService("/get_can_data", &CanHandler::onGetCanData, this)),
     register_srv_(_nh->advertiseService("/register_can_notification", &CanHandler::onRegister, this)) {
 
-    // asume that can parser had already been initialized
+    // get can yaml file
+    std::string can_config;
+    ros::param::get("~can_config", can_config);
+
+    // init can parser
+    can_parser_.init(can_config);
+
     // initialize the map key in registration_
     IdFrameset frameset = can_parser_.get_id_frameset();
     for(auto frame_it = frameset.begin(); frame_it != frameset.end(); frame_it++) {
@@ -16,6 +22,19 @@ CanHandler::CanHandler(std::shared_ptr<ros::NodeHandle> _nh) : nh_(_nh),
             registration_[frame_it->first][data_it->first];
         }
     }
+
+    // initiate last_time_
+    last_time_ = ros::Time::now();
+}
+
+void CanHandler::update() {
+    ros::Time current_time = ros::Time::now();
+
+    // periodically publish can frame
+    can_parser_.periodic_publish((current_time - last_time_).toSec(),
+        std::bind(&CanHandler::publish, this, std::placeholders::_1, std::placeholders::_2));
+    
+    last_time_ = current_time;
 }
 
 void CanHandler::onCan(const can_msgs::Frame::ConstPtr &_msg) {

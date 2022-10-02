@@ -1,14 +1,12 @@
 // std include
 #include <memory>
+#include <string>
 
 // ros include
 #include <ros/ros.h>
 
-// ros message include
-#include "can_msgs/Frame.h"
-
 // nturt include
-#include "can_parser.hpp"
+#include "can_handler.hpp"
 
 int main(int argc, char **argv) {
     // register as a ros node
@@ -20,10 +18,12 @@ int main(int argc, char **argv) {
     // frequancy 1000 Hz
     ros::Rate loop_rate(1000);
 
+    CanHandler can_handler(nh);
+
     // main loop
     while (ros::ok()) {
         ros::spinOnce();
-        //std::cout << "while\n";
+        can_handler.update();
         loop_rate.sleep();
     }
     return 0;

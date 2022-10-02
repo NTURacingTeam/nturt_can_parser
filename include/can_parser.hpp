@@ -45,7 +45,11 @@ typedef std::function<void(const FramePtr&, const boost::array<u_int8_t, 8>&)> P
  */
 class CanParser{
     public:
-        CanParser();
+        /**
+         * @brief Initialize can parser and load yaml file.
+         * @param _file Path to the can yaml file.
+         */
+        void init(std::string _file);
 
         /**
          * @brief Function to publish the periodically published frame.
@@ -117,7 +121,6 @@ class CanParser{
          */
         NameFrameset get_name_frameset() const;
 
-        int init_parser();
         void print_err_log();
         void map_print();
         int check_key(int id, std::string key, std::string comp);

@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<launch>
+    <!-- can parser node -->
+    <node pkg="nturt_can_parser" name="nturt_can_parser_node" type="nturt_can_parser_node" output="screen">
+        <param name="can_config" value="$(find nturt_can_parser)/doc/test.yaml"/>
+    </node>
+
+    <!-- test node -->
+    <node pkg="nturt_can_parser" name="nturt_can_handler_test" type="nturt_can_handler_test" output="screen"/>
+</launch>

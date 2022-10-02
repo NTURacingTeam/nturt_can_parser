@@ -1,10 +1,8 @@
 #include "can_parser.hpp"
 
-CanParser::CanParser() {
-    std::cout << "CanParser constructing\n";
-    id_frameset_ = load_yaml("/home/docker/ws/src/nturt_can_parser/doc/can.yaml");
+void CanParser::init(std::string _file) {
+    id_frameset_ = load_yaml(_file);
     name_frameset_ = convert_to_name_frame(id_frameset_);
-    std::cout << "CanParser constructed\n";
 }
 
 bool CanParser::publish(const std::string &_name, const PublishFun publish_fun) const {
@@ -78,10 +76,6 @@ IdFrameset CanParser::get_id_frameset() const {
 
 NameFrameset CanParser::get_name_frameset() const {
     return name_frameset_;
-}
-
-int CanParser::init_parser() {
-    return OK;
 }
 
 void CanParser::map_print() {

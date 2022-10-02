@@ -50,12 +50,13 @@ target_link_libraries(${PROJECT_NAME}_node
 )
 
 # tests
-# executable: yaml_loader_test
-add_executable(yaml_loader_test
-        test/yaml_loader_test.cpp
+# executable: can_handler_test
+add_executable(nturt_can_handler_test
+        test/can_handler_test.cpp
 )
 
-target_link_libraries(yaml_loader_test
+target_link_libraries(nturt_can_handler_test
+        ${catkin_LIBRARIES}
         ${PROJECT_NAME}
 )
 
@@ -66,4 +67,13 @@ add_executable(can_parser_test
 
 target_link_libraries(can_parser_test
        ${PROJECT_NAME}
+)
+
+# executable: yaml_loader_test
+add_executable(yaml_loader_test
+        test/yaml_loader_test.cpp
+)
+
+target_link_libraries(yaml_loader_test
+        ${PROJECT_NAME}
 )

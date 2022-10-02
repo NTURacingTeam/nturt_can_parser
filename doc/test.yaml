@@ -1,10 +1,29 @@
+# fake can config file for testing purposes
 can:
+  frame:
+    name: mcu_board
+    id: 0x0A1
+    is_extended_id: false
+    dlc: 8
+    period: 0
+    dataset:
+      data:
+        name: control_board_temp
+        is_signed: true
+        is_byte: true
+        is_little_endian: false
+        start_byte: 0
+        end_byte: 2
+        default: 0
+        resolution: 0.1
+        offset: 0
+        
   frame:
     name: mcu_command
     id: 0x0C0
     is_extended_id: false
     dlc: 8
-    period: 0
+    period: 0.01
     dataset:
       data: # byte data
         name: torque_command

@@ -9,6 +9,7 @@
 
 // std include
 #include <array>
+#include <string>
 #include <functional>
 #include <memory>
 #include <vector>
@@ -26,7 +27,6 @@
 #include "nturt_ros_interface/RegisterCanNotification.h"
 #include "nturt_ros_interface/UpdateCanData.h"
 
-
 /**
  * @author QuantumSpawner jet22854111@gmail.com
  * @brief Class for ros wrapper for can parser.
@@ -34,6 +34,9 @@
 class CanHandler {
     public:
         CanHandler(std::shared_ptr<ros::NodeHandle> _nh);
+
+        /// @brief Function that should be called every time to update the can handler.
+        void update();
 
     private:
         /// @brief ROS node handler.
@@ -67,6 +70,9 @@ class CanHandler {
          * that contains these can data.
          */
         std::map<int, std::map<std::string, std::vector<std::shared_ptr<ros::Publisher>>>> registration_;
+
+        /// @brief Last time that this node is updated.
+        ros::Time last_time_;
 
         /// @brief Callback function when receiving message from "/received_messages".
         void onCan(const can_msgs::Frame::ConstPtr &_msg);
