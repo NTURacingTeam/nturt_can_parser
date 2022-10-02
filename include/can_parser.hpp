@@ -126,13 +126,12 @@ class CanParser{
         int check_key(int id, std::string key, std::string comp);
         int check_key(int id, std::string key);
         int decode(int _id, int *_data);
-        //int decode(int id, const boost::array<unsigned char, 8> data);    // not sure
+        int decode(int _id, const boost::array<unsigned char, 8> &_data);    // not sure
         int encode(int _id, int *_data);
         int set_tbe(int _id, std::string _data_name, double _value);
         double get_afd(int _id, std::string _data_name);
         std::vector<std::pair<std::string, std::string>> get_key(int id);
 
-    private:
         /// @brief Map storing pointer to can frame, with key being the id of the can frame.
         IdFrameset id_frameset_;
 
