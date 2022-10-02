@@ -52,7 +52,7 @@ class CanParser{
         void init(std::string _file);
 
         /**
-         * @brief Function to publish the periodically published frame.
+         * @brief Function to publish frame by name.
          * @param[in] _name Name of the can frame to be published.
          * @param[in] publish_fun Function to publish the frame, whose arguments are frame pointer and data of the frame.
          * @return True if the frame is published successfully, or false if failed.

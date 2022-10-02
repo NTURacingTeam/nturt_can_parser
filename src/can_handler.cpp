@@ -7,7 +7,7 @@ CanHandler::CanHandler(std::shared_ptr<ros::NodeHandle> _nh) : nh_(_nh),
     update_data_sub_(_nh->subscribe("/update_can_data", 10, &CanHandler::onUpdateCanData, this)),
     get_data_srv_(_nh->advertiseService("/get_can_data", &CanHandler::onGetCanData, this)),
     register_srv_(_nh->advertiseService("/register_can_notification", &CanHandler::onRegister, this)) {
-
+    
     // get can yaml file
     std::string can_config;
     ros::param::get("~can_config", can_config);
@@ -43,7 +43,7 @@ void CanHandler::onCan(const can_msgs::Frame::ConstPtr &_msg) {
 
     // if frame is nullptr
     if(!frame) {
-        ROS_ERROR("Error: Frame not found when receiving can signal id: %d", _msg->id);
+        ROS_ERROR("Error: Frame not found when receiving can signal id: \"%d\"", _msg->id);
         return;
     }
 
@@ -52,7 +52,7 @@ void CanHandler::onCan(const can_msgs::Frame::ConstPtr &_msg) {
         // message to update can data to registered node
         nturt_ros_interface::UpdateCanData data_msg;
         data_msg.name = data_it->first;
-        data_msg.name = frame->dataset_[data_it->first]->last_data_;
+        data_msg.data = frame->dataset_[data_it->first]->last_data_;
 
         for(auto pub_it = data_it->second.begin(); pub_it != data_it->second.end(); pub_it++) {
             (*pub_it)->publish(data_msg);
@@ -63,14 +63,14 @@ void CanHandler::onCan(const can_msgs::Frame::ConstPtr &_msg) {
 void CanHandler::onPublishCanFrame(const std_msgs::String::ConstPtr &_msg) {
     // if frame publish is unsuccessfully
     if(!can_parser_.publish(_msg->data, std::bind(&CanHandler::publish, this, std::placeholders::_1, std::placeholders::_2))) {
-        ROS_ERROR("Error: Frame not found when publishing can frame: %s.", _msg->data.c_str());
+        ROS_ERROR("Error: Frame not found when publishing can frame: \"%s\".", _msg->data.c_str());
     }
 }
 
 void CanHandler::onUpdateCanData(const nturt_ros_interface::UpdateCanData::ConstPtr &_msg) {
     // if data not found
     if(!can_parser_.update_data(_msg->name, _msg->data)) {
-        ROS_ERROR("Error: Data not found when updating can data: %s", _msg->name.c_str());
+        ROS_ERROR("Error: Data not found when updating can data: \"%s\"", _msg->name.c_str());
     }
 }
 
@@ -82,7 +82,7 @@ bool CanHandler::onGetCanData(nturt_ros_interface::GetCanData::Request &_req,
 
     // if data is nullptr
     if(!data) {
-        ROS_ERROR("Error: Data not found when getting can data: %s.", _req.name.c_str());
+        ROS_ERROR("Error: Data not found when getting can data: \"%s\".", _req.name.c_str());
         return false;
     }
 
@@ -98,13 +98,13 @@ bool CanHandler::onRegister(nturt_ros_interface::RegisterCanNotification::Reques
     // check if all register data exist
     for(auto it = _req.data_name.begin(); it != _req.data_name.end(); it++) {
         if(dataset.find(*it) == dataset.end()) {
-            ROS_ERROR("Error: Data not found when setting registration can data: %s from node: %s", it->c_str(), _req.node_name.c_str());
+            ROS_ERROR("Error: Data not found when setting registration can data: \"%s\" from node: \"%s\"", it->c_str(), _req.node_name.c_str());
             return false;
         }
     }
     
     // topic for the notification
-    _res.topic = "/can_notification/" + _req.node_name;
+    _res.topic = "/can_notification" + _req.node_name;
     auto publisher = std::make_shared<ros::Publisher>(nh_->advertise<nturt_ros_interface::UpdateCanData>(_res.topic, 10));
 
     // register

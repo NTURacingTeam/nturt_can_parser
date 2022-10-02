@@ -23,7 +23,7 @@ can:
     id: 0x0C0
     is_extended_id: false
     dlc: 8
-    period: 0.01
+    period: 1
     dataset:
       data: # byte data
         name: torque_command

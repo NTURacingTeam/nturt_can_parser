@@ -3,6 +3,10 @@
 void CanParser::init(std::string _file) {
     id_frameset_ = load_yaml(_file);
     name_frameset_ = convert_to_name_frame(id_frameset_);
+    // append the can data in every frame set into one
+    for(auto it = name_frameset_.begin(); it != name_frameset_.end(); it++) {
+        dataset_.insert(it->second->dataset_.begin(), it->second->dataset_.end());
+    }
 }
 
 bool CanParser::publish(const std::string &_name, const PublishFun publish_fun) const {
@@ -36,7 +40,7 @@ FramePtr CanParser::update_frame(const int &_id, const boost::array<u_int8_t, 8>
         return nullptr;
     }
 
-    // decode frame to can data
+    return id_frameset_[_id];
 }
 
 DataPtr CanParser::get_data(const std::string &_name) const {
