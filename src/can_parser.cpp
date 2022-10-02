@@ -32,8 +32,18 @@ DataPtr CanParser::update_data(const std::string &_name, const double &_value) {
 
 FramePtr CanParser::update_frame(const int &_id, const boost::array<u_int8_t, 8> &_data) {
     // if frame not found
-    if(id_frameset_.find(_id) == id_frameset_.end()) {
+
+    auto curr_frame = id_frameset_.find(_id);
+    if(curr_frame == id_frameset_.end()) {
         return nullptr;
+    }
+    else {
+        decode(_id, _data);
+        /*
+        for (auto curr_data = curr_frame->second->dataset_.begin(); curr_data != curr_frame->second->dataset_.end(); curr_data++) {
+            decode();
+        }
+        */
     }
 
     // decode frame to can data
@@ -138,7 +148,51 @@ int CanParser::encode(int _id, int *_data) {
     }
     return OK;
 }
+int CanParser::decode(int _id, const boost::array<unsigned char, 8> &_data) {
+    std::cout << "decode" << "\n";
+    for (auto it = id_frameset_[_id]->dataset_.begin(); it != id_frameset_[_id]->dataset_.end(); it++) {
+        long long compose = 0;
+        if (it->second->start_byte_ != it->second->end_byte_) {
+            if (it->second->is_little_endian_ == _CP_LITTLE) {
+                for (int i = it->second->start_byte_; i < it->second->end_byte_; i++) {
+                    compose |= _data[i] << 8 * (i - it->second->start_byte_);
+                }
+            } 
+            else if (it->second->is_little_endian_ == _CP_BIG) {
+                for (int i = it->second->end_byte_; i > it->second->start_byte_; i--) {
+                    compose |= _data[i - 1] << 8 * (it->second->end_byte_ - i);
+                }
+            } 
+            else {
+                return ERR;
+            }
+            if (it->second->is_signed_) {
+                int sign_handling_bit = 8 * (it->second->end_byte_ - it->second->start_byte_) - 1;
+                bool negative = (compose >> sign_handling_bit) & 1;
+                long long neg_mask;
+                if (negative) {
+                    neg_mask = ~((int)pow256[it->second->end_byte_ - it->second->start_byte_] - 1);
+                    compose |= neg_mask;
+                }
+            }
+        }  
+        else if (it->second->start_byte_== it->second->end_byte_) {
+          compose = (_data[it->second->start_byte_] >> it->second->start_bit_) % pow2[it->second->end_bit_];
+        } 
+        else {
+            return ERR;
+        }
 
+        dataset_[it->second->name_]->last_data_ = ((double)it->second->resolution_ * compose) + it->second->offset_;
+        flag_[_id][it->second->name_] = true;
+
+        it->second->last_data_ = ((double)it->second->resolution_ * compose) + it->second->offset_; //test
+        //comp->flag_ = true; //test
+
+        std::cout << id_frameset_[_id]->name_ << ": " << it->second->name_ << "\n" << compose << "\n";
+    }
+    return OK;
+}
 int CanParser::decode(int _id, int *_data) {
     std::cout << "decode" << "\n";
     for (auto it = id_frameset_[_id]->dataset_.begin(); it != id_frameset_[_id]->dataset_.end(); it++) {
@@ -174,7 +228,7 @@ int CanParser::decode(int _id, int *_data) {
             return ERR;
         }
 
-        after_decode[_id][it->second->name_] = ((double)it->second->resolution_ * compose) + it->second->offset_;
+        dataset_[it->second->name_]->last_data_ = ((double)it->second->resolution_ * compose) + it->second->offset_;
         flag_[_id][it->second->name_] = true;
 
         it->second->last_data_ = ((double)it->second->resolution_ * compose) + it->second->offset_; //test
