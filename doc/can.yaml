@@ -1,5 +1,41 @@
 can:
   frame:
+    name: dashboard
+    id: 0x080AD095
+    is_extended_id: true
+    dlc: 8
+    period: 0
+    dataset:
+      data:
+        name: ready_to_drive
+        is_signed: false
+        is_byte: false
+        byte: 0
+        start_bit: 0
+        end_bit: 1
+        default: 0
+        resolution: 1
+        offset: 0
+      data:
+        name: gear_dial
+        is_signed: false
+        is_byte: true
+        start_byte: 1
+        end_byte: 2
+        default: 0
+        resolution: 1
+        offset: 0
+      data:
+        name: keep_alive
+        is_signed: false
+        is_byte: false
+        byte: 7
+        start_bit: 0
+        end_bit: 1
+        default: 0
+        resolution: 1
+        offset: 0
+  frame:
     name: front_box_1
     id: 0x080AD091
     is_extended_id: true
@@ -151,78 +187,17 @@ can:
         resolution: 1
         offset: 0
   frame:
-    name: rear_box_2
-    id: 0x080AD094
-    is_extended_id: true
-    dlc: 8
-    period: 0
-    dataset:
-      data:
-        name: travel_rear_left
-        is_signed: false
-        is_byte: true
-        start_byte: 0
-        end_byte: 1
-        default: 0
-        resolution: 0.17647058823
-        offset: 200
-      data:
-        name: travel_rear_right
-        is_signed: false
-        is_byte: true
-        start_byte: 1
-        end_byte: 2
-        default: 0
-        resolution: 0.17647058823
-        offset: 200
-  frame:
-    name: dashboard
-    id: 0x080AD095
-    is_extended_id: true
-    dlc: 8
-    period: 0
-    dataset:
-      data:
-        name: ready_to_drive
-        is_signed: false
-        is_byte: false
-        byte: 0
-        start_bit: 0
-        end_bit: 1
-        default: 0
-        resolution: 1
-        offset: 0
-      data:
-        name: gear_dial
-        is_signed: false
-        is_byte: true
-        start_byte: 1
-        end_byte: 2
-        default: 0
-        resolution: 1
-        offset: 0
-      data:
-        name: keep_alive
-        is_signed: false
-        is_byte: false
-        byte: 7
-        start_bit: 0
-        end_bit: 1
-        default: 0
-        resolution: 1
-        offset: 0
-  frame:
     name: mcu_command
     id: 0x0C0
     is_extended_id: false
     dlc: 8
-    period: 0
+    period: 0.01
     dataset:
       data:
         name: torque_command
         is_signed: true
         is_byte: true
-        is_little_endian: false
+        is_little_endian: true
         start_byte: 0
         end_byte: 2
         default: 0
@@ -232,14 +207,14 @@ can:
         name: speed_command
         is_signed: true
         is_byte: true
-        is_little_endian: false
+        is_little_endian: true
         start_byte: 2
         end_byte: 4
         default: 0
         resolution: 1
         offset: 0
       data:
-        name: direction_cmd
+        name: direction_command
         is_signed: false
         is_byte: true
         start_byte: 4
@@ -298,7 +273,7 @@ can:
         name: control_board_temp
         is_signed: true
         is_byte: true
-        is_little_endian: false
+        is_little_endian: true
         start_byte: 0
         end_byte: 2
         default: 0
@@ -315,7 +290,7 @@ can:
         name: motor_temp
         is_signed: true
         is_byte: true
-        is_little_endian: false
+        is_little_endian: true
         start_byte: 4
         end_byte: 6
         default: 0
@@ -332,7 +307,7 @@ can:
         name: motor_speed
         is_signed: true
         is_byte: true
-        is_little_endian: false
+        is_little_endian: true
         start_byte: 2
         end_byte: 4
         default: 0
@@ -349,7 +324,7 @@ can:
         name: output_voltage
         is_signed: true
         is_byte: true
-        is_little_endian: false
+        is_little_endian: true
         start_byte: 2
         end_byte: 4
         resolution: 0.1
@@ -416,3 +391,28 @@ can:
         default: 0
         resolution: 0.5
         offset: 0
+  frame:
+    name: rear_box_2
+    id: 0x080AD094
+    is_extended_id: true
+    dlc: 8
+    period: 0
+    dataset:
+      data:
+        name: travel_rear_left
+        is_signed: false
+        is_byte: true
+        start_byte: 0
+        end_byte: 1
+        default: 0
+        resolution: 0.17647058823
+        offset: 200
+      data:
+        name: travel_rear_right
+        is_signed: false
+        is_byte: true
+        start_byte: 1
+        end_byte: 2
+        default: 0
+        resolution: 0.17647058823
+        offset: 200

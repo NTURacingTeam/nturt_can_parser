@@ -1,6 +1,9 @@
 #!/bin/bash
 
-# put your frames into ./frames and enter the command "./combine.sh"
+if [[ $@ == '-h' || $@ == '--help' ]]; then
+    echo 'Put your frames into doc/frames and enter the command "./combine.sh", then this script will combine all of them into "can.yaml"'.
+fi
 
-cat ../doc/frames/*.yaml > ../doc/can.yaml
+echo 'can:' > ../doc/can.yaml
+cat ../doc/frames/*.yaml >> ../doc/can.yaml
 echo "combine finished"

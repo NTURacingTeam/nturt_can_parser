@@ -1,4 +1,3 @@
-can:
   frame:
     name: front_box_1
     id: 0x080AD091
@@ -9,7 +8,7 @@ can:
       data:
         name: front_left_wheel_speed
         is_signed: false
-        is_little_endian: true
+        is_little_endian: false
         is_byte: true
         start_byte: 0
         end_byte: 2
@@ -19,7 +18,7 @@ can:
       data:
         name: front_right_wheel_speed
         is_signed: false
-        is_little_endian: true
+        is_little_endian: false
         is_byte: true
         start_byte: 2
         end_byte: 4

@@ -8,7 +8,6 @@
 #define YAML_LAODER_HPP
 
 // std include
-#include <bitset>
 #include <iostream>
 #include <map>
 #include <memory>
@@ -28,14 +27,19 @@ struct Data;
 struct Frame;
 
 // type definitions
+/// @brief Pointer to can data.
 typedef std::shared_ptr<Data> DataPtr;
 
+/// @brief Map stroing pointer to can data with key being the can data's name.
 typedef std::map<std::string, DataPtr> Dataset;
 
+/// @brief Pointer to can Frame.
 typedef std::shared_ptr<Frame> FramePtr;
 
+/// @brief Map stroing pointer to can frame with key being the can frame's id.
 typedef std::map<int, FramePtr> IdFrameset;
 
+/// @brief Map stroing pointer to can frame with key being the can frame's name.
 typedef std::map<std::string, FramePtr> NameFrameset;
 
 /**
@@ -52,19 +56,26 @@ struct Data {
     /// @brief If this can data is a byte data.
     bool is_byte_;
 
-    /// @brief If this can data is little endian, i.e. most significant bit first.
+    /** @brief If this can data is little endian, set to false if is_byte is set to false or is only one byte long.
+     * 
+     * Assuming having a data with byte 0 being \f$X\f$ and byte 1 being \f$Y\f$, then little endian means that the data is claculated
+     * as \f$X+256\times Y\f$, or \f$256\times X+Y\f$ if it is big endian.
+     */
     bool is_little_endian_;
 
-    /// @brief Start byte of this can data, the range will be determined as [start_byte, end_byte).
+    /// @brief Start byte of this can data, the range will be determined as \f$[\text{start_byte},\text{end_byte})\f$.
     int start_byte_;
 
-    /// @brief End byte of this can data, the range will be determined as [start_byte, end_byte).
+    /// @brief End byte of this can data, the range will be determined as \f$[\text{start_byte},\text{end_byte})\f$,
+    /// set to -1 if not used when is_byte is set to false.
     int end_byte_;
 
-    /// @brief Start bit of this can data, the range will be determined as [start_bit, end_bit).
+    /// @brief Start bit of this can data, the range will be determined as \f$[\text{start_bit},\text{end_bit})\f$,
+    /// set to -1 if not used when is_byte is set to true.
     int start_bit_;
 
-    /// @brief End bit of this can data, the range will be determined as [start_bit, end_bit).
+    /// @brief End bit of this can data, the range will be determined as \f$[\text{start_bit},\text{end_bit})\f$,
+    /// set to -1 if not used when is_byte is set to true.
     int end_bit_;
 
     /// @brief Default value of this can data if this can data has never been sent/received, default to 0 if not
@@ -75,7 +86,7 @@ struct Data {
     /// is changed, default to 0 if not specified in the yaml file.
     double resolution_;
 
-    /// @brief Offset of this can data, calculated as original value - offset, default to 0 if not specified in
+    /// @brief Offset of this can data, calculated as original value + offset, default to 0 if not specified in
     /// the yaml file.
     double offset_;
 
@@ -93,16 +104,20 @@ struct Data {
 
     /**
      * @brief Get which bit of the can frame is occupied by this can data.
-     * @return Which bit(s) is/are occupied by this can data in the can frame, which is determined as #byte * 8 + #bit.
+     * 
+     * Which is determined as: \f$\sum^{63}_{i=0}{2^i*(\text{if ith bit is occupied})}\f$.
+     * @return Which bit(s) is/are occupied by this can data in the can frame.
      */
-    std::bitset<64> get_occupied_bit() const;
+    u_int64_t get_occupied_bit() const;
 
     /**
      * @brief Get which byte of this can data is occupied.
+     * 
+     * Which is determined as: \f$\sum^{7}_{i=0}{2^i*(\text{if ith byte is occupied})}\f$.
      * @param _data Can data whose occupation of a can frame data byte is to be determined.
      * @return Which byte(s) is/are occupied by this can data in the can frame.
      */
-    std::bitset<8> get_occupied_byte() const;
+    u_int8_t get_occupied_byte() const;
 };
 
 /**
@@ -141,41 +156,36 @@ struct Frame {
 
     /**
      * @brief Get which bit of this can frame is occupied.
-     * @return Which bit(s) is/are occupied in this can frame, which is determined as #byte * 8 + #bit.
-     * @throw std::runtime_error Throw exception when two can data have overlapping data positions.
+     * 
+     * Which is determined as: \f$ \sum^{63}_{i=0}{2^i*(\text{if ith bit is occupied})} \f$.
+     * @return Which bit(s) is/are occupied in this can frame.
+     * @throw std::runtime_error If two can data have overlapping data positions.
      */
-    std::bitset<64> get_occupied_bit() const ;
+    u_int64_t get_occupied_bit() const ;
 
     /**
      * @brief Get which byte of this can frame is occupied.
+     * 
+     * Which is determined as: \f$ \sum^{7}_{i=0}{2^i*(\text{if ith byte is occupied})} \f$.
      * @return Which byte(s) is/are occupied in this can frame.
-     * @todo Currently no checking will be done if two can data have overlapping data positions.
+     * @note No checking will be done if two can data have overlapping data positions when using this function.
      */
-    std::bitset<8> get_occupied_byte() const ;
+    u_int8_t get_occupied_byte() const ;
 
     /**
      * @brief Get the higest occupied byte of this can frame.
      * @return Which byte is the hightest occupied byte.
+     * @throw std::runtime_error If two can data have overlapping data positions.
      */
     int get_higtest_occupied_byte() const ;
 };
 
-/**
- * @brief Operator used for passing the string representsation of can data to ostream.
- * @param _ostream
- * @param _data
- * @return std::ostream&
- */
+/// @brief Operator used for passing the string representsation of can data to ostream.
 inline std::ostream& operator<<(std::ostream &_ostream, const Data &_data) {
     return _ostream << _data.get_string();
 }
 
-/**
- * @brief Operator used for passing the string representsation of can frame to ostream.
- * @param _ostream
- * @param _frame
- * @return std::ostream&
- */
+/// @brief Operator used for passing the string representsation of can frame to ostream.
 inline std::ostream& operator<<(std::ostream &_ostream, const Frame &_frame) {
     return _ostream << _frame.get_string();
 }
@@ -186,28 +196,16 @@ namespace YAML {
 /// @brief Class template used to convert yaml node containing can data into C++ can data class
 template<>
 struct convert<Data> {
-    /**
-     * @brief Function to convert yaml node containing can data into C++ can data class, which is implemented in yaml-cpp
-     * as "as<Data>()" function.
-     * @param[in] _node The yaml node containing can data.
-     * @param[out] _cType The reference of can data class, used to store can data.
-     * @return true
-     * @throw std::runtime_error
-     */
+    /// @brief Function to convert yaml node containing can data into C++ can data class, which is implemented in yaml-cpp
+    /// as "as<Data>()" function.
     static bool decode(const Node &_node, Data &_cType);
 };
 
 /// @brief Class template used to convert yaml node containing can frame into C++ can frame class.
 template<>
 struct convert<Frame> {
-    /**
-     * @brief Function to convert yaml node containing can frame into C++ can frame class, which is implemented in yaml-cpp
-     * as "as<Frame>()" function.
-     * @param[in] _node The yaml node containing can frame.
-     * @param[out] _cType The reference of can frame class, used to store can frame.
-     * @return true
-     * @throw std::runtime_error
-     */
+    /// @brief Function to convert yaml node containing can frame into C++ can frame class, which is implemented in yaml-cpp
+    /// as "as<Frame>()" function.
     static bool decode(const Node &_node, Frame &_cType);
 };
 
@@ -257,5 +255,15 @@ std::string get_string(const IdFrameset &_frameset);
  * @return The string representation of the frameset.
  */
 std::string get_string(const NameFrameset &_frameset);
+
+/// @brief Operator used for passing the string representsation of id can frame to ostream.
+inline std::ostream& operator<<(std::ostream &_ostream, const IdFrameset &_id_frame) {
+    return _ostream << get_string(_id_frame);
+}
+
+/// @brief Operator used for passing the string representsation of name can frame to ostream.
+inline std::ostream& operator<<(std::ostream &_ostream, const NameFrameset &_name_frame) {
+    return _ostream << get_string(_name_frame);
+}
 
 #endif // YAML_LAODER_HPP

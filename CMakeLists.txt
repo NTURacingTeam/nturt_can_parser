@@ -77,10 +77,3 @@ add_executable(yaml_loader_test
 target_link_libraries(yaml_loader_test 
         ${PROJECT_NAME}
 )
-
-add_executable(ly
-        test/ly.cpp
-)
-target_link_libraries(ly
-       ${PROJECT_NAME}
-)

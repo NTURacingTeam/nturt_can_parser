@@ -1,7 +1,7 @@
 # YAML rule
 ###### tags: `software` `electrical_system` `NTURT`
 
-Please put your can configuration `can.yaml` here.
+Please put your can configuration `can.yaml` in the same directory as this documentation.
 
 ## Example
 
@@ -141,7 +141,7 @@ Listed in the order of the example above.
 
 ### is_little_endian:
 
-- Determine if this data is little or big endian, for big endian, the value of the data is calculated as (first byte) + (second byte) * 256 + (third byte) * 256 ^ 2 ... It is calculated in the reversed order if it is little endian.
+- Determine if this data is little or big endian, for little endian, the value of the data is calculated as (first byte) + 256 * (second byte) + 256 ^ 2 *(third byte) ... It is calculated in the reversed order if it is big endian.
 - type: boolean
 - required: only required
   - This flag is only required if both is_byte is set to true and the data is two byte or longer.

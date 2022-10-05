@@ -11,7 +11,7 @@ can:
         name: control_board_temp
         is_signed: true
         is_byte: true
-        is_little_endian: false
+        is_little_endian: true
         start_byte: 0
         end_byte: 2
         default: 0

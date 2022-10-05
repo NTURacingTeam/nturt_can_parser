@@ -8,11 +8,13 @@
 #define CAN_HANDLER_HPP
 
 // std include
-#include <array>
 #include <string>
 #include <functional>
 #include <memory>
 #include <vector>
+
+// boost include
+#include <boost/array.hpp>
 
 // ros include
 #include <ros/ros.h>
@@ -33,6 +35,8 @@
  */
 class CanHandler {
     public:
+        /// @brief Constructor of can handler.
+        /// @param _nh Shared pointer to can handle.
         CanHandler(std::shared_ptr<ros::NodeHandle> _nh);
 
         /// @brief Function that should be called every time to update the can handler.

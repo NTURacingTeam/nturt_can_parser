@@ -1,0 +1,25 @@
+  frame:
+    name: rear_box_2
+    id: 0x080AD094
+    is_extended_id: true
+    dlc: 8
+    period: 0
+    dataset:
+      data:
+        name: travel_rear_left
+        is_signed: false
+        is_byte: true
+        start_byte: 0
+        end_byte: 1
+        default: 0
+        resolution: 0.17647058823
+        offset: 200
+      data:
+        name: travel_rear_right
+        is_signed: false
+        is_byte: true
+        start_byte: 1
+        end_byte: 2
+        default: 0
+        resolution: 0.17647058823
+        offset: 200

@@ -9,7 +9,7 @@
         name: wheel_speed_front_left
         is_signed: false
         is_byte: true
-        is_little_endian: true
+        is_little_endian: false
         start_byte: 0
         end_byte: 2
         default: 0
@@ -19,7 +19,7 @@
         name: wheel_speed_front_right
         is_signed: false
         is_byte: true
-        is_little_endian: true
+        is_little_endian: false
         start_byte: 2
         end_byte: 4
         default: 0

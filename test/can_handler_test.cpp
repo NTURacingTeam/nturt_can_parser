@@ -59,28 +59,23 @@ class CanHandlerTest {
         ros::ServiceClient get_data_clt_;
         ros::ServiceClient register_clt_;
 
-        bool show_can_ = false;
-
-        bool show_register_ = false;
-
         // callback function when receiving can message from "/sent_messages"
         void onCan(const can_msgs::Frame::ConstPtr &_msg) const {
-            if(show_can_) {
-                ROS_INFO("received can frame with id: \"%d\"", _msg->id);
+            std::string data_string = std::to_string(_msg->data[0]);
+            for(int i = 1; i < 8; i++) {
+                data_string += ' ' + std::to_string(_msg->data[i]);
             }
+            ROS_INFO("received can frame with id: \"%d\" and data: \"%s\"", _msg->id, data_string.c_str());
         }
 
         // callback function when receiving register message.
         void onRegister(const nturt_ros_interface::UpdateCanData::ConstPtr _msg) {
-            if(show_register_) {
-                ROS_INFO("received register message with name: \"%s\" and data: \"%f\"", _msg->name.c_str(), _msg->data);
-            }
+            ROS_INFO("received register message with name: \"%s\" and data: \"%f\"", _msg->name.c_str(), _msg->data);
         }
 
         // test for register notification
         void register_test() {
             ROS_INFO("register test begin");
-            show_register_ = true;
 
             // register service call
             nturt_ros_interface::RegisterCanNotification register_srv;
@@ -116,14 +111,12 @@ class CanHandlerTest {
 
             ros::Duration(0.1).sleep();
 
-            show_register_ = false;
             ROS_INFO("register test end");
         }
         
         // test for update can data
         void update_test() {
             ROS_INFO("update test begin");
-            show_can_ = true;
 
             ROS_INFO("send test to change can data output, expect can data to be different");
             PAUSE
@@ -131,12 +124,11 @@ class CanHandlerTest {
             // fake can update for testing
             nturt_ros_interface::UpdateCanData update_msg;
             update_msg.name = "torque_command";
-            update_msg.data = 1000;
+            update_msg.data = -0.1;
             update_data_pub_.publish(update_msg);
 
             ros::Duration(2.0).sleep();
 
-            show_can_ = false;
             ROS_INFO("update test end");
         }
 
@@ -160,7 +152,6 @@ class CanHandlerTest {
 
         void publish_test() {
             ROS_INFO("publish test begin");
-            show_can_ = true;
 
             std_msgs::String publish_msg;
             publish_msg.data = "mcu_board";
@@ -168,7 +159,6 @@ class CanHandlerTest {
             
             ros::Duration(0.1).sleep();
 
-            show_can_ = false;
             ROS_INFO("publish test end");
         }
 };

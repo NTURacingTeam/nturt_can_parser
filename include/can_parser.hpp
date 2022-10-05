@@ -1,21 +1,18 @@
 /**
  * @file can_parser.hpp
- * @author your name (you@domain.com)
- * @brief 
+ * @author QuantumSpawner jet22854111@gmail.com
+ * @brief Can parser for handling the conversion of raw can data and desired data.
  */
 
 #ifndef CAN_PARSER_HPP
 #define CAN_PARSER_HPP
 
 // std include
-#include <bitset>
-#include <cmath>
 #include <functional>
-#include <iostream>
-#include <string>
 #include <map>
 #include <memory>
-#include <vector>
+#include <stdexcept>
+#include <string>
 
 // boost include
 #include <boost/array.hpp>
@@ -23,25 +20,13 @@
 // nturt include
 #include "yaml_loader.hpp"
 
-#define OK -1
-#define ERR 0
-
-#define _CP_BIT 0       // used to be 1
-#define _CP_BYTE 1      // used to be 2
-#define _CP_BIG 0       // used to be 3
-#define _CP_LITTLE 1    // used to be 4 
-// define Constants
-#define TWOPOW08 256
-#define TWOPOW26 67108864
-// define mask
-#define _CP_MASK_LAST_8_BIT 255 // b0000000011111111
-
 // type definition
+/// @brief Function type definition for publishing can frame.
 typedef std::function<void(const FramePtr&, const boost::array<u_int8_t, 8>&)> PublishFun;
 
 /**
- * @author your name (you@domain.com)
- * @brief 
+ * @author QuantumSpawner jet22854111@gmail.com
+ * @brief Class for handling the conversion of raw can data and desired data, with orther utilities to fufill normal use cases.
  */
 class CanParser{
     public:
@@ -52,10 +37,17 @@ class CanParser{
         void init(std::string _file);
 
         /**
+         * @brief Function to publish frame by it's pointer.
+         * @param _frame Pointer to the can frame.
+         * @param publish_fun Function to publish the frame, whose arguments are frame pointer and data of the frame.
+         */
+        void publish(const FramePtr &_frame, const PublishFun publish_fun) const;
+
+        /**
          * @brief Function to publish frame by name.
          * @param[in] _name Name of the can frame to be published.
          * @param[in] publish_fun Function to publish the frame, whose arguments are frame pointer and data of the frame.
-         * @return True if the frame is published successfully, or false if failed.
+         * @return True if the frame is published successfully, or false if not found.
          */
         bool publish(const std::string &_name, const PublishFun publish_fun) const;
 
@@ -121,37 +113,37 @@ class CanParser{
          */
         NameFrameset get_name_frameset() const;
 
-        void print_err_log();
-        void map_print();
-        int check_key(int id, std::string key, std::string comp);
-        int check_key(int id, std::string key);
-        int decode(int _id, int *_data);
-        int decode(int _id, const boost::array<unsigned char, 8> &_data);    // not sure
-        int encode(int _id, int *_data);
-        int set_tbe(int _id, std::string _data_name, double _value);
-        double get_afd(int _id, std::string _data_name);
-        std::vector<std::pair<std::string, std::string>> get_key(int id);
-
+    private:
         /// @brief Map storing pointer to can frame, with key being the id of the can frame.
         IdFrameset id_frameset_;
+
+        /// @brief Id frameset that stores only frames that have to be periodically published.
+        IdFrameset periodic_publish_frameset_;
 
         /// @brief Map storing pointer to can frame, with key being the name of the can frame.
         NameFrameset name_frameset_;
 
         /// @brief Map storing pointer to can data, with key being the name of the can data.
         Dataset dataset_;
-
-        std::map<int, std::map<std::string, bool>> flag_;
-        std::map<int, std::map<std::string, double>> after_decode; // move to last_data_ in Data, should be deleted
-        std::map<int, std::map<std::string, double>> to_be_encode; // so does this
-        //map<string, vector<bool>> flag_;
-        std::map<int, std::vector<std::pair<std::string, std::string>>> find_id_to_get_two_name;
-        
-        /// @brief 2 to the power of N;
-        const unsigned long pow2[8] = {1, 2, 4, 8, 16, 32, 64, 128};
-
-        /// @brief 256 to the power of N;
-        const unsigned long pow256[8] = {1, 256, 65536, 16777216, 4294967296, 1099511627776, 281474976710656, 72057594037927940};
 };
+
+/**
+ * @brief Function to decode raw can data from a frame into desired data according to the data's configuration.
+ * 
+ * The data is calculated by \f$\text{resolution}\times\text{raw data}-\text{offset}\f$.
+ * @param[out] _data Pointer to can data where last_data is modified by the decoded data form raw_data.
+ * @param[in] _raw_data Raw can data to be decoded to can data.
+ */
+void decode(DataPtr &_data, const boost::array<uint8_t, 8> &_raw_data);
+
+/**
+ * @brief Function to encode data into raw can data according to the data's configuration.
+ * 
+ * The raw data is calculated by \f$(\text{data}+\text{offset})/\text{resolution}\f$, rounded down.
+ * @note DOSE NOT check for overfolw.
+ * @param[in] _data Pointer to can data where last_data to be encoded to raw can data.
+ * @param[out] _raw_data Raw can data modified by last_data in can data.
+ */
+void encode(const DataPtr &_data, boost::array<uint8_t, 8> &_raw_data);
 
 #endif // CAN_PARSER_HPP
