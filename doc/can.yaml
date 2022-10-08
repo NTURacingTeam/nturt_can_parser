@@ -45,7 +45,7 @@ can:
       data:
         name: front_left_wheel_speed
         is_signed: false
-        is_little_endian: true
+        is_little_endian: false
         is_byte: true
         start_byte: 0
         end_byte: 2
@@ -55,7 +55,7 @@ can:
       data:
         name: front_right_wheel_speed
         is_signed: false
-        is_little_endian: true
+        is_little_endian: false
         is_byte: true
         start_byte: 2
         end_byte: 4
@@ -340,7 +340,7 @@ can:
         name: wheel_speed_front_left
         is_signed: false
         is_byte: true
-        is_little_endian: true
+        is_little_endian: false
         start_byte: 0
         end_byte: 2
         default: 0
@@ -350,7 +350,7 @@ can:
         name: wheel_speed_front_right
         is_signed: false
         is_byte: true
-        is_little_endian: true
+        is_little_endian: false
         start_byte: 2
         end_byte: 4
         default: 0
@@ -416,3 +416,28 @@ can:
         default: 0
         resolution: 0.17647058823
         offset: 200
+  frame:
+    name: vehicle_control_unit
+    id: 0x008A7D0
+    is_extended_id: true
+    dlc: 8
+    period: 0.1
+    dataset:
+      data:
+        name: vcu_light
+        is_signed: false
+        is_byte: true
+        start_byte: 0
+        start_byte: 1
+        default: 0
+        resolution: 1
+        offset: 0
+      data:
+        name: rtd_light
+        is_signed: false
+        is_byte: true
+        start_byte: 7
+        start_byte: 8
+        default: 0
+        resolution: 1
+        offset: 0
