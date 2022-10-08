@@ -1,7 +1,7 @@
 # YAML rule
 ###### tags: `software` `electrical_system` `NTURT`
 
-Please put your can configuration `can.yaml` in the same directory as this documentation.
+Please put your can configuration `XXX.yaml` in the same directory as this documentation.
 
 ## Example
 
