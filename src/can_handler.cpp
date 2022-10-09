@@ -77,7 +77,6 @@ void CanHandler::onUpdateCanData(const nturt_ros_interface::UpdateCanData::Const
 bool CanHandler::onGetCanData(nturt_ros_interface::GetCanData::Request &_req,
     nturt_ros_interface::GetCanData::Response &_res) {
     
-    // update can data to can parser
     DataPtr data = can_parser_.get_data(_req.name);
 
     // if data is nullptr

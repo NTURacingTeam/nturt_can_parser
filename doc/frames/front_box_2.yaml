@@ -5,6 +5,15 @@
     dlc: 8
     period: 0
     dataset:
+      # data:
+      #   name: brake
+      #   is_signed: false
+      #   is_byte: true
+      #   start_byte: 0
+      #   end_byte: 1
+      #   default: 0
+      #   resolution: 0.00395
+      #   offset: -0.00395
       data:
         name: brake
         is_signed: false
@@ -12,8 +21,17 @@
         start_byte: 0
         end_byte: 1
         default: 0
-        resolution: 0.00395
-        offset: -0.00395
+        resolution: 1
+        offset: 0
+      # data:
+      #   name: accelerator_1
+      #   is_signed: false
+      #   is_byte: true
+      #   start_byte: 1
+      #   end_byte: 2
+      #   default: 0
+      #   resolution: 0.00395
+      #   offset: -0.00395
       data:
         name: accelerator_1
         is_signed: false
@@ -21,8 +39,17 @@
         start_byte: 1
         end_byte: 2
         default: 0
-        resolution: 0.00395
-        offset: -0.00395
+        resolution: 1
+        offset: 0
+      # data:
+      #   name: accelerator_2
+      #   is_signed: false
+      #   is_byte: true
+      #   start_byte: 2
+      #   end_byte: 3
+      #   default: 0
+      #   resolution: 0.00395
+      #   offset: -0.00395
       data:
         name: accelerator_2
         is_signed: false
@@ -30,8 +57,8 @@
         start_byte: 2
         end_byte: 3
         default: 0
-        resolution: 0.00395
-        offset: -0.00395
+        resolution: 1
+        offset: 0
       data:
         name: steer_angle
         is_signed: false
