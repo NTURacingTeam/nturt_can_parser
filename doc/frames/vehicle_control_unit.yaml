@@ -10,7 +10,7 @@
         is_signed: false
         is_byte: true
         start_byte: 0
-        start_byte: 1
+        end_byte: 1
         default: 0
         resolution: 1
         offset: 0
@@ -19,7 +19,7 @@
         is_signed: false
         is_byte: true
         start_byte: 7
-        start_byte: 8
+        end_byte: 8
         default: 0
         resolution: 1
         offset: 0

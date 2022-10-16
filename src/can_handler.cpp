@@ -5,8 +5,7 @@ CanHandler::CanHandler(std::shared_ptr<ros::NodeHandle> _nh) : nh_(_nh),
     can_sub_(_nh->subscribe("/received_messages", 10, &CanHandler::onCan, this)),
     publish_frame_sub_(_nh->subscribe("/publish_can_frame", 10, &CanHandler::onPublishCanFrame, this)),
     update_data_sub_(_nh->subscribe("/update_can_data", 10, &CanHandler::onUpdateCanData, this)),
-    get_data_srv_(_nh->advertiseService("/get_can_data", &CanHandler::onGetCanData, this)),
-    register_srv_(_nh->advertiseService("/register_can_notification", &CanHandler::onRegister, this)) {
+    get_data_srv_(_nh->advertiseService("/get_can_data", &CanHandler::onGetCanData, this)) {
     
     // get can yaml file
     std::string can_config;
@@ -22,6 +21,9 @@ CanHandler::CanHandler(std::shared_ptr<ros::NodeHandle> _nh) : nh_(_nh),
             registration_[frame_it->first][data_it->first];
         }
     }
+    
+    // advertise "/register_can_notification" service until finishing initializin the map key in registration_
+    register_srv_ = nh_->advertiseService("/register_can_notification", &CanHandler::onRegister, this);
 
     // initiate last_time_
     last_time_ = ros::Time::now();
@@ -95,9 +97,9 @@ bool CanHandler::onRegister(nturt_ros_interface::RegisterCanNotification::Reques
     Dataset dataset = can_parser_.get_dataset();
 
     // check if all register data exist
-    for(auto it = _req.data_name.begin(); it != _req.data_name.end(); it++) {
-        if(dataset.find(*it) == dataset.end()) {
-            ROS_ERROR("Error: Data not found when setting registration can data: \"%s\" from node: \"%s\"", it->c_str(), _req.node_name.c_str());
+    for(std::string &data : _req.data_name) {
+        if(dataset.find(data) == dataset.end()) {
+            ROS_ERROR("Error: Data not found when setting registration can data: \"%s\" from node: \"%s\"", data.c_str(), _req.node_name.c_str());
             return false;
         }
     }
@@ -107,8 +109,8 @@ bool CanHandler::onRegister(nturt_ros_interface::RegisterCanNotification::Reques
     auto publisher = std::make_shared<ros::Publisher>(nh_->advertise<nturt_ros_interface::UpdateCanData>(_res.topic, 10));
 
     // register
-    for(auto it = _req.data_name.begin(); it != _req.data_name.end(); it++) {
-        registration_[dataset[*it]->frame_->id_][*it].push_back(publisher);
+    for(std::string &data : _req.data_name) {
+        registration_[dataset[data]->frame_->id_][data].push_back(publisher);
     }
 
     return true;

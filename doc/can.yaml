@@ -96,7 +96,7 @@ can:
         end_byte: 8
         resolution: 0.5
         offset: 0
-    frame:
+  frame:
     name: front_box_2
     id: 0x080AD092
     is_extended_id: true
@@ -455,7 +455,7 @@ can:
         is_signed: false
         is_byte: true
         start_byte: 0
-        start_byte: 1
+        end_byte: 1
         default: 0
         resolution: 1
         offset: 0
@@ -464,7 +464,7 @@ can:
         is_signed: false
         is_byte: true
         start_byte: 7
-        start_byte: 8
+        end_byte: 8
         default: 0
         resolution: 1
         offset: 0

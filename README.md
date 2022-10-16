@@ -57,6 +57,8 @@ to this service, can parser will return the can data's data stored in can parser
 
 Register to can parser what data to published to a specific topic, when that registered data got updated by received can signals.
 
+**Caution: Please wait until this service is brocasted before calling it by using [`ros::service::waitForService()`](https://docs.ros.org/en/api/roscpp/html/namespaceros_1_1service.html#aabe996581255345b3383e66eaaedef5a).**
+
 Service type: `RegisterCanNotification` in `nturt_ros_interface`.
 
 Call a variable sized array of the name of the can data to register (as `data_name` in `RegisterCanNotification`) and the name of the node registering (as `node_name` in `RegisterCanNotification`), can parser will return the topic name the registering node should subscribed to  (as `topic_name` in `RegisterCanNotification`).

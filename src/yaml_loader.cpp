@@ -2,9 +2,9 @@
 
 // global variable definition, put in source file to prevent being linked
 // 2 to the power of N.
-const u_int64_t pow2[8] = {1, 2, 4, 8, 16, 32, 64, 128};
+constexpr u_int64_t pow2[8] = {1, 2, 4, 8, 16, 32, 64, 128};
 //256 to the power of N.
-const u_int64_t pow256[8] = {1, 256, 65536, 16777216, 4294967296, 1099511627776, 281474976710656, 72057594037927936};
+constexpr u_int64_t pow256[8] = {1, 256, 65536, 16777216, 4294967296, 1099511627776, 281474976710656, 72057594037927936};
 
 std::string Data::get_string() const {
     std::string string = "\tCAN data: " + name_ + " --------------------" +

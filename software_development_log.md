@@ -29,15 +29,17 @@ TODO
 ## Testing environment:
 
 - ros noetic
-- docker virtual environment from [NTURacingTeam/docker](https://github.com/NTURacingTeam/docker) with image `ros_matlab`, based on ubuntu20.04
+- docker virtual environment from [NTURacingTeam/docker](https://github.com/NTURacingTeam/docker) with image `ros_matlab`, `ros_rpi` based on ubuntu20.04
 
 ##### Testing hardware:
 
 - asus tuf gaming a15 FA506II-0031A 4800H
+- raspberry pi 3B+
 
 ##### Operating system:
 
 - ubuntu 20.04
+- raspbian 32-bit
 
 ##### Compiler(intepreter) version:
 
@@ -45,8 +47,12 @@ TODO
 
 ---
 
-## Testing result of O.O:
+## Testing result of 1.0:
 
-still needs extensive testing with real can signal
+### Receiving can signal from front box
 
-## Todos in O.O:
+Register to can parser from nodes `nturt_torque_controller`, `nturt_state_controller`, registered and data received successfully.
+
+## Todos in 1.0:
+
+- check for transmitting can signal
