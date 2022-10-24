@@ -25,7 +25,7 @@ include_directories(
 )
 
 # libraries
-# libraries: nturt_can_parse
+# library: nturt_can_parser
 add_library(${PROJECT_NAME}
         src/can_parser.cpp
         src/yaml_loader.cpp
@@ -38,8 +38,12 @@ target_link_libraries(${PROJECT_NAME}
         yaml-cpp
 )
 
-# application
-# executable: nturt_can_parse_node
+# build this package after "nturt_ros_interface" has already finished generating
+add_dependencies(${PROJECT_NAME}
+        nturt_ros_interface_generate_messages_cpp)
+
+# applications
+# executable: nturt_can_parser_node
 add_executable(${PROJECT_NAME}_node
         app/can_parser_node.cpp
 )

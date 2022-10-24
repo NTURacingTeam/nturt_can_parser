@@ -100,8 +100,8 @@
         is_signed: false
         is_byte: false
         byte: 7
-        start_bit: 0
-        end_bit: 1
+        start_bit: 1
+        end_bit: 2
         default: 0
         resolution: 1
         offset: 0
@@ -110,8 +110,8 @@
         is_signed: false
         is_byte: false
         byte: 7
-        start_bit: 1
-        end_bit: 2
+        start_bit: 0
+        end_bit: 1
         default: 0
         resolution: 1
         offset: 0
