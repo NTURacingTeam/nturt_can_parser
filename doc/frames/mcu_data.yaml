@@ -1,5 +1,5 @@
   frame:
-    name: mcu_board
+    name: mcu_board_temp
     id: 0x0A1
     is_extended_id: false
     dlc: 8

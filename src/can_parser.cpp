@@ -1,225 +1,130 @@
 #include "can_parser.hpp"
 
-// global variable definition, put in source file to prevent being linked
-// 2 to the power of N.
-constexpr u_int64_t pow2[8] = {1, 2, 4, 8, 16, 32, 64, 128};
-//256 to the power of N.
-constexpr u_int64_t pow256[8] = {1, 256, 65536, 16777216, 4294967296, 1099511627776, 281474976710656, 72057594037927936};
+CanParser::CanParser(std::shared_ptr<ros::NodeHandle> _nh) : nh_(_nh),
+    can_pub_(_nh->advertise<can_msgs::Frame>("/sent_messages", 10)),
+    can_sub_(_nh->subscribe("/received_messages", 10, &CanParser::onCan, this)),
+    publish_frame_sub_(_nh->subscribe("/publish_can_frame", 10, &CanParser::onPublishCanFrame, this)),
+    update_data_sub_(_nh->subscribe("/update_can_data", 10, &CanParser::onUpdateCanData, this)),
+    get_data_srv_(_nh->advertiseService("/get_can_data", &CanParser::onGetCanData, this)) {
+    
+    // get can yaml file
+    std::string can_config;
+    ros::param::get("~can_config", can_config);
 
-void CanParser::init(std::string _file) {
-    id_frameset_ = load_yaml(_file);
+    // init can parser
+    can_handler_.init(can_config);
 
-    // put all frames that need to be periodically published into one
-    for(auto it = id_frameset_.begin(); it != id_frameset_.end(); it++) {
-        if(it->second->period_ != 0) {
-            periodic_publish_frameset_[it->first] = it->second;
+    // initialize the map key in registration_
+    IdFrameset frameset = can_handler_.get_id_frameset();
+    for(auto frame_it = frameset.begin(); frame_it != frameset.end(); frame_it++) {
+        for(auto data_it = frame_it->second->dataset_.begin(); data_it != frame_it->second->dataset_.end(); data_it++) {
+            registration_[frame_it->first][data_it->first];
         }
     }
+    
+    // advertise "/register_can_notification" service until finishing initializin the map key in registration_
+    register_srv_ = nh_->advertiseService("/register_can_notification", &CanParser::onRegister, this);
 
-    name_frameset_ = convert_to_name_frame(id_frameset_);
+    // initiate last_time_
+    last_time_ = ros::Time::now();
+}
 
-    // append the can data in every frame set into one dataset
-    for(auto it = name_frameset_.begin(); it != name_frameset_.end(); it++) {
-        dataset_.insert(it->second->dataset_.begin(), it->second->dataset_.end());
+void CanParser::update() {
+    ros::Time current_time = ros::Time::now();
+
+    // periodically publish can frame
+    can_handler_.periodic_publish((current_time - last_time_).toSec(),
+        std::bind(&CanParser::publish, this, std::placeholders::_1, std::placeholders::_2));
+    
+    last_time_ = current_time;
+}
+
+void CanParser::onCan(const can_msgs::Frame::ConstPtr &_msg) {
+    // update the frame stored in can parser
+    FramePtr frame = can_handler_.update_frame(_msg->id, _msg->data);
+
+    // if frame is nullptr
+    if(!frame) {
+        ROS_ERROR("Error: Frame not found when receiving can signal id: \"%d\"", _msg->id);
+        return;
+    }
+
+    // publish to registered nodes
+    for(auto data_it = registration_[frame->id_].begin(); data_it != registration_[frame->id_].end(); data_it++) {
+        // message to update can data to registered node
+        nturt_ros_interface::UpdateCanData data_msg;
+        data_msg.name = data_it->first;
+        data_msg.data = frame->dataset_[data_it->first]->last_data_;
+
+        for(auto pub_it = data_it->second.begin(); pub_it != data_it->second.end(); pub_it++) {
+            (*pub_it)->publish(data_msg);
+        }
     }
 }
 
-void CanParser::publish(const FramePtr &_frame, const PublishFun publish_fun) const {
-    // default raw can data (when not occupied by any data) to 0
-    boost::array<uint8_t, 8> data = {0};
-
-    // encode every data in the frame into raw can data, then publish it
-    for(auto it = _frame->dataset_.begin(); it != _frame->dataset_.end(); it++) {
-        encode(it->second, data);
+void CanParser::onPublishCanFrame(const std_msgs::String::ConstPtr &_msg) {
+    // if frame publish is unsuccessfully
+    if(!can_handler_.publish(_msg->data, std::bind(&CanParser::publish, this, std::placeholders::_1, std::placeholders::_2))) {
+        ROS_ERROR("Error: Frame not found when publishing can frame: \"%s\".", _msg->data.c_str());
     }
-    publish_fun(_frame, data);
 }
 
-bool CanParser::publish(const std::string &_name, const PublishFun publish_fun) const {
-    try {
-        FramePtr frame = name_frameset_.at(_name);
-        publish(frame, publish_fun);
+void CanParser::onUpdateCanData(const nturt_ros_interface::UpdateCanData::ConstPtr &_msg) {
+    // if data not found
+    if(!can_handler_.update_data(_msg->name, _msg->data)) {
+        ROS_ERROR("Error: Data not found when updating can data: \"%s\"", _msg->name.c_str());
     }
-    // if frame not found
-    catch(std::out_of_range) {
+}
+
+bool CanParser::onGetCanData(nturt_ros_interface::GetCanData::Request &_req,
+    nturt_ros_interface::GetCanData::Response &_res) {
+    
+    DataPtr data = can_handler_.get_data(_req.name);
+
+    // if data is nullptr
+    if(!data) {
+        ROS_ERROR("Error: Data not found when getting can data: \"%s\".", _req.name.c_str());
         return false;
+    }
+
+    _res.data = data->last_data_;
+    return true;
+}
+
+bool CanParser::onRegister(nturt_ros_interface::RegisterCanNotification::Request &_req,
+    nturt_ros_interface::RegisterCanNotification::Response &_res) {
+    
+    Dataset dataset = can_handler_.get_dataset();
+
+    // check if all register data exist
+    for(std::string &data : _req.data_name) {
+        if(dataset.find(data) == dataset.end()) {
+            ROS_ERROR("Error: Data not found when setting registration can data: \"%s\" from node: \"%s\"", data.c_str(), _req.node_name.c_str());
+            return false;
+        }
+    }
+    
+    // topic for the notification
+    _res.topic = "/can_notification" + _req.node_name;
+    auto publisher = std::make_shared<ros::Publisher>(nh_->advertise<nturt_ros_interface::UpdateCanData>(_res.topic, 10));
+
+    // register
+    for(std::string &data : _req.data_name) {
+        registration_[dataset[data]->frame_->id_][data].push_back(publisher);
     }
 
     return true;
 }
 
-void CanParser::periodic_publish(const double &_dt, const PublishFun publish_fun) const {
-    for(auto it = periodic_publish_frameset_.begin(); it != periodic_publish_frameset_.end(); it++) {
-        it->second->dt_ += _dt;
-        if(it->second->dt_ >= it->second->period_) {
-            publish(it->second, publish_fun);
-            // try to catch up the required period by not setting dt to 0
-            it->second->dt_ -= it->second->period_;
-        }
-    }
-}
-
-DataPtr CanParser::update_data(const std::string &_name, const double &_value) {
-    try {
-        DataPtr data = dataset_.at(_name);
-        data->last_data_ = _value;
-        return data;
-    }
-    // if data not found
-    catch(std::out_of_range) {
-        return nullptr;
-    }
-}
-
-FramePtr CanParser::update_frame(const int &_id, const boost::array<u_int8_t, 8> &_data) {
-    try {
-        FramePtr frame = id_frameset_.at(_id);
-        for(auto it = frame->dataset_.begin(); it != frame->dataset_.end(); it++) {
-            decode(it->second, _data);
-        }
-        return frame;
-    }
-    // if frame not found
-    catch(std::out_of_range) {
-        return nullptr;
-    }
-}
-
-DataPtr CanParser::get_data(const std::string &_name) const {
-    try {
-        return dataset_.at(_name);
-    }
-    // if data not found
-    catch(std::out_of_range) {
-        return nullptr;
-    }
-}
-
-FramePtr CanParser::get_frame(const int &_id) const {
-    try {
-        return id_frameset_.at(_id);
-    }
-    // if frame not found
-    catch(std::out_of_range) {
-        return nullptr;
-    }
-}
-
-FramePtr CanParser::get_frame(const std::string &_name) const {
-    try {
-        return name_frameset_.at(_name);
-    }
-    // if frame not found
-    catch(std::out_of_range) {
-        return nullptr;
-    }
-}
-
-Dataset CanParser::get_dataset() const {
-    return dataset_;
-}
-
-IdFrameset CanParser::get_id_frameset() const {
-    return id_frameset_;
-}
-
-NameFrameset CanParser::get_name_frameset() const {
-    return name_frameset_;
-}
-
-void decode(DataPtr &_data, const boost::array<uint8_t, 8> &_raw_data) {
-    // composed data before converting to double
-    u_int64_t compose = 0;
+void CanParser::publish(const FramePtr &_frame, const boost::array<uint8_t, 8> &_data) {
+    // construct can frame
+    can_msgs::Frame can_msg;
+    can_msg.header.stamp = ros::Time::now();
+    can_msg.is_extended = _frame->is_extended_id_;
+    can_msg.id = _frame->id_;
+    can_msg.dlc = _frame->dlc_;
+    can_msg.data = _data;
     
-    // combine multiple bytes/bits into one long long
-    // if is byte data
-    if(_data->is_byte_) {
-        // if is little endian
-        // calculated as (first byte) + 256 * (second byte) + 256 ^ 2 *(third byte) ... (calclate 256's power by shifting to left)
-        if(_data->is_little_endian_) {
-            for(int i = _data->end_byte_ - 1; i >= _data->start_byte_; i--) {
-                compose = (compose << 8) + _raw_data[i];
-            }
-        }
-        else {
-            for(int i = _data->start_byte_; i < _data->end_byte_; i++) {
-                compose = (compose << 8) + _raw_data[i];
-            }
-        }
-    }
-    else {
-        // calculated by removing the last "end_bit" bit by modding 2 ^ end_bit, then remove first "start_bit" bit by shifting to right start_bit
-        compose = (_raw_data[_data->start_byte_] & (pow2[_data->end_bit_] - 1)) >> _data->start_bit_;
-    }
-
-    // if is signed data
-    if(_data->is_signed_) {
-        // most significant bit (1 means negative)
-        // claculated by shifting the data to right by it's length (bit) - 1
-        bool is_negative;
-        if(_data->is_byte_) {
-            is_negative = compose >> ((_data->end_byte_ - _data->start_byte_) * 8 - 1);
-        }
-        else {
-            is_negative = compose >> ((_data->end_bit_ - _data->start_bit_) - 1);
-        }
-
-        if(is_negative) {
-            // if is not 8 byte long, should put negative mask after compose for extending the negative bits (from the data's most significant
-            // bit to u_int64_t's most significant bit) for casting u_int64_t to int64_t
-            // calculated as 2 ^ it's length (bit) - 1, then not it
-            if(_data->end_byte_ - _data->start_byte_ != 8) {
-                u_int64_t negative_mask;
-                if(_data->is_byte_) {
-                    negative_mask = ~ (pow256[_data->end_byte_ - _data->start_byte_] - 1);
-                }
-                else {
-                    negative_mask = ~ (pow2[_data->end_bit_ - _data->start_bit_] - 1);
-                }
-
-                // put the negative_mask on
-                compose |= negative_mask;
-            }
-        }
-
-        // cast to signed data
-        _data->last_data_ = _data->resolution_ * static_cast<int64_t>(compose) - _data->offset_;
-    }
-    else {
-        _data->last_data_ = _data->resolution_ * compose - _data->offset_;
-    }
-}
-
-void encode(const DataPtr &_data, boost::array<uint8_t, 8> &_raw_data) {
-    // composed data from double, rounded down
-    // don't need to consider the sign of the data because implicit cast has already done if for us
-    // DOES NOT check for overfolw
-    u_int64_t compose = (_data->last_data_ - _data->offset_) / _data->resolution_;
-
-    // if is byte data
-    if(_data->is_byte_) {
-        // if is little endian
-        // calculated as shift it to the right by 8 * N bit, then take mod 256
-        if(_data->is_little_endian_) {
-            for(int i = 0; i < _data->end_byte_ - _data->start_byte_; i++) {
-                _raw_data[_data->start_byte_ + i] = (compose >> (8 * i)) & 255;
-            }
-        }
-        else {
-            for(int i = 0; i < _data->end_byte_ - _data->start_byte_; i++) {
-                _raw_data[_data->end_byte_ - i - 1] = (compose >> (8 * i)) & 255;
-            }
-        }
-    }
-    else {
-        // to clear previous data stored in raw data, a mask with the previous raw data in this range (in [start_bit, end_bit)) and all 0
-        // outside the range should exlusive or the raw data to make this range all 0 and not effecting data outside the range
-        // calculated by removing the last "end_bit" bit by modding 2 ^ end_bit, then remove first "start_bit" bit by shifting to right start_bit
-        u_int8_t clear_mask = (_raw_data[_data->start_byte_] & (pow2[_data->end_bit_] - 1)) >> _data->start_bit_;
-
-        // put clear_mask on
-        _raw_data[_data->start_byte_] ^= clear_mask;
-        // calculated by removing the last "end_bit - start_bit" (length of the data in bit) by modding 2 ^ length, then shift it to left start_bit
-        _raw_data[_data->start_byte_] |= (compose & (pow2[_data->end_bit_ - _data->start_bit_] - 1)) << _data->start_bit_;
-    }
+    // publish
+    can_pub_.publish(can_msg);
 }

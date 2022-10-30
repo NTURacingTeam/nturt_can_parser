@@ -3,7 +3,7 @@
     id: 0x0C0
     is_extended_id: false
     dlc: 8
-    period: 0.01
+    period: 0.04 # too fast seem to be unstable
     dataset:
       data:
         name: torque_command

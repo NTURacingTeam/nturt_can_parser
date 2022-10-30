@@ -1,149 +1,106 @@
 /**
  * @file can_parser.hpp
+ * @brief ROS node wrapper for can parser.
  * @author QuantumSpawner jet22854111@gmail.com
- * @brief Can parser for handling the conversion of raw can data and desired data.
  */
 
 #ifndef CAN_PARSER_HPP
 #define CAN_PARSER_HPP
 
 // std include
-#include <functional>
-#include <map>
-#include <memory>
-#include <stdexcept>
 #include <string>
+#include <functional>
+#include <memory>
+#include <vector>
 
 // boost include
 #include <boost/array.hpp>
 
-// nturt include
-#include "yaml_loader.hpp"
+// ros include
+#include <ros/ros.h>
 
-// type definition
-/// @brief Function type definition for publishing can frame.
-typedef std::function<void(const FramePtr&, const boost::array<u_int8_t, 8>&)> PublishFun;
+// ros message include
+#include <can_msgs/Frame.h>
+#include <std_msgs/String.h>
+
+// nturt include
+#include "can_handler.hpp"
+#include "nturt_ros_interface/GetCanData.h"
+#include "nturt_ros_interface/RegisterCanNotification.h"
+#include "nturt_ros_interface/UpdateCanData.h"
 
 /**
+ * @brief Class for ros wrapper for can parser.
  * @author QuantumSpawner jet22854111@gmail.com
- * @brief Class for handling the conversion of raw can data and desired data, with orther utilities to fufill normal use cases.
  */
-class CanParser{
+class CanParser {
     public:
-        /**
-         * @brief Initialize can parser and load yaml file.
-         * @param _file Path to the can yaml file.
-         */
-        void init(std::string _file);
+        /// @brief Constructor of can handler.
+        /// @param _nh Shared pointer to can handle.
+        CanParser(std::shared_ptr<ros::NodeHandle> _nh);
 
-        /**
-         * @brief Function to publish frame by it's pointer.
-         * @param _frame Pointer to the can frame.
-         * @param publish_fun Function to publish the frame, whose arguments are frame pointer and data of the frame.
-         */
-        void publish(const FramePtr &_frame, const PublishFun publish_fun) const;
-
-        /**
-         * @brief Function to publish frame by name.
-         * @param[in] _name Name of the can frame to be published.
-         * @param[in] publish_fun Function to publish the frame, whose arguments are frame pointer and data of the frame.
-         * @return True if the frame is published successfully, or false if not found.
-         */
-        bool publish(const std::string &_name, const PublishFun publish_fun) const;
-
-        /**
-         * @brief Function to publish the periodically published frame.
-         * @param[in] _dt The time difference between this and last call of this function.
-         * @param[in] publish_fun Function to publish the frame, whose arguments are frame pointer and data of the frame.
-         */
-        void periodic_publish(const double &_dt, const PublishFun publish_fun) const;
-
-        /**
-         * @brief Function to update the can data.
-         * @param[in] _name The name of the can data.
-         * @param[in] _value The value of the can data.
-         * @return Pointer to can data, nullptr if not found.
-         */
-        DataPtr update_data(const std::string &_name, const double &_value);
-
-        /**
-         * @brief Function to update the can data of a frame.
-         * @param[in] _id The id of the frame.
-         * @param[in] _data The data of the frame.
-         * @return Pointer to the updated frame, nullptr if not found.
-         */
-        FramePtr update_frame(const int &_id, const boost::array<u_int8_t, 8> &_data);
-
-        /**
-         * @brief Get can data using the data's name.
-         * @param[in] _name The name of the can data.
-         * @return Pointer to the can data, nullptr if not found.
-         */
-        DataPtr get_data(const std::string &_name) const;
-
-        /**
-         * @brief Get can frame using the frame's id.
-         * @param[in] _id Id of the can frame.
-         * @return Pointer to the can frame, nullptr if not found.
-         */
-        FramePtr get_frame(const int &_id) const;
-
-        /**
-         * @brief Get frame using the frame's name.
-         * @param[in] _name Name of the can frame.
-         * @return Pointer to the can frame, nullptr if not found.
-         */
-        FramePtr get_frame(const std::string &_name) const;
-        
-        /**
-         * @brief Get dataset stroed in the can parser.
-         * @return Dataset, a map storing pointer to can data of all frames, with key being the name of the can data.
-         */
-        Dataset get_dataset() const;
-
-        /**
-         * @brief Get id frameset stored in the can parser.
-         * @return Frameset, a map storing pointer to can frame, with key being the id of the can frame.
-         */
-        IdFrameset get_id_frameset() const;
-
-        /**
-         * @brief Get name frameset stored in the can parser.
-         * @return Frameset, a map storing pointer to can frame, with key being the name of the can frame.
-         */
-        NameFrameset get_name_frameset() const;
+        /// @brief Function that should be called every time to update the can handler.
+        void update();
 
     private:
-        /// @brief Map storing pointer to can frame, with key being the id of the can frame.
-        IdFrameset id_frameset_;
+        /// @brief ROS node handler.
+        std::shared_ptr<ros::NodeHandle> nh_;
 
-        /// @brief Id frameset that stores only frames that have to be periodically published.
-        IdFrameset periodic_publish_frameset_;
+        /// @brief ROS publisher to "/sent_messages", for sending can signal.
+        ros::Publisher can_pub_;
 
-        /// @brief Map storing pointer to can frame, with key being the name of the can frame.
-        NameFrameset name_frameset_;
+        /// @brief ROS sbscriber to "/received_messages", for receiving can signal.
+        ros::Subscriber can_sub_;
 
-        /// @brief Map storing pointer to can data, with key being the name of the can data.
-        Dataset dataset_;
+        /// @brief ROS subscriber to "/publish_can_frame", for publishing can frame.
+        ros::Subscriber publish_frame_sub_;
+
+        /// @brief ROS subscriber to "/update_can_data", for updating can data in parser.
+        ros::Subscriber update_data_sub_;
+
+        /// @brief ROS service server to "/get_can_data", for getting can data in parser.
+        ros::ServiceServer get_data_srv_;
+
+        /// @brief ROS service server to "/register_can_notification", for registering notification.
+        ros::ServiceServer register_srv_;
+
+        /// @brief CAN handler for handling can data.
+        CanHandler can_handler_;
+
+        /** @brief The cursed object.
+         * 
+         * The vector containing the pointer to the publisher to nodes that registered to be notified when can data update,
+         * which is mapped by the name of the can data name that the nodes registed to, which iteslf is mapped by the frame
+         * that contains these can data.
+         */
+        std::map<int, std::map<std::string, std::vector<std::shared_ptr<ros::Publisher>>>> registration_;
+
+        /// @brief Last time that this node is updated.
+        ros::Time last_time_;
+
+        /// @brief Callback function when receiving message from "/received_messages".
+        void onCan(const can_msgs::Frame::ConstPtr &_msg);
+
+        /// @brief Callback function when receiving message from "/publish_can_frame".
+        void onPublishCanFrame(const std_msgs::String::ConstPtr &_msg);
+
+        /// @brief Callback function when receiving message from "/update_can_data".
+        void onUpdateCanData(const nturt_ros_interface::UpdateCanData::ConstPtr &_msg);
+
+        /// @brief Callback function when receiving service call from "/get_can_data".
+        bool onGetCanData(nturt_ros_interface::GetCanData::Request &_req,
+            nturt_ros_interface::GetCanData::Response &_res);
+
+        /// @brief Callback function when receiving service call form "/register_can_notification".
+        bool onRegister(nturt_ros_interface::RegisterCanNotification::Request &_req,
+            nturt_ros_interface::RegisterCanNotification::Response &_res);
+
+        /**
+         * @brief Function for publishing can signal.
+         * @param _frame Can frame to be published.
+         * @param _data The raw data of the can signal.
+         */
+        void publish(const FramePtr &_frame, const boost::array<uint8_t, 8> &_data);
 };
-
-/**
- * @brief Function to decode raw can data from a frame into desired data according to the data's configuration.
- * 
- * The data is calculated by \f$\text{resolution}\times\text{raw data}-\text{offset}\f$.
- * @param[out] _data Pointer to can data where last_data is modified by the decoded data form raw_data.
- * @param[in] _raw_data Raw can data to be decoded to can data.
- */
-void decode(DataPtr &_data, const boost::array<uint8_t, 8> &_raw_data);
-
-/**
- * @brief Function to encode data into raw can data according to the data's configuration.
- * 
- * The raw data is calculated by \f$(\text{data}+\text{offset})/\text{resolution}\f$, rounded down.
- * @note DOSE NOT check for overfolw.
- * @param[in] _data Pointer to can data where last_data to be encoded to raw can data.
- * @param[out] _raw_data Raw can data modified by last_data in can data.
- */
-void encode(const DataPtr &_data, boost::array<uint8_t, 8> &_raw_data);
 
 #endif // CAN_PARSER_HPP
