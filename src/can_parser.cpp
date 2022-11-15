@@ -45,7 +45,7 @@ void CanParser::onCan(const can_msgs::Frame::ConstPtr &_msg) {
 
     // if frame is nullptr
     if(!frame) {
-        ROS_ERROR("Error: Frame not found when receiving can signal id: \"%d\"", _msg->id);
+        ROS_WARN("Error: Frame not found when receiving can signal id: \"%d\"", _msg->id);
         return;
     }
 

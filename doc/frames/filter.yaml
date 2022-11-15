@@ -1,0 +1,17 @@
+  frame:
+    name: filter_1
+    id: 0x800
+    is_extended_id: false
+    dlc: 8
+    period: 0
+    dataset:
+      data:
+        name: filter_data_1
+        is_signed: false
+        is_byte: false
+        byte: 0
+        start_bit: 0
+        end_bit: 1
+        default: 0
+        resolution: 1
+        offset: 0
