@@ -218,7 +218,7 @@ can:
     id: 0x0C0
     is_extended_id: false
     dlc: 8
-    period: 0.01
+    period: 0.03 # too fast seem to be unstable
     dataset:
       data:
         name: torque_command
@@ -290,7 +290,7 @@ can:
         resolution: 0.1
         offset: 0
   frame:
-    name: mcu_board
+    name: mcu_board_temp
     id: 0x0A1
     is_extended_id: false
     dlc: 8
