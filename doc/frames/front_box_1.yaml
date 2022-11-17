@@ -26,7 +26,7 @@
         resolution: 0.003921568627451
         offset: 0
       data:
-        name: tyre_temp_front_left_1
+        name: front_left_tyre_temperature_1
         is_signed: false
         is_byte: true
         start_byte: 4
@@ -35,7 +35,7 @@
         resolution: 0.5
         offset: 0
       data:
-        name: tyre_temp_front_left_2
+        name: front_left_tyre_temperature_2
         is_signed: false
         is_byte: true
         start_byte: 5
@@ -44,7 +44,7 @@
         resolution: 0.5
         offset: 0
       data:
-        name: tyre_temp_front_right_1
+        name: front_right_tyre_temperature_1
         is_signed: false
         is_byte: true
         start_byte: 6
@@ -52,7 +52,7 @@
         resolution: 0.5
         offset: 0
       data:
-        name: tyre_temp_front_right_2
+        name: front_right_tyre_temperature_2
         is_signed: false
         is_byte: true
         start_byte: 7

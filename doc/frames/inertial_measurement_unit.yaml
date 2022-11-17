@@ -1,0 +1,121 @@
+  frame:
+    name: imu_acceleration
+    id: 0x188
+    is_extended_id: false
+    dlc: 6
+    period: 0
+    dataset:
+      data:
+        name: imu_acceleration_x
+        is_signed: true
+        is_little_endian: true
+        is_byte: true
+        start_byte: 0
+        end_byte: 2
+        default: 0
+        resolution: 0.00980655
+        offset: 0
+      data:
+        name: imu_acceleration_y
+        is_signed: true
+        is_little_endian: true
+        is_byte: true
+        start_byte: 2
+        end_byte: 4
+        default: 0
+        resolution: 0.00980655
+        offset: 0
+      data:
+        name: imu_acceleration_z
+        is_signed: true
+        is_little_endian: true
+        is_byte: true
+        start_byte: 4
+        end_byte: 6
+        default: 0
+        resolution: 0.00980655
+        offset: 0
+  frame:
+    name: imu_gyro
+    id: 0x288
+    is_extended_id: false
+    dlc: 6
+    period: 0
+    dataset:
+      data:
+        name: imu_gyro_x
+        is_signed: true
+        is_little_endian: true
+        is_byte: true
+        start_byte: 0
+        end_byte: 2
+        default: 0
+        resolution: 0.001745329
+        offset: 0
+      data:
+        name: imu_gyro_y
+        is_signed: true
+        is_little_endian: true
+        is_byte: true
+        start_byte: 2
+        end_byte: 4
+        default: 0
+        resolution: 0.001745329
+        offset: 0
+      data:
+        name: imu_gyro_z
+        is_signed: true
+        is_little_endian: true
+        is_byte: true
+        start_byte: 4
+        end_byte: 6
+        default: 0
+        resolution: 0.001745329
+        offset: 0
+  frame:
+    name: imu_quaternion
+    id: 0x488
+    is_extended_id: false
+    dlc: 8
+    period: 0
+    dataset:
+      data:
+        name: imu_quaternion_w
+        is_signed: true
+        is_little_endian: true
+        is_byte: true
+        start_byte: 0
+        end_byte: 2
+        default: 0
+        resolution: 0.00001
+        offset: 0
+      data:
+        name: imu_quaternion_x
+        is_signed: true
+        is_little_endian: true
+        is_byte: true
+        start_byte: 2
+        end_byte: 4
+        default: 0
+        resolution: 0.00001
+        offset: 0
+      data:
+        name: imu_quaternion_y
+        is_signed: true
+        is_little_endian: true
+        is_byte: true
+        start_byte: 4
+        end_byte: 6
+        default: 0
+        resolution: 0.00001
+        offset: 0
+      data:
+        name: imu_quaternion_z
+        is_signed: true
+        is_little_endian: true
+        is_byte: true
+        start_byte: 6
+        end_byte: 8
+        default: 0
+        resolution: 0.00001
+        offset: 0

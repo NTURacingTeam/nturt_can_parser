@@ -1,7 +1,24 @@
   frame:
+    name: error_filer
+    id: 0x04
+    is_extended_id: true
+    dlc: 8
+    period: 0
+    dataset:
+      data:
+        name: error_data_1
+        is_signed: false
+        is_byte: false
+        byte: 0
+        start_bit: 0
+        end_bit: 1
+        default: 0
+        resolution: 1
+        offset: 0
+  frame:
     name: filter_1
     id: 0x800
-    is_extended_id: false
+    is_extended_id: true
     dlc: 8
     period: 0
     dataset:

@@ -8,18 +8,20 @@
       data:
         name: vcu_light
         is_signed: false
-        is_byte: true
-        start_byte: 0
-        end_byte: 1
+        is_byte: false
+        byte: 0
+        start_bit: 0
+        end_bit: 1
         default: 0
         resolution: 1
         offset: 0
       data:
         name: rtd_light
         is_signed: false
-        is_byte: true
-        start_byte: 7
-        end_byte: 8
+        is_byte: false
+        byte: 7
+        start_bit: 0
+        end_bit: 1
         default: 0
         resolution: 1
         offset: 0

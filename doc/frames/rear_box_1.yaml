@@ -6,7 +6,7 @@
     period: 0
     dataset:
       data:
-        name: wheel_speed_front_left
+        name: rear_left_wheel_speed
         is_signed: false
         is_byte: true
         is_little_endian: false
@@ -16,7 +16,7 @@
         resolution: 0.003921568627451
         offset: 0
       data:
-        name: wheel_speed_front_right
+        name: rear_right_wheel_speed
         is_signed: false
         is_byte: true
         is_little_endian: false
@@ -26,7 +26,7 @@
         resolution: 0.003921568627451
         offset: 0
       data:
-        name: tyre_temp_rear_left_1
+        name: rear_left_tyre_temperature_1
         is_signed: false
         is_byte: true
         start_byte: 4
@@ -34,7 +34,7 @@
         resolution: 0.5
         offset: 0
       data:
-        name: tyre_temp_rear_left_2
+        name: rear_left_tyre_temperature_2
         is_signed: false
         is_byte: true
         start_byte: 5
@@ -43,7 +43,7 @@
         resolution: 0.5
         offset: 0
       data:
-        name: tyre_temp_rear_right_1
+        name: rear_right_tyre_temperature_1
         is_signed: false
         is_byte: true
         start_byte: 6
@@ -52,7 +52,7 @@
         resolution: 0.5
         offset: 0
       data:
-        name: tyre_temp_rear_right_2
+        name: rear_right_tyre_temperature_2
         is_signed: false
         is_byte: true
         start_byte: 7

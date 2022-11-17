@@ -69,7 +69,7 @@
         resolution: 1.406
         offset: -180.0
       data:
-        name: travel_front_left
+        name: front_left_suspension_travel
         is_signed: false
         is_byte: true
         start_byte: 4
@@ -78,7 +78,7 @@
         resolution: 0.17647058823
         offset: 200
       data:
-        name: travel_front_right
+        name: front_right_suspension_travel
         is_signed: false
         is_byte: true
         start_byte: 5
@@ -96,22 +96,22 @@
         resolution: 19.6078431373
         offset: 0
       data:
-        name: brake_micro
-        is_signed: false
-        is_byte: false
-        byte: 7
-        start_bit: 1
-        end_bit: 2
-        default: 0
-        resolution: 1
-        offset: 0
-      data:
         name: accelerator_micro
         is_signed: false
         is_byte: false
         byte: 7
         start_bit: 0
         end_bit: 1
+        default: 0
+        resolution: 1
+        offset: 0
+      data:
+        name: brake_micro
+        is_signed: false
+        is_byte: false
+        byte: 7
+        start_bit: 1
+        end_bit: 2
         default: 0
         resolution: 1
         offset: 0

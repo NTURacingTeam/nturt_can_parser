@@ -6,7 +6,7 @@
     period: 0
     dataset:
       data:
-        name: travel_rear_left
+        name: rear_left_suspension_travel
         is_signed: false
         is_byte: true
         start_byte: 0
@@ -15,7 +15,7 @@
         resolution: 0.17647058823
         offset: 200
       data:
-        name: travel_rear_right
+        name: rear_right_suspension_travel
         is_signed: false
         is_byte: true
         start_byte: 1

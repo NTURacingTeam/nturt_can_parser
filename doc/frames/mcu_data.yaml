@@ -1,12 +1,12 @@
   frame:
-    name: mcu_board_temp
+    name: mcu_temperature_2
     id: 0x0A1
     is_extended_id: false
     dlc: 8
     period: 0
     dataset:
       data:
-        name: control_board_temp
+        name: control_board_temperature
         is_signed: true
         is_byte: true
         is_little_endian: true
@@ -16,14 +16,14 @@
         resolution: 0.1
         offset: 0
   frame:
-    name: mcu_motor_temp
+    name: mcu_tepmerature_3
     id: 0x0A2
     is_extended_id: false
     dlc: 8
     period: 0
     dataset:
       data:
-        name: motor_temp
+        name: motor_temperature
         is_signed: true
         is_byte: true
         is_little_endian: true
@@ -33,7 +33,7 @@
         resolution: 0.1
         offset: 0
   frame:
-    name: mcu_motor_speed
+    name: mcu_motor_position
     id: 0x0A5
     is_extended_id: false
     dlc: 8
@@ -50,18 +50,18 @@
         resolution: 1
         offset: 0
   frame:
-    name: mcu_output_voltage
+    name: mcu_voltage
     id: 0x0A7
     is_extended_id: false
     dlc: 8
     period: 0
     dataset:
       data:
-        name: output_voltage
+        name: input_voltage
         is_signed: true
         is_byte: true
         is_little_endian: true
-        start_byte: 2
-        end_byte: 4
+        start_byte: 0
+        end_byte: 2
         resolution: 0.1
         offset: 0
