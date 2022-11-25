@@ -108,7 +108,7 @@ struct Data {
      * Which is determined as: \f$\sum^{63}_{i=0}{2^i*(\text{if ith bit is occupied})}\f$.
      * @return Which bit(s) is/are occupied by this can data in the can frame.
      */
-    u_int64_t get_occupied_bit() const;
+    uint64_t get_occupied_bit() const;
 
     /**
      * @brief Get which byte of this can data is occupied.
@@ -117,7 +117,7 @@ struct Data {
      * @param _data Can data whose occupation of a can frame data byte is to be determined.
      * @return Which byte(s) is/are occupied by this can data in the can frame.
      */
-    u_int8_t get_occupied_byte() const;
+    uint8_t get_occupied_byte() const;
 };
 
 /**
@@ -129,7 +129,7 @@ struct Frame {
     std::string name_;
 
     /// @brief Can id of this frame.
-    unsigned int id_;
+    uint32_t id_;
 
     /// @brief If the id is extended format, determined automatically when not specified, i.e. true if the id is
     /// more than 15 bit long.
@@ -161,7 +161,7 @@ struct Frame {
      * @return Which bit(s) is/are occupied in this can frame.
      * @throw std::runtime_error If two can data have overlapping data positions.
      */
-    u_int64_t get_occupied_bit() const ;
+    uint64_t get_occupied_bit() const ;
 
     /**
      * @brief Get which byte of this can frame is occupied.
@@ -170,7 +170,7 @@ struct Frame {
      * @return Which byte(s) is/are occupied in this can frame.
      * @note No checking will be done if two can data have overlapping data positions when using this function.
      */
-    u_int8_t get_occupied_byte() const ;
+    uint8_t get_occupied_byte() const ;
 
     /**
      * @brief Get the higest occupied byte of this can frame.

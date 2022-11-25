@@ -2,9 +2,9 @@
 
 // global variable definition, put in source file to prevent being linked
 // 2 to the power of N.
-constexpr u_int64_t pow2[8] = {1, 2, 4, 8, 16, 32, 64, 128};
+constexpr uint64_t pow2[8] = {1, 2, 4, 8, 16, 32, 64, 128};
 //256 to the power of N.
-constexpr u_int64_t pow256[8] = {1, 256, 65536, 16777216, 4294967296, 1099511627776, 281474976710656, 72057594037927936};
+constexpr uint64_t pow256[8] = {1, 256, 65536, 16777216, 4294967296, 1099511627776, 281474976710656, 72057594037927936};
 
 std::string Data::get_string() const {
     std::string string = "\tCAN data: " + name_ + " --------------------" +
@@ -22,8 +22,8 @@ std::string Data::get_string() const {
     return string;
 }
 
-u_int64_t Data::get_occupied_bit() const {
-    u_int64_t occupied_bit = 0;
+uint64_t Data::get_occupied_bit() const {
+    uint64_t occupied_bit = 0;
     // if is byte data
     if(is_byte_) {
         occupied_bit = (pow256[end_byte_ - start_byte_] - 1) << 8 * start_byte_;
@@ -34,8 +34,8 @@ u_int64_t Data::get_occupied_bit() const {
     return occupied_bit;
 }
 
-u_int8_t Data::get_occupied_byte() const {
-    u_int8_t occupied_byte = 0;
+uint8_t Data::get_occupied_byte() const {
+    uint8_t occupied_byte = 0;
     // if is byte data
     if(is_byte_) {
         occupied_byte = (pow2[end_byte_ - start_byte_] - 1) << start_byte_;
@@ -262,10 +262,10 @@ std::string Frame::get_string() const {
     return string;
 }
 
-u_int64_t Frame::get_occupied_bit() const {
-    u_int64_t occupied_bit = 0;
+uint64_t Frame::get_occupied_bit() const {
+    uint64_t occupied_bit = 0;
     for(auto it = dataset_.begin(); it != dataset_.end(); it ++) {
-        u_int64_t data_occupied_bit = it->second->get_occupied_bit();
+        uint64_t data_occupied_bit = it->second->get_occupied_bit();
         if((data_occupied_bit & occupied_bit) != 0) {
             throw std::runtime_error(std::string("Error: There are two can data in can frame \"") + name_ +
                 "\" that have overlapping data position.\n");
@@ -277,8 +277,8 @@ u_int64_t Frame::get_occupied_bit() const {
     return occupied_bit;
 }
 
-u_int8_t Frame::get_occupied_byte() const {
-    u_int8_t occupied_byte = 0;
+uint8_t Frame::get_occupied_byte() const {
+    uint8_t occupied_byte = 0;
     for(auto it = dataset_.begin(); it != dataset_.end(); it ++) {
         occupied_byte |= it->second->get_occupied_byte();
     }
@@ -287,7 +287,7 @@ u_int8_t Frame::get_occupied_byte() const {
 
 int Frame::get_higtest_occupied_byte() const {
     int hightest_occupied_byte = 0;
-    u_int64_t occupied_byte = get_occupied_bit();
+    uint64_t occupied_byte = get_occupied_bit();
     while(occupied_byte != 0) {
         hightest_occupied_byte ++;
         occupied_byte >>= 8;

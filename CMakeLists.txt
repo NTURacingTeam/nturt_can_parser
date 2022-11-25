@@ -3,6 +3,8 @@ project(nturt_can_parser)
 set(CMAKE_BUILD_TYPE Release)
 set(CMAKE_CXX_STANDARD 17)
 
+add_subdirectory(lib/isotp)
+
 find_package(catkin REQUIRED COMPONENTS
         can_msgs
         nturt_ros_interface
@@ -19,6 +21,7 @@ catkin_package(
 
 include_directories(
         include
+        lib/isotp/include
         ${Boost_INCLUDE_DIRS}
         ${catkin_INCLUDE_DIRS}
         ${YAML_CPP_INCLUDE_DIRS}
@@ -66,11 +69,31 @@ target_link_libraries(nturt_can_handler_test
 
 # executable: can_parser_test
 add_executable(can_parser_test
-       test/can_parser_test.cpp
+        test/can_parser_test.cpp
 )
 
 target_link_libraries(can_parser_test
-       ${PROJECT_NAME}
+        ${PROJECT_NAME}
+)
+
+# executable: isotp_receive_test
+add_executable(isotp_receive_test
+        test/isotp_receive_test.cpp
+)
+
+target_link_libraries(isotp_receive_test
+        ${catkin_LIBRARIES}
+        isotp
+)
+
+# executable: isotp_send_test
+add_executable(isotp_send_test
+        test/isotp_send_test.cpp
+)
+
+target_link_libraries(isotp_send_test
+        ${catkin_LIBRARIES}
+        isotp
 )
 
 # executable: yaml_loader_test
