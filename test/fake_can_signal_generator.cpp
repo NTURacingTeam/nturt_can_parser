@@ -107,7 +107,7 @@ class FakeCanSignalGenerator {
             can_msg.id = 0x080AD091;
             can_msg.is_extended = true;
             can_msg.dlc = 8;
-            can_msg.data = {0, now256, 0, now256, now256, now256, now256, now256};
+            can_msg.data = {now256, now256, now256, now256, now256, now256, now256, now256};
             can_pub_.publish(can_msg);
 
             // rear_box_1
