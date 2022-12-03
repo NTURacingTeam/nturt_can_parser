@@ -76,6 +76,15 @@ target_link_libraries(can_parser_test
         ${PROJECT_NAME}
 )
 
+# executable: fake_can_signal_generator
+add_executable(fake_can_signal_generator
+        test/fake_can_signal_generator.cpp
+)
+
+target_link_libraries(fake_can_signal_generator
+        ${PROJECT_NAME}
+)
+
 # executable: isotp_receive_test
 add_executable(isotp_receive_test
         test/isotp_receive_test.cpp

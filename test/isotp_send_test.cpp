@@ -59,7 +59,7 @@ class IsoTpSendTest {
         }
 
         void error_out(const char *message) {
-            ROS_ERROR(message);
+            ROS_ERROR("%s", message);
         }
 
         void test_isotp_callback(const ros::TimerEvent&) {

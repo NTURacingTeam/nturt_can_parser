@@ -51,7 +51,7 @@ class IsoTpReceiveTest {
         }
 
         void error_out(const char *message) {
-            ROS_ERROR(message);
+            ROS_ERROR("%s", message);
         }
 };
 
