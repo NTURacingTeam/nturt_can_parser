@@ -12,7 +12,7 @@
         start_byte: 0
         end_byte: 1
         default: 0
-        resolution: 0.17647058823
+        resolution: 0.000017647058823
         offset: 200
       data:
         name: rear_right_suspension_travel
@@ -21,5 +21,5 @@
         start_byte: 1
         end_byte: 2
         default: 0
-        resolution: 0.17647058823
+        resolution: 0.000017647058823
         offset: 200

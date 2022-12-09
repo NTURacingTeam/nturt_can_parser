@@ -47,7 +47,7 @@
         start_byte: 2
         end_byte: 4
         default: 0
-        resolution: 1
+        resolution: 0.10471975512
         offset: 0
   frame:
     name: mcu_voltage

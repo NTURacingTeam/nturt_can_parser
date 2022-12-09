@@ -198,8 +198,8 @@ can:
         start_byte: 3
         end_byte: 4
         default: 0
-        resolution: 1.406
-        offset: -180.0
+        resolution: 0.02453932928
+        offset: -3.14159265359
       data:
         name: front_left_suspension_travel
         is_signed: false
@@ -207,7 +207,7 @@ can:
         start_byte: 4
         end_byte: 5
         default: 0
-        resolution: 0.17647058823
+        resolution: 0.000017647058823
         offset: 200
       data:
         name: front_right_suspension_travel
@@ -216,7 +216,7 @@ can:
         start_byte: 5
         end_byte: 6
         default: 0
-        resolution: 0.17647058823
+        resolution: 0.000017647058823
         offset: 200
       data:
         name: oil_pressure
@@ -225,7 +225,7 @@ can:
         start_byte: 6
         end_byte: 7
         default: 0
-        resolution: 19.6078431373
+        resolution: 0.19607843137
         offset: 0
       data:
         name: accelerator_micro
@@ -493,7 +493,7 @@ can:
         start_byte: 2
         end_byte: 4
         default: 0
-        resolution: 1
+        resolution: 0.10471975512
         offset: 0
   frame:
     name: mcu_voltage
@@ -587,7 +587,7 @@ can:
         start_byte: 0
         end_byte: 1
         default: 0
-        resolution: 0.17647058823
+        resolution: 0.000017647058823
         offset: 200
       data:
         name: rear_right_suspension_travel
@@ -596,7 +596,7 @@ can:
         start_byte: 1
         end_byte: 2
         default: 0
-        resolution: 0.17647058823
+        resolution: 0.000017647058823
         offset: 200
   frame:
     name: vehicle_control_unit
