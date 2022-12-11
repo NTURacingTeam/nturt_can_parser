@@ -264,7 +264,7 @@ std::string Frame::get_string() const {
 
 uint64_t Frame::get_occupied_bit() const {
     uint64_t occupied_bit = 0;
-    for(auto it = dataset_.begin(); it != dataset_.end(); it ++) {
+    for(auto it = dataset_.begin(); it != dataset_.end(); it++) {
         uint64_t data_occupied_bit = it->second->get_occupied_bit();
         if((data_occupied_bit & occupied_bit) != 0) {
             throw std::runtime_error(std::string("Error: There are two can data in can frame \"") + name_ +
@@ -347,7 +347,7 @@ bool YAML::convert<Frame>::decode(const Node &_node, Frame &_cType) {
     if(_node["dataset"]) {
         // check if "data" tag exist
         if(_node["dataset"]["data"]) {
-            for(auto it = _node["dataset"].begin(); it != _node["dataset"].end(); it ++) {
+            for(auto it = _node["dataset"].begin(); it != _node["dataset"].end(); it++) {
                 auto data = std::make_shared<Data>(it->second.as<Data>());
                 _cType.dataset_[data->name_] = data;
             }
