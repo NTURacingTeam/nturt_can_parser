@@ -1,22 +1,33 @@
 <?xml version="1.0"?>
-<package format="2">
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
     <name>nturt_can_parser</name>
     <version>0.0.0</version>
-    <description>CAN message parser</description>
-    <maintainer email="jet22854111@gmail.com">QuantumSpawner</maintainer>
-    <author email="jet22854111@gmail.com">QuantumSpawner</author>
+    <description>ROS2 package for parsing can signals.</description>
+    <maintainer email="jet22854111@gmail.com">docker</maintainer>
+    <author email="jet22854111@gmail.com">quantumspawner</author>
     <author email="queeniiee02@gmail.com">LY</author>
     <author email="tw88712@gmail.com">TieneSabor</author>
     <license>TODO</license>
 
-    <!-- build dependencies -->
-    <buildtool_depend>catkin</buildtool_depend>
-    <build_depend>can_msgs</build_depend>
-    <build_depend>nturt_ros_interface</build_depend>
-    <build_depend>roscpp</build_depend>
+    <!-- general dependencies -->
+    <depend>can_msgs</depend>
+    <depend>nturt_ros_interface</depend>
+    <depend>rclcpp</depend>
+    <depend>rclcpp_components</depend>
+    <depend>ros2_socketcan</depend>
 
-    <!-- execute dependencies -->
-    <exec_depend>can_msgs</exec_depend>
-    <exec_depend>nturt_ros_interface</exec_depend>
-    <exec_depend>roscpp</exec_depend>
+    <!-- build dependencies -->
+    <buildtool_depend>ament_cmake</buildtool_depend>
+
+    <!-- execute dependencise -->
+    <exec_depend>ros2launch</exec_depend>
+
+    <!-- test dependencies -->
+    <test_depend>ament_lint_auto</test_depend>
+    <test_depend>ament_lint_common</test_depend>
+
+    <export>
+        <build_type>ament_cmake</build_type>
+    </export>
 </package>

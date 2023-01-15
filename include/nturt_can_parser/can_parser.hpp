@@ -1,7 +1,7 @@
 /**
  * @file can_parser.hpp
- * @brief ROS node wrapper for can parser.
  * @author QuantumSpawner jet22854111@gmail.com
+ * @brief ROS node wrapper for can parser.
  */
 
 #ifndef CAN_PARSER_HPP
@@ -30,8 +30,8 @@
 #include "nturt_ros_interface/UpdateCanData.h"
 
 /**
- * @brief Class for ros wrapper for can parser.
  * @author QuantumSpawner jet22854111@gmail.com
+ * @brief Class for ros wrapper for can parser.
  */
 class CanParser {
     public:

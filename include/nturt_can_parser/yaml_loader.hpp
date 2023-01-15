@@ -1,7 +1,7 @@
 /**
  * @file yaml_loader.hpp
- * @brief Yaml loader for can parser to load can rules from a yaml file.
  * @author QuantumSpawner jet22854111@gmail.com
+ * @brief Yaml loader for can parser to load can rules from a yaml file.
  */
 
 #ifndef YAML_LAODER_HPP
@@ -43,8 +43,8 @@ typedef std::map<int, FramePtr> IdFrameset;
 typedef std::map<std::string, FramePtr> NameFrameset;
 
 /**
- * @brief Struct for storing can data.
  * @author QuantumSpawner jet22854111@gmail.com
+ * @brief Struct for storing can data.
  */
 struct Data {
     /// @brief Name of this can data, it will be used as key of the "dataset" map which stores all can data.

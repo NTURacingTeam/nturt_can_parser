@@ -1,7 +1,7 @@
 /**
  * @file can_handler.hpp
- * @brief Can handler for handling the conversion of raw can data and desired data.
  * @author QuantumSpawner jet22854111@gmail.com
+ * @brief Can handler for handling the conversion of raw can data and desired data.
  */
 
 #ifndef CAN_HANDLER_HPP
@@ -25,8 +25,8 @@
 typedef std::function<void(const FramePtr&, const boost::array<uint8_t, 8>&)> PublishFun;
 
 /**
- * @brief Class for handling the conversion of raw can data and desired data, with orther utilities to fufill normal use cases.
  * @author QuantumSpawner jet22854111@gmail.com
+ * @brief Class for handling the conversion of raw can data and desired data, with orther utilities to fufill normal use cases.
  */
 class CanHandler{
     public:
