@@ -3,7 +3,7 @@
  * @author QuantumSpawner jet22854111@gmail.com
  * @brief ROS2 node wrapping socket can for receiving can signals.
  * 
- * The C++ socket can driver and ros2 node implementation is adopted from
+ * The c++ socket can driver and ros2 node implementation are adopted from
  * [autowarefoundation/ros2_socketcan](https://github.com/autowarefoundation/ros2_socketcan).
  */
 

@@ -13,17 +13,24 @@
 // nturt include
 #include "nturt_can_parser/socket_can_sender_node.hpp"
 #include "nturt_can_parser/socket_can_receiver_node.hpp"
+#include "nturt_realtime_utils/memory_lock.hpp"
+#include "nturt_realtime_utils/scheduling.hpp"
 
 int main(int argc, char **argv) {
-    struct sched_param param;
-    param.sched_priority = 80;
-    sched_setscheduler(getpid(), SCHED_FIFO, &param);
+    // real-time configuration
+    lock_memory();
+    set_thread_scheduling(pthread_self(), SCHED_FIFO, 80);
 
     rclcpp::init(argc, argv);
+
     rclcpp::executors::StaticSingleThreadedExecutor executor;
     rclcpp::NodeOptions options;
-    executor.add_node(std::make_shared<drivers::socketcan::SocketCanReceiverNode>(options));
+
+    rclcpp::Node::SharedPtr ros2_socket_can_node = std::make_shared<drivers::socketcan::SocketCanReceiverNode>(options);
+
+    executor.add_node(ros2_socket_can_node);
     executor.spin();
+    rclcpp::shutdown();
 
     return 0;
 }

@@ -4,14 +4,15 @@
     <name>nturt_can_parser</name>
     <version>0.0.0</version>
     <description>ROS2 package for parsing can signals.</description>
-    <maintainer email="jet22854111@gmail.com">docker</maintainer>
-    <author email="jet22854111@gmail.com">quantumspawner</author>
+    <maintainer email="jet22854111@gmail.com">QuantumSpawner</maintainer>
+    <author email="jet22854111@gmail.com">QuantumSpawner</author>
     <author email="queeniiee02@gmail.com">LY</author>
     <author email="tw88712@gmail.com">TieneSabor</author>
     <license>TODO</license>
 
     <!-- general dependencies -->
     <depend>can_msgs</depend>
+    <depend>nturt_realtime_utils</depend>
     <depend>nturt_ros_interface</depend>
     <depend>rclcpp</depend>
     <depend>rclcpp_components</depend>

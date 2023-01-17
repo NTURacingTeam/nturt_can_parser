@@ -6,8 +6,8 @@ namespace socketcan {
 SocketCanReceiverNode::SocketCanReceiverNode(const rclcpp::NodeOptions &_options) : Node("socket_can_receiver_node", _options),
     can_pub_(this->create_publisher<can_msgs::msg::Frame>("/from_can_bus", 100)),
     interface_(this->declare_parameter("interface", "can0")),
-    use_bus_time_(this->declare_parameter("interface", false)) {
-    
+    use_bus_time_(this->declare_parameter("use_bus_time", false)) {
+
     RCLCPP_INFO(this->get_logger(), "interface: %s", interface_.c_str());
 
     double interval_sec = this->declare_parameter("timeout_sec", 0.01);

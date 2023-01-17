@@ -9,6 +9,7 @@ endif()
 
 find_package(ament_cmake REQUIRED)
 find_package(can_msgs REQUIRED)
+find_package(nturt_realtime_utils REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(rclcpp_components REQUIRED)
 find_package(ros2_socketcan REQUIRED)
@@ -47,7 +48,13 @@ target_link_libraries(ros2_socket_can_node
         ros2_socketcan_node
 )
 ament_target_dependencies(ros2_socket_can_node
+        nturt_realtime_utils
         rclcpp
+)
+
+# install headers
+install(DIRECTORY include/${PROJECT_NAME}
+        DESTINATION include
 )
 
 # install node components
@@ -84,7 +91,9 @@ ament_export_libraries(
 ament_export_dependencies(
         ament_cmake
         can_msgs
+        nturt_realtime_utils
         rclcpp
+        ros2_socketcan
 )
 
 ament_package()
