@@ -26,9 +26,11 @@ int main(int argc, char **argv) {
     rclcpp::executors::StaticSingleThreadedExecutor executor;
     rclcpp::NodeOptions options;
 
-    rclcpp::Node::SharedPtr ros2_socket_can_node = std::make_shared<drivers::socketcan::SocketCanReceiverNode>(options);
+    rclcpp::Node::SharedPtr socket_can_sender_node = std::make_shared<drivers::socketcan::SocketCanSenderNode>(options);
+    rclcpp::Node::SharedPtr socket_can_receiver_node = std::make_shared<drivers::socketcan::SocketCanReceiverNode>(options);
 
-    executor.add_node(ros2_socket_can_node);
+    executor.add_node(socket_can_sender_node);
+    executor.add_node(socket_can_receiver_node);
     executor.spin();
     rclcpp::shutdown();
 

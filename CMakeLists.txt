@@ -20,12 +20,12 @@ include_directories(
 )
 
 # libraries
-# library: ros2_socketcan_node
-add_library(ros2_socketcan_node SHARED
+# library: socket_can_node
+add_library(socket_can_node SHARED
         src/socket_can_receiver_node.cpp
         src/socket_can_sender_node.cpp
 )
-ament_target_dependencies(ros2_socketcan_node
+ament_target_dependencies(socket_can_node
         can_msgs
         rclcpp
         rclcpp_components
@@ -33,21 +33,21 @@ ament_target_dependencies(ros2_socketcan_node
 )
 # register to node components
 # node component: SocketCanSenderNode
-rclcpp_components_register_nodes(ros2_socketcan_node "drivers::socketcan::SocketCanSenderNode")
-set(node_plugins "${node_plugins}drivers::socketcan::SocketCanSenderNode;$<TARGET_FILE:ros2_socketcan_node>\n")
+rclcpp_components_register_nodes(socket_can_node "drivers::socketcan::SocketCanSenderNode")
+set(node_plugins "${node_plugins}drivers::socketcan::SocketCanSenderNode;$<TARGET_FILE:socket_can_node>\n")
 # node component: SocketCanReceiverNode
-rclcpp_components_register_nodes(ros2_socketcan_node "drivers::socketcan::SocketCanReceiverNode")
-set(node_plugins "${node_plugins}drivers::socketcan::SocketCanReceiverNode;$<TARGET_FILE:ros2_socketcan_node>\n")
+rclcpp_components_register_nodes(socket_can_node "drivers::socketcan::SocketCanReceiverNode")
+set(node_plugins "${node_plugins}drivers::socketcan::SocketCanReceiverNode;$<TARGET_FILE:socket_can_node>\n")
 
 # applications
-# executable: ros2_socket_can_node
-add_executable(ros2_socket_can_node
-        app/ros2_socket_can_node.cpp
+# executable: socket_can_bridge_node
+add_executable(socket_can_bridge_node
+        app/socket_can_bridge_node.cpp
 )
-target_link_libraries(ros2_socket_can_node
-        ros2_socketcan_node
+target_link_libraries(socket_can_bridge_node
+        socket_can_node
 )
-ament_target_dependencies(ros2_socket_can_node
+ament_target_dependencies(socket_can_bridge_node
         nturt_realtime_utils
         rclcpp
 )
@@ -58,14 +58,14 @@ install(DIRECTORY include/${PROJECT_NAME}
 )
 
 # install node components
-install(TARGETS ros2_socketcan_node
+install(TARGETS socket_can_node
         ARCHIVE DESTINATION lib
         LIBRARY DESTINATION lib
         RUNTIME DESTINATION bin
 )
 
 # install applications, test executables
-install(TARGETS ros2_socket_can_node
+install(TARGETS socket_can_bridge_node
         DESTINATION lib/${PROJECT_NAME}
 )
 
