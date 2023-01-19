@@ -1,11 +1,8 @@
-#include "nturt_can_parser/socket_can_sender_node.hpp"
+#include "nturt_can_parser/socket_can_sender.hpp"
 
-namespace drivers {
-namespace socketcan {
-
-SocketCanSenderNode::SocketCanSenderNode(const rclcpp::NodeOptions &_options) : Node("socket_can_sender_node", _options),
+SocketCanSender::SocketCanSender(const rclcpp::NodeOptions &_options) : Node("socket_can_sender_node", _options),
     can_sub_(this->create_subscription<can_msgs::msg::Frame>("to_can_bus", 100,
-        std::bind(&SocketCanSenderNode::onCan, this, std::placeholders::_1))),
+        std::bind(&SocketCanSender::onCan, this, std::placeholders::_1))),
     interface_(this->declare_parameter("interface", "can0")) {
     
     RCLCPP_INFO(this->get_logger(), "interface: %s", interface_.c_str());
@@ -16,7 +13,7 @@ SocketCanSenderNode::SocketCanSenderNode(const rclcpp::NodeOptions &_options) : 
 
     // initialize can sender driver
     try {
-        sender_ = std::make_unique<SocketCanSender>(interface_);
+        sender_ = std::make_unique<drivers::socketcan::SocketCanSender>(interface_);
     }
     catch (const std::exception & ex) {
         RCLCPP_ERROR(
@@ -26,20 +23,20 @@ SocketCanSenderNode::SocketCanSenderNode(const rclcpp::NodeOptions &_options) : 
     }
 }
 
-void SocketCanSenderNode::onCan(const can_msgs::msg::Frame::SharedPtr _msg) {
-    FrameType type;
+void SocketCanSender::onCan(const can_msgs::msg::Frame::SharedPtr _msg) {
+    drivers::socketcan::FrameType type;
     if(_msg->is_rtr) {
-        type = FrameType::REMOTE;
+        type = drivers::socketcan::FrameType::REMOTE;
     }
     else if(_msg->is_error) {
-        type = FrameType::ERROR;
+        type = drivers::socketcan::FrameType::ERROR;
     }
     else {
-        type = FrameType::DATA;
+        type = drivers::socketcan::FrameType::DATA;
     }
 
-    CanId send_id = _msg->is_extended ? CanId(_msg->id, 0, type, ExtendedFrame) :
-    CanId(_msg->id, 0, type, StandardFrame);
+    drivers::socketcan::CanId send_id = _msg->is_extended ? drivers::socketcan::CanId(_msg->id, 0, type, drivers::socketcan::ExtendedFrame) :
+    drivers::socketcan::CanId(_msg->id, 0, type, drivers::socketcan::StandardFrame);
     try {
         sender_->send(_msg->data.data(), _msg->dlc, send_id, timeout_ns_);
     }
@@ -49,8 +46,5 @@ void SocketCanSenderNode::onCan(const can_msgs::msg::Frame::SharedPtr _msg) {
     }
 }
 
-} // namespace socketcan
-} // namespace drivers
-
 #include "rclcpp_components/register_node_macro.hpp"
-RCLCPP_COMPONENTS_REGISTER_NODE(drivers::socketcan::SocketCanSenderNode)
+RCLCPP_COMPONENTS_REGISTER_NODE(SocketCanSender)

@@ -23,27 +23,24 @@
 // ros2_socketcan include
 #include "ros2_socketcan/socket_can_sender.hpp"
 
-namespace drivers {
-namespace socketcan {
-
 /**
  * @author QuantumSpawner jet22854111@gmail.com
  * @brief Class for sending can signals to socket can.
  */
-class SocketCanSenderNode : public rclcpp::Node {
+class SocketCanSender : public rclcpp::Node {
     public:
         /**
          * @brief Constructor.
          * @param _options Options for node initialization.
          */
-        SocketCanSenderNode(const rclcpp::NodeOptions &_options);
+        SocketCanSender(const rclcpp::NodeOptions &_options);
 
     private:
         /// @brief ROS2 subscriber to "/to_can_bus", for receiving can signals that other nodes want to send.
         rclcpp::Subscription<can_msgs::msg::Frame>::SharedPtr can_sub_;
 
         /// @brief Pointer to the socket can driver.
-        std::unique_ptr<SocketCanSender> sender_;
+        std::unique_ptr<drivers::socketcan::SocketCanSender> sender_;
         
         // internal states
         /// @brief The name of the socket can interface.
@@ -55,8 +52,5 @@ class SocketCanSenderNode : public rclcpp::Node {
         /// @brief Callback function when receiving message from "/from_can_bus".
         void onCan(const can_msgs::msg::Frame::SharedPtr _msg);
 };
-
-} // namespace socketcan
-} // namespace drivers
 
 #endif // SOCKET_CAN_SENDER_NODE_HPP

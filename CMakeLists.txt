@@ -20,34 +20,45 @@ include_directories(
 )
 
 # libraries
-# library: socket_can_node
-add_library(socket_can_node SHARED
-        src/socket_can_receiver_node.cpp
-        src/socket_can_sender_node.cpp
+# library: socket_can
+add_library(socket_can SHARED
+        src/socket_can_receiver.cpp
+        src/socket_can_sender.cpp
 )
-ament_target_dependencies(socket_can_node
+ament_target_dependencies(socket_can
         can_msgs
         rclcpp
         rclcpp_components
         ros2_socketcan
 )
 # register to node components
-# node component: SocketCanSenderNode
-rclcpp_components_register_nodes(socket_can_node "drivers::socketcan::SocketCanSenderNode")
-set(node_plugins "${node_plugins}drivers::socketcan::SocketCanSenderNode;$<TARGET_FILE:socket_can_node>\n")
-# node component: SocketCanReceiverNode
-rclcpp_components_register_nodes(socket_can_node "drivers::socketcan::SocketCanReceiverNode")
-set(node_plugins "${node_plugins}drivers::socketcan::SocketCanReceiverNode;$<TARGET_FILE:socket_can_node>\n")
+# node component: SocketCanSender
+rclcpp_components_register_nodes(socket_can "SocketCanSender")
+set(node_plugins "${node_plugins}SocketCanSender;$<TARGET_FILE:socket_can>\n")
+# node component: SocketCanReceiver
+rclcpp_components_register_nodes(socket_can "SocketCanReceiver")
+set(node_plugins "${node_plugins}SocketCanReceiver;$<TARGET_FILE:socket_can>\n")
 
 # applications
-# executable: socket_can_bridge_node
-add_executable(socket_can_bridge_node
-        app/socket_can_bridge_node.cpp
+# executable: socket_can_receiver_node
+add_executable(socket_can_receiver_node
+        app/socket_can_receiver_node.cpp
 )
-target_link_libraries(socket_can_bridge_node
-        socket_can_node
+target_link_libraries(socket_can_receiver_node
+        socket_can
 )
-ament_target_dependencies(socket_can_bridge_node
+ament_target_dependencies(socket_can_receiver_node
+        nturt_realtime_utils
+        rclcpp
+)
+# executable: socket_can_sender_node
+add_executable(socket_can_sender_node
+        app/socket_can_sender_node.cpp
+)
+target_link_libraries(socket_can_sender_node
+        socket_can
+)
+ament_target_dependencies(socket_can_sender_node
         nturt_realtime_utils
         rclcpp
 )
@@ -58,14 +69,14 @@ install(DIRECTORY include/${PROJECT_NAME}
 )
 
 # install node components
-install(TARGETS socket_can_node
+install(TARGETS socket_can
         ARCHIVE DESTINATION lib
         LIBRARY DESTINATION lib
         RUNTIME DESTINATION bin
 )
 
 # install applications, test executables
-install(TARGETS socket_can_bridge_node
+install(TARGETS socket_can_receiver_node socket_can_sender_node
         DESTINATION lib/${PROJECT_NAME}
 )
 

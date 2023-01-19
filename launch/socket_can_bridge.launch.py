@@ -1,12 +1,19 @@
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription, RegisterEventHandler
+from launch.actions import DeclareLaunchArgument, EmitEvent, RegisterEventHandler
 from launch.conditions import IfCondition
-from launch.event_handlers import OnProcessExit
-from launch.launch_description_sources import PythonLaunchDescriptionSource
-from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
+from launch.events import matches_action
+from launch.event_handlers import OnProcessExit, OnProcessStart, OnProcessIO
+from launch.substitutions import LaunchConfiguration, PythonExpression
 
 from launch_ros.actions import Node
-from launch_ros.substitutions import FindPackageShare
+from launch_ros.events.lifecycle import ChangeState
+from launch_ros.event_handlers import OnStateTransition
+from lifecycle_msgs.msg import Transition
+
+# conditional sustitution for realtime node argument
+def _realtime_command(condition):
+    cmd = ['"--realtime" if "true" == "', condition, '" else ""']
+    return PythonExpression(cmd)
 
 def generate_launch_description():
     # declare arguments
@@ -18,31 +25,17 @@ def generate_launch_description():
             description="The password of the user to get root permission using sudo to setup can bus.",
         )
     )
+    arguments.append(
+        DeclareLaunchArgument(
+            "is_realtime",
+            default_value="true",
+            description="Arguement to determine whether this test is running in realtime process.",
+        )
+    )
 
     # initialize arguments
     password = LaunchConfiguration("password")
-
-    # declare include files
-    # node for receiving can signal
-    socket_can_receiver = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource([
-            PathJoinSubstitution([
-                FindPackageShare("ros2_socketcan"),
-                "launch",
-                "socket_can_receiver.launch.py",
-            ]),
-        ]),
-    )
-    # node for sending can signal
-    socket_can_sender = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource([
-            PathJoinSubstitution([
-                FindPackageShare("ros2_socketcan"),
-                "launch",
-                "socket_can_sender.launch.py",
-            ]),
-        ]),
-    )
+    is_realtime = LaunchConfiguration("is_realtime")
 
     # declare node
     # node for configuring can bus
@@ -54,14 +47,30 @@ def generate_launch_description():
         ],
         output="both",
     )
+    socket_can_receiver_node = Node(
+        package="nturt_can_parser",
+        executable="socket_can_receiver_node",
+        arguments=[
+            _realtime_command(is_realtime),
+        ],
+        output="both",
+    )
+    socket_can_sender_node = Node(
+        package="nturt_can_parser",
+        executable="socket_can_sender_node",
+        arguments=[
+            _realtime_command(is_realtime),
+        ],
+        output="both",
+    )
 
     # declare event handler
     delay_after_configure_can_node = RegisterEventHandler(
         event_handler=OnProcessExit(
             target_action=configure_can_node,
             on_exit=[
-                socket_can_receiver,
-                socket_can_sender,
+                socket_can_receiver_node,
+                socket_can_sender_node,
             ],
         )
     )
