@@ -55,6 +55,7 @@ Options:
 
     def __configure_can(self):
         if not self.__can_activated:
+            os.system("sudo ip link set can0 type can bitrate 100000")
             os.system("sudo ifconfig can0 up")
             self.__bus = can.interface.Bus(channel="can0", bustype="socketcan")
 

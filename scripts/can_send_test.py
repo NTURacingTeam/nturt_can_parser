@@ -59,12 +59,9 @@ Options:
             elif opt in ("-r", "--repeat"):
                 self.__send_repeatedly()
 
-    def clean_up(self):
-        if self.__can_activated:
-            os.system("sudo ifconfig can0 down")
-
     def __configure_can(self):
         if not self.__can_activated:
+            os.system("sudo ip link set can0 type can bitrate 100000")
             os.system("sudo ifconfig can0 up")
             self.__bus = can.interface.Bus(channel="can0", bustype="socketcan")
 
@@ -72,7 +69,7 @@ Options:
 
     def __send_once(self):
         self.__configure_can()
-        msg = can.Message(arbitration_id=0x010, is_extended_id=True, data=[0, 1, 2, 3, 4, 5, 6, 7])
+        msg = can.Message(arbitration_id=0x010, is_extended_id=False, data=[0, 1, 2, 3, 4, 5, 6, 7])
         self.__bus.send(msg)
         print(f"Send signal: {msg}.")
 
