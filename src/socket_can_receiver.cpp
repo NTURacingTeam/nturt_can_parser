@@ -9,7 +9,7 @@ SocketCanReceiver::SocketCanReceiver(const rclcpp::NodeOptions &_options) : Node
 
     double interval_sec = this->declare_parameter("timeout_sec", 0.01);
     interval_ns_ = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::duration<double>(interval_sec));
-    RCLCPP_INFO(this->get_logger(), "interval(ns): %f", interval_sec);
+    RCLCPP_INFO(this->get_logger(), "interval(s): %f", interval_sec);
 
     RCLCPP_INFO(this->get_logger(), "use bus time: %d", use_bus_time_);
 
@@ -17,12 +17,16 @@ SocketCanReceiver::SocketCanReceiver(const rclcpp::NodeOptions &_options) : Node
     try {
         receiver_ = std::make_unique<drivers::socketcan::SocketCanReceiver>(interface_);
     }
-    catch(const std::exception & ex) {
+    catch(const std::exception &ex) {
         RCLCPP_ERROR(this->get_logger(), "Error opening CAN receiver: %s - %s", interface_.c_str(), ex.what());
         rclcpp::shutdown();
     }
 
     receiver_thread_ = std::make_unique<std::thread>(&SocketCanReceiver::receive, this);
+}
+
+SocketCanReceiver::~SocketCanReceiver() {
+    receiver_thread_->join();
 }
 
 void SocketCanReceiver::receive() {
@@ -34,7 +38,7 @@ void SocketCanReceiver::receive() {
         try {
             receive_id = receiver_->receive(frame_msg.data.data(), interval_ns_);
         }
-        catch (const std::exception & ex) {
+        catch(const std::exception &ex) {
             RCLCPP_WARN_THROTTLE(this->get_logger(), *this->get_clock(), 1000, "Error receiving CAN message: %s - %s", interface_.c_str(), ex.what());
         continue;
         }

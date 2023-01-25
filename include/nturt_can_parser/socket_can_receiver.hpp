@@ -36,6 +36,9 @@ class SocketCanReceiver : public rclcpp::Node {
          */
         SocketCanReceiver(const rclcpp::NodeOptions &_options);
 
+        /// @brief Destructor.
+        ~SocketCanReceiver();
+
     private:
         /// @brief ROS2 publisher to "/from_can_bus", for sending received can signals to other nodes.
         rclcpp::Publisher<can_msgs::msg::Frame>::SharedPtr can_pub_;

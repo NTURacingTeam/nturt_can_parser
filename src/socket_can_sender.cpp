@@ -9,13 +9,13 @@ SocketCanSender::SocketCanSender(const rclcpp::NodeOptions &_options) : Node("so
 
     double timeout_sec = this->declare_parameter("timeout_sec", 0.01);
     timeout_ns_ = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::duration<double>(timeout_sec));
-    RCLCPP_INFO(this->get_logger(), "timeout(ns): %f", timeout_sec);
+    RCLCPP_INFO(this->get_logger(), "timeout(s): %f", timeout_sec);
 
     // initialize can sender driver
     try {
         sender_ = std::make_unique<drivers::socketcan::SocketCanSender>(interface_);
     }
-    catch (const std::exception & ex) {
+    catch(const std::exception &ex) {
         RCLCPP_ERROR(
         this->get_logger(), "Error opening CAN sender: %s - %s",
         interface_.c_str(), ex.what());
@@ -40,7 +40,7 @@ void SocketCanSender::onCan(const can_msgs::msg::Frame::SharedPtr _msg) {
     try {
         sender_->send(_msg->data.data(), _msg->dlc, send_id, timeout_ns_);
     }
-    catch(const std::exception & ex) {
+    catch(const std::exception &ex) {
         RCLCPP_WARN_THROTTLE(this->get_logger(), *this->get_clock(), 1000, "Error sending CAN message: %s - %s", interface_.c_str(), ex.what());
         return;
     }
