@@ -31,6 +31,7 @@ Options:
 
     def __del__(self):
         if self.__can_activated:
+            self.__bus.shutdown()
             os.system("sudo ifconfig can0 down")
 
     def run(self):
@@ -63,7 +64,7 @@ Options:
         if not self.__can_activated:
             os.system("sudo ip link set can0 type can bitrate 100000")
             os.system("sudo ifconfig can0 up")
-            self.__bus = can.interface.Bus(channel="can0", bustype="socketcan")
+            self.__bus = can.interfaces.socketcan.SocketcanBus(channel="can0", local_loopback=False)
 
         self.__can_activated = True
 

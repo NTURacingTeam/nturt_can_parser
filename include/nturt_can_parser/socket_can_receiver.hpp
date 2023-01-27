@@ -52,13 +52,16 @@ class SocketCanReceiver : public rclcpp::Node {
         /// @brief The name of the socket can interface.
         std::string interface_;
 
+        /// @brief Receive filters.
+        std::string filters_;
+
         /// @brief Socket can receive interval \f$[ns]\f$.
         std::chrono::nanoseconds interval_ns_;
 
         /// @brief Flag to determine whether to use can bus time.
         bool use_bus_time_;
 
-        /// @brief 
+        /// @brief Callback function to keep receiving can signals from another thread.
         void receive();
 };
 
