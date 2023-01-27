@@ -3,12 +3,9 @@
 SocketCanReceiver::SocketCanReceiver(const rclcpp::NodeOptions &_options) : Node("socket_can_receiver_node", _options),
     can_pub_(this->create_publisher<can_msgs::msg::Frame>("/from_can_bus", 100)),
     interface_(this->declare_parameter("interface", "can0")),
-    filters_(this->declare_parameter("filters", "0:0")),
     use_bus_time_(this->declare_parameter("use_bus_time", false)) {
 
     RCLCPP_INFO(this->get_logger(), "interface: %s", interface_.c_str());
-
-    RCLCPP_INFO(this->get_logger(), "receive filter: %s", filters_.c_str());
 
     double interval_sec = this->declare_parameter("timeout_sec", 0.01);
     interval_ns_ = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::duration<double>(interval_sec));
@@ -19,7 +16,6 @@ SocketCanReceiver::SocketCanReceiver(const rclcpp::NodeOptions &_options) : Node
     // initialize can receiver driver
     try {
         receiver_ = std::make_unique<drivers::socketcan::SocketCanReceiver>(interface_);
-        receiver_->SetCanFilters(drivers::socketcan::SocketCanReceiver::CanFilterList(filters_));
     }
     catch(const std::exception &ex) {
         RCLCPP_ERROR(this->get_logger(), "Error opening CAN receiver: %s - %s", interface_.c_str(), ex.what());

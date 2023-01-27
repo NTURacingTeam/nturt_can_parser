@@ -52,9 +52,6 @@ class SocketCanReceiver : public rclcpp::Node {
         /// @brief The name of the socket can interface.
         std::string interface_;
 
-        /// @brief Receive filters.
-        std::string filters_;
-
         /// @brief Socket can receive interval \f$[ns]\f$.
         std::chrono::nanoseconds interval_ns_;
 
