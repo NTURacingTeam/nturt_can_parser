@@ -2,65 +2,75 @@
 
 ## Introduction
 
-Implement the data parsing between can signal from ros topic `/received_messages` and `sent_messages` from node `socketcan_bridge_node` in ros package [`socketcan_bridge`](https://wiki.ros.org/socketcan_bridge). This node translates the normal 1~8 bytes long data from a can frame into desired data type (mainly in double) with desired resolution and offset as
+This ros2 package provides bridge between socket can and ros2 message. Though this ros2 package is called can "parser", it don't parse any of the incoming can signals. Instead, [NTURacingTeam/nturt_can_config](https://github.com/NTURacingTeam/nturt_can_config) provide such function using c code generated from dbc(can database) file.
 
-$$\text{desired data}=\text{resolution}\times\text{raw data}-\text{offset}$$
+> Obviously, the name "parser" suggests that this package was once used as a parser of can message before we find out that there's a de facto standard dbc format that document such. And even dozens of code generators built for that. Better research before doing any hard works! If you are interested in how this package was used for parsing can message, please checkout `ros1` branch.
 
-and translates back vice versa as configured in the "can_config" parameter (more information in the `Can parameter` section below).
+### ROS2 SocketCAN
 
-Once the can parser receives a can frame, the data is stored in can parser's buffer, in order to get the data or other utilities, please checkout `ROS interface` section below.
+The library used for bridging socket can and ros2 node implementation was adopted from [autowarefoundation/ros2_socketcan](https://github.com/autowarefoundation/ros2_socketcan/tree/0b4c0d9bf7214467d7c520ed2d5dd72806c664a6). Yet the library has minor defect that the receiver node will receive the can message sent by the sender node due to socket can's `local loopback`. Hence we forked the package into our own [NTURacingTeam/ros2_socketcan](https://github.com/NTURacingTeam/ros2_socketcan).
+
+### Real-time support
+
+The sender/receiver node from [autowarefoundation/ros2_socketcan](https://github.com/autowarefoundation/ros2_socketcan) does not  support for real-time. Hence this package adds it's own implementation of the sender/receiver node in order to make them real-time.
 
 ## Usage
 
-### Can parameter
+### configure_can.sh
 
-To parse raw can frame data into desired data, this node needs a config file (in yaml) specified by ros `can_config` parameter. For more information how to wirte the config file, please checkout `README.md` file in the `doc` directory.
+After system reboot, can bus have to be configured before use, hence this node(process) is used for such purpose, and it exits afterwards.
 
-### socket_can_bridge
+Usage:
 
-This node requires `socketcan_bridge_node` in ros package [`socketcan_bridge`](https://wiki.ros.org/socketcan_bridge) that transmits and receives raw can data into ros messages in topic `/received_messages` and `sent_messages` (message published on `/received_messages` when received can frame and publish to `sent_messages` for transmit can frame).
+```shell=
+ros2 run nturt_can_parser configure_can.sh [OPTIONS]
+```
 
-**Please also run `socketcan_bridge_node` when using this node**.
+Use `-h` option to checkout its full usage.
 
-### ROS interfaces
+### socket_can_receiver
 
-This node uses the following ros topics and services to transfer data to other nodes.
+This ros2 node publishes `can_msgs/msg/Frame` message to `from_can_bus` topic when receiving can signal from socket can. To run it in real-time mode, use `--real-time` option.
 
-#### `/publish_can_frame`
+Usage:
 
-Publish a can frame by it's name.
+```shell=
+ros2 run nturt_can_parser socket_can_receiver [--real-time]
+```
 
-Message type: `String` in `std_msgs`.
+### socket_can_sender
 
-Publish the name of the can frame to be published (as `data` in `String`) to this topic in order to publish this can frame to can bus. The published can data is the data stored in can parser's buffer.
+This ros2 node subscribes `can_msgs/msg/Frame` message from `to_can_bus` topic to send can signal to socket can. To run it in real-time mode, use `--real-time` option.
 
-#### `/update_can_data`
+Usage:
 
-Update a can data by it's name.
+```shell=
+ros2 run nturt_can_parser socket_can_sender [--real-time]
+```
 
-Message type `UpdateCanData` in `nturt_ros_interface`.
+### socker_can_bridge.launch.py
 
-Publish the name of the can data to be updated (as `name` in `UpdateCanData`) and the updated data (as `data` in `UpdateCanData`) to this topic in order to change the can data stored in can parser's buffer.
+This launch file combines the functionality of the above three nodes.
 
-**Can parser does not check for data overflowing, so plase be aware of whether the data will overflow when parsed into raw can data.**
+Usage:
 
-#### `/get_can_data`
+```shell=
+ros2 launch nturt_can_parser socker_can_bridge.launch.py
+```
 
-Get the can data stroed in can parser's buffer by it's name.
+#### Launch Configuration
 
-Service type: `GetCanData` in `nturt_ros_interface`.
+There are couple ros2 parameters defined in this launch file:
 
-Call the name of the can data to get data (as `name` in `GetCanData`)
-to this service, can parser will return the can data's data stored in can parser (as `data` in `GetCanData`).
+1. `password` - string: The password of the sudo user for configuring can bus, required.
+2. `bitrate` - int: The Bitrate at which the can bus will transfer can signal, default to 100000(100K).
+3. `is_realtime` - bool: Whether to run in real-time mode, default to `true`.
 
-#### `/register_can_notification`
+## Tests
 
-Register to can parser what data to published to a specific topic, when that registered data got updated by received can signals.
+This package provides two python scripts to test socket can:
 
-**Caution: Please wait until this service is brocasted before calling it by using [`ros::service::waitForService()`](https://docs.ros.org/en/api/roscpp/html/namespaceros_1_1service.html#aabe996581255345b3383e66eaaedef5a).**
+1. can_receive_test.py
+2. can_send_test.py
 
-Service type: `RegisterCanNotification` in `nturt_ros_interface`.
-
-Call a variable sized array of the name of the can data to register (as `data_name` in `RegisterCanNotification`) and the name of the node registering (as `node_name` in `RegisterCanNotification`), can parser will return the topic name the registering node should subscribed to  (as `topic_name` in `RegisterCanNotification`).
-
-The message type of the notification is `UpdateCanData` in `nturt_ros_interface`, it works the same as in `/update_can_data` section above.
+Use `-h` option to checkout theirs full usage.

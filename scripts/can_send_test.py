@@ -10,10 +10,10 @@ import time
 class CanSendTest:
     __usage = f"""Usage:{sys.argv[0]} <ONLY ONE OPTION>
 Options:
-    -h --help       Print this help message and exit.
-    -i --inverter   Send can signal to test inverter.
-    -o --once       Only send test can signal once.
-    -r --repeat     Repeatedly send test can signal."""
+    -h --help       Print this help message and exit
+    -i --inverter   Send can signal to test inverter
+    -o --once       Only send test can signal once
+    -r --repeat     Repeatedly send test can signal"""
 
     __option = "hior"
 
@@ -48,8 +48,8 @@ Options:
 
         for opt, val in opts:
             if opt in ("-h", "--help"):
-                print(self.__usage, file=sys.stderr)
-                sys.exit(1)
+                print(self.__usage)
+                sys.exit(0)
 
             elif opt in ("-i", "--inverter"):
                 self.__test_inverter()

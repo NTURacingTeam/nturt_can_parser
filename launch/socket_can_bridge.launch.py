@@ -1,14 +1,9 @@
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument, EmitEvent, RegisterEventHandler
-from launch.conditions import IfCondition
-from launch.events import matches_action
-from launch.event_handlers import OnProcessExit, OnProcessStart, OnProcessIO
+from launch.actions import DeclareLaunchArgument, RegisterEventHandler
+from launch.event_handlers import OnProcessExit
 from launch.substitutions import LaunchConfiguration, PythonExpression
 
 from launch_ros.actions import Node
-from launch_ros.events.lifecycle import ChangeState
-from launch_ros.event_handlers import OnStateTransition
-from lifecycle_msgs.msg import Transition
 
 # conditional sustitution for realtime node argument
 def _realtime_command(condition):
@@ -21,20 +16,27 @@ def generate_launch_description():
     arguments.append(
         DeclareLaunchArgument(
             "password",
-            default_value="",
             description="The password of the user to get root permission using sudo to setup can bus.",
+        )
+    )
+    arguments.append(
+        DeclareLaunchArgument(
+            "bitrate",
+            default_value="100000",
+            description="The Bitrate at which the can bus will transfer can signal.",
         )
     )
     arguments.append(
         DeclareLaunchArgument(
             "is_realtime",
             default_value="true",
-            description="Arguement to determine whether this test is running in realtime process.",
+            description="Arguement to determine whether to run in real-time.",
         )
     )
 
     # initialize arguments
     password = LaunchConfiguration("password")
+    bitrate = LaunchConfiguration("bitrate")
     is_realtime = LaunchConfiguration("is_realtime")
 
     # declare node
@@ -43,7 +45,10 @@ def generate_launch_description():
         package="nturt_can_parser",
         executable="configure_can.sh",
         arguments=[
+            "-p",
             password,
+            "-b",
+            bitrate
         ],
         output="both",
     )

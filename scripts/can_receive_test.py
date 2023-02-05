@@ -9,9 +9,9 @@ import sys
 class CanReceiveTest:
     __usage = f"""Usage:{sys.argv[0]} <ONLY ONE OPTION>
 Options:
-    -h --help       Print this help message and exit.
-    -o --once       Only receive can signal once.
-    -r --repeat     Repeatedly receive can signal."""
+    -h --help       Print this help message and exit
+    -o --once       Only receive can signal once
+    -r --repeat     Repeatedly receive can signal"""
 
     __option = "hor"
 
@@ -45,8 +45,8 @@ Options:
 
         for opt, val in opts:
             if opt in ("-h", "--help"):
-                print(self.__usage, file=sys.stderr)
-                sys.exit(1)
+                print(self.__usage)
+                sys.exit(0)
 
             elif opt in ("-o", "--once"):
                 self.__receive_once()
