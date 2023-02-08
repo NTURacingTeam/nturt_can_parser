@@ -63,7 +63,7 @@ ros2 launch nturt_can_parser socker_can_bridge.launch.py
 There are couple ros2 parameters defined in this launch file:
 
 1. `password` - string: The password of the sudo user for configuring can bus, required.
-2. `bitrate` - int: The Bitrate at which the can bus will transfer can signal, default to 100000(100K).
+2. `bitrate` - int: The Bitrate at which the can bus will transfer can signal, default to `100000`(100K).
 3. `is_realtime` - bool: Whether to run in real-time mode, default to `true`.
 
 ## Tests

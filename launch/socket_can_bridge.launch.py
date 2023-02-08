@@ -16,6 +16,7 @@ def generate_launch_description():
     arguments.append(
         DeclareLaunchArgument(
             "password",
+            default_value="",
             description="The password of the user to get root permission using sudo to setup can bus.",
         )
     )
