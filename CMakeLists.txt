@@ -9,13 +9,11 @@ endif()
 
 find_package(ament_cmake REQUIRED)
 find_package(ament_cmake_python REQUIRED)
-find_package(can_msgs REQUIRED)
 find_package(nturt_realtime_utils REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(rclcpp_components REQUIRED)
 find_package(rclpy REQUIRED)
 find_package(ros2_socketcan REQUIRED)
-find_package(yaml-cpp REQUIRED)
 
 # install python module for this package
 ament_python_install_package(${PROJECT_NAME})
@@ -117,7 +115,6 @@ ament_export_libraries(
 ament_export_dependencies(
         ament_cmake
         ament_cmake_python
-        can_msgs
         nturt_realtime_utils
         rclcpp
         rclpy

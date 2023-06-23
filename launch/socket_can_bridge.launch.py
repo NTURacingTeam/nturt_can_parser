@@ -23,15 +23,15 @@ def generate_launch_description():
     arguments.append(
         DeclareLaunchArgument(
             "bitrate",
-            default_value="100000",
-            description="The Bitrate at which the can bus will transfer can signal.",
+            default_value="1000000",
+            description="The bitrate of the can.",
         )
     )
     arguments.append(
         DeclareLaunchArgument(
             "is_realtime",
             default_value="true",
-            description="Arguement to determine whether to run in real-time.",
+            description="Whether to run using real-time scheduler.",
         )
     )
 

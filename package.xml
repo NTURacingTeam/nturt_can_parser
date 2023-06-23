@@ -11,9 +11,7 @@
     <license>TODO</license>
 
     <!-- general dependencies -->
-    <depend>can_msgs</depend>
     <depend>nturt_realtime_utils</depend>
-    <depend>nturt_ros_interface</depend>
     <depend>rclcpp</depend>
     <depend>rclcpp_components</depend>
     <depend>ros2_socketcan</depend>
@@ -22,6 +20,7 @@
     <buildtool_depend>ament_cmake</buildtool_depend>
 
     <!-- execute dependencise -->
+    <exec_depend>rclpy</exec_depend>
     <exec_depend>ros2launch</exec_depend>
 
     <!-- test dependencies -->
