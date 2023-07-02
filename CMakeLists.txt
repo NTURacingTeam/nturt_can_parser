@@ -89,7 +89,7 @@ install(DIRECTORY scripts/
 )
 
 # install launch scripts
-install(DIRECTORY launch
+install(DIRECTORY launch/
         DESTINATION share/${PROJECT_NAME}
 )
 
