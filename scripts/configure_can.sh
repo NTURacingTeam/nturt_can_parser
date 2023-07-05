@@ -58,6 +58,8 @@ while true; do
     esac
 done
 
+echo "setting can bitrate to ${BITRATE}"
 echo ${PASSWORD} | sudo -S ip link set down can0
 echo ${PASSWORD} | sudo -S ip link set can0 type can bitrate ${BITRATE} restart-ms 100
+echo ${PASSWORD} | sudo -S ifconfig can0 txqueuelen 65536
 echo ${PASSWORD} | sudo -S ifconfig can0 up

@@ -9,6 +9,7 @@ endif()
 
 find_package(ament_cmake REQUIRED)
 find_package(ament_cmake_python REQUIRED)
+find_package(can_msgs REQUIRED)
 find_package(nturt_realtime_utils REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(rclcpp_components REQUIRED)
@@ -42,8 +43,8 @@ set(node_plugins "${node_plugins}SocketCanSender;$<TARGET_FILE:socket_can>\n")
 rclcpp_components_register_nodes(socket_can "SocketCanReceiver")
 set(node_plugins "${node_plugins}SocketCanReceiver;$<TARGET_FILE:socket_can>\n")
 
-# applications
-# executable: socket_can_receiver_node
+# executable
+# application: socket_can_receiver_node
 add_executable(socket_can_receiver_node
         app/socket_can_receiver_node.cpp
 )
@@ -54,7 +55,7 @@ ament_target_dependencies(socket_can_receiver_node
         nturt_realtime_utils
         rclcpp
 )
-# executable: socket_can_sender_node
+# application: socket_can_sender_node
 add_executable(socket_can_sender_node
         app/socket_can_sender_node.cpp
 )
@@ -63,6 +64,15 @@ target_link_libraries(socket_can_sender_node
 )
 ament_target_dependencies(socket_can_sender_node
         nturt_realtime_utils
+        rclcpp
+)
+
+# test: monitor_can_node
+add_executable(monitor_can_node
+        test/monitor_can_node.cpp
+)
+ament_target_dependencies(monitor_can_node
+        can_msgs
         rclcpp
 )
 
@@ -79,7 +89,7 @@ install(TARGETS socket_can
 )
 
 # install applications, test executables
-install(TARGETS socket_can_receiver_node socket_can_sender_node
+install(TARGETS socket_can_receiver_node socket_can_sender_node monitor_can_node
         DESTINATION lib/${PROJECT_NAME}
 )
 
@@ -115,8 +125,10 @@ ament_export_libraries(
 ament_export_dependencies(
         ament_cmake
         ament_cmake_python
+        can_msgs
         nturt_realtime_utils
         rclcpp
+        rclcpp_components
         rclpy
         ros2_socketcan
 )
