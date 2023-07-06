@@ -4,7 +4,6 @@
 
 // stl include
 #include <functional>
-#include <iostream>
 #include <list>
 #include <memory>
 #include <string>
@@ -28,15 +27,15 @@ class MonitorCan : public rclcpp::Node {
  private:
   void onCan(const std::shared_ptr<can_msgs::msg::Frame> msg) {
     if (can_id_filter_ == 0 || msg->id == can_id_filter_) {
-      std::cout << "stamp: sec: " << std::dec << msg->header.stamp.sec
-                << ", nanosec: " << msg->header.stamp.nanosec
-                << "\nid: " << std::hex << msg->id
-                << ", is_rtr: " << std::boolalpha << msg->is_error
-                << ", is_extended: " << msg->is_extended
-                << ", is_error: " << msg->is_error << ", dlc: " << std::dec
-                << static_cast<int>(msg->dlc) << "\ndata: ";
+      printf(
+          "stamp: sec: %d, nanosec: %d\nid: 0x%X, is_rtr: %s, is_extended: "
+          "%s, is_error: %s, dlc: %d\ndata: ",
+          msg->header.stamp.sec, msg->header.stamp.nanosec, msg->id,
+          msg->is_rtr ? "true" : "false", msg->is_extended ? "true" : "false",
+          msg->is_error ? "true" : "false", msg->dlc);
+
       for (int i = 0; i < msg->dlc; i++) {
-        std::cout << std::hex << static_cast<int>(msg->data[i]) << " ";
+        printf("0x%X ", msg->data[i]);
       }
       std::cout << "\n---" << std::endl;
     }

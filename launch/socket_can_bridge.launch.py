@@ -23,7 +23,7 @@ def generate_launch_description():
     arguments.append(
         DeclareLaunchArgument(
             "bitrate",
-            default_value="1000000",
+            default_value="250000",
             description="The bitrate of the can.",
         )
     )
