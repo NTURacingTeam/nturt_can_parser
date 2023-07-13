@@ -50,6 +50,8 @@ static const char *option = "d:h:";
 struct option long_option[] = {{"dec", 0, NULL, 'd'}, {"hex", 1, NULL, 'h'}};
 
 static const char *usage =
+    "Monitor can bus message.\n"
+    "\n"
     "Usage: ros2 run nturt_can_parser monitor_can_node <OPTIONS>\n"
     "Options:\n"
     "    -d --dec    Set decimal filter\n"

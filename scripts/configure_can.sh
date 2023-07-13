@@ -7,6 +7,8 @@ COLOR_GREEN='\e[0;32m'
 COLOR_RED='\e[1;31m'
 
 print_usage() {
+    echo "Configure socket-can settings"
+    echo ""
     echo "Usage: ./configure_can.sh [OPTIONS]"
     echo "Options:"
     echo "    -b --bitrate    Initialize can bus to the bitrate, default to 100000(100k)"
