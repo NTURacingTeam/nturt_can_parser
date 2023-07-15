@@ -14,6 +14,10 @@
 // ros2 message include
 #include <can_msgs/msg/frame.hpp>
 
+#define COLOR_REST "\033[0m"
+#define HIGHLIGHT "\033[0;1m"
+#define COLOR_RED "\033[1;31m"
+
 class MonitorCan : public rclcpp::Node {
  public:
   /// @brief Constructor of MonitorCan.
@@ -47,7 +51,11 @@ class MonitorCan : public rclcpp::Node {
 };
 
 static const char *option = "d:h:";
-struct option long_option[] = {{"dec", 0, NULL, 'd'}, {"hex", 1, NULL, 'h'}};
+struct option long_option[] = {
+    {"dec", 0, NULL, 'd'},
+    {"hex", 1, NULL, 'h'},
+    {0, 0, 0, 0},
+};
 
 static const char *usage =
     "Monitor can bus message.\n"
@@ -56,11 +64,6 @@ static const char *usage =
     "Options:\n"
     "    -d --dec    Set decimal filter\n"
     "    -h --hex    Set hexadecimal filter\n";
-
-static void command_line_argument_error() {
-  fprintf(stderr, "%s\n", usage);
-  exit(1);
-}
 
 int main(int argc, char **argv) {
   rclcpp::init(argc, argv);
@@ -73,9 +76,8 @@ int main(int argc, char **argv) {
   // prevent getopt to print error message to stderr
   opterr = 0;
 
-  int opt = 0;
   while (1) {
-    opt = getopt_long(argc, argv, option, long_option, NULL);
+    int opt = getopt_long(argc, argv, option, long_option, NULL);
 
     if (opt == -1) {
       break;
@@ -91,14 +93,21 @@ int main(int argc, char **argv) {
         break;
 
       case '?':
-        printf("illegal option: %c\n", optopt);
-        command_line_argument_error();
-        break;
+        fprintf(stderr,
+                COLOR_RED "Error:" HIGHLIGHT " Unknown option: %c\n" COLOR_REST,
+                optopt);
+        printf("%s\n", usage);
+        exit(1);
     }
   }
 
   if (argc > optind) {
-    command_line_argument_error();
+    fprintf(stderr,
+            COLOR_RED "Error:" HIGHLIGHT
+                      " Argument given, expect no argument %c\n" COLOR_REST,
+            optopt);
+    printf("%s\n", usage);
+    exit(1);
   }
 
   auto monitor_can_node = std::make_shared<MonitorCan>(options, can_id_filter);
